@@ -72,7 +72,7 @@
         "typedoc": "0.28.20",
         "typedoc-plugin-markdown": "4.14.1",
         "typescript": "6.0.3",
-        "typescript-eslint": "8.70.1",
+        "typescript-eslint": "8.72.1",
         "vitest": "4.1.12"
     },
     "description": "Modular TypeScript runtime for installed AI CLIs: native auth, isolated profiles, sessions and policy-controlled routing.",
