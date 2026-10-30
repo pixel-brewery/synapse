@@ -1,3 +1,4 @@
+# cspell:ignore extraheader
 name: Continuous Package Release
 
 on:
@@ -36,6 +37,8 @@ jobs:
         name: Verify and publish the package family
         needs: verify
         if: github.ref == 'refs/heads/main'
+        # Store the App key only in this environment; allow deployments from main only.
+        environment: release-main
         permissions:
             contents: write
             actions: write
@@ -43,11 +46,20 @@ jobs:
         runs-on: ubuntu-latest
         timeout-minutes: 60
         steps:
+            - name: Require the protected-main release App configuration
+              env:
+                  RELEASE_APP_CONFIGURED: ${{ vars.RELEASE_APP_ID != '' && secrets.RELEASE_APP_PRIVATE_KEY != '' }}
+              run: |
+                  set -euo pipefail
+                  if [ "$RELEASE_APP_CONFIGURED" != true ]; then
+                      echo 'Configure RELEASE_APP_ID and RELEASE_APP_PRIVATE_KEY for the dedicated release App before releasing.' >&2
+                      exit 1
+                  fi
+
             - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
               with:
                   fetch-depth: 0
-                  # Repository write authority remains available to this trusted release job.
-                  persist-credentials: true
+                  persist-credentials: false
 
             - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
               with:
@@ -139,9 +151,21 @@ jobs:
                       exit 1
                   fi
 
-            # Checkout retains github.token for this push. A release commit pushed
-            # with that token does not recursively start another release workflow.
+            - name: Create the repository-scoped release push token
+              id: release-app-token
+              uses: actions/create-github-app-token@64ab729a6294000f5aa4a4bc0b73d1f32bc45510 # v3.3.0
+              with:
+                  app-id: ${{ vars.RELEASE_APP_ID }}
+                  private-key: ${{ secrets.RELEASE_APP_PRIVATE_KEY }}
+                  owner: ${{ github.repository_owner }}
+                  repositories: ${{ github.event.repository.name }}
+                  permission-contents: write
+
+            # Only this verified atomic push uses the release App's branch-rule
+            # exception. The configured [skip ci] commit prevents recursive releases.
             - name: Publish the verified release commit and tag atomically
+              env:
+                  RELEASE_PUSH_TOKEN: ${{ steps.release-app-token.outputs.token }}
               run: |
                   set -euo pipefail
                   git fetch origin main --tags
@@ -154,7 +178,9 @@ jobs:
                       echo "${RELEASE_TAG} appeared while the release was being verified." >&2
                       exit 1
                   fi
-                  git push --atomic origin "HEAD:refs/heads/main" "refs/tags/${RELEASE_TAG}"
+                  auth_header="$(printf 'x-access-token:%s' "$RELEASE_PUSH_TOKEN" | base64 -w0)"
+                  printf '::add-mask::%s\n' "$auth_header"
+                  git -c "http.${GITHUB_SERVER_URL}/.extraheader=AUTHORIZATION: basic ${auth_header}" push --atomic origin "HEAD:refs/heads/main" "refs/tags/${RELEASE_TAG}"
 
             # The tag is durable before any registry write. A partial upload can be
             # retried with release:publish at that tag; Nx skips existing versions.

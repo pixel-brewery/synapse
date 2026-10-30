@@ -2,11 +2,11 @@
 
 Synapse is a TypeScript library for applications that work with installed AI CLIs. Contributions can improve a driver, the shared runtime, authentication, routing, tests or documentation. Start with the [documentation hub](.docs/README.md) and use a small reproducible example when reporting a problem. Sensitive reports follow [SECURITY.md](SECURITY.md).
 
-The public source target is [pixel-brewery/synapse](https://github.com/pixel-brewery/synapse), under the [Pixel Brewery organization](https://github.com/pixel-brewery). The owner completes the [repository transfer and public launch](.docs/guides/releases.md#public-source-launch). Repository administration, history replacement and package publication remain owner actions; contributors submit focused pull requests.
+The public source is [pixel-brewery/synapse](https://github.com/pixel-brewery/synapse), under the [Pixel Brewery organization](https://github.com/pixel-brewery). Pull-request creation is restricted to collaborators. Repository administration, history replacement and package publication remain owner actions; collaborators submit focused pull requests.
 
 ## Set up a checkout
 
-Fork the repository, create a focused branch and install from the checkout root. Use Node.js **24.15.0 or later** and the Yarn version pinned by `packageManager` in [package.json](package.json), currently **4.18.1**.
+Create a focused branch and install from the checkout root. Public source can be read and forked without contribution access, but opening a pull request requires collaborator access. Use Node.js **24.15.0 or later** and the Yarn version pinned by `packageManager` in [package.json](package.json), currently **4.18.1**.
 
 ```sh
 corepack enable
@@ -36,7 +36,7 @@ The merge workflow accepts only current same-repository Dependabot PRs targeting
 
 When `main` changes, the refresh workflow asks Dependabot to rebase outdated PRs. Requests are limited to one per PR and main revision. Dependabot recalculates its dependency changes and lockfile, and the updated PR triggers CI again. It retains control of its branch; manually edited bot PRs may require maintainer attention. The workflow does not recreate PRs or discard manual edits.
 
-A successful bot merge explicitly dispatches the normal package release and refresh workflows because pushes made with `GITHUB_TOKEN` do not start ordinary push workflows. Publication finishes with a GitHub Release and another Dependabot refresh for the generated version commit. Human merges to `main` start the same release and refresh paths through their push events. Actions must be enabled and this repository must have write access under each package's Manage Actions access setting. The release uses the short-lived `GITHUB_TOKEN`; an existing `PACKAGES_TOKEN` secret is an optional override. Source configuration alone does not grant package access. See the [release guide](.docs/guides/releases.md).
+A successful bot merge explicitly dispatches the normal package release and refresh workflows because pushes made with `GITHUB_TOKEN` do not start ordinary push workflows. Publication finishes with a GitHub Release and another Dependabot refresh for the generated version commit. Human PR merges to `main` start the same release and refresh paths through their push events. Package operations use the short-lived `GITHUB_TOKEN`; an existing `PACKAGES_TOKEN` secret is an optional override. Only the final atomic release commit/tag push uses the separately configured release App. Actions, package Actions-access grants, the App installation and its main-rule exception are separate live prerequisites. See the [release guide](.docs/guides/releases.md#main-protection-and-release-app-prerequisites).
 
 ## Find the owner and change it
 
@@ -82,6 +82,8 @@ The [CI workflow](.github/workflows/ci.yml) configures Node.js 24 on Linux, macO
 
 Explain the observable problem, resulting behavior and relevant compatibility changes. Include exact verification commands and outcomes, with anything not run stated explicitly. Describe changes to public exports, stored sessions/profile metadata or CLI assumptions so reviewers can assess consumer impact.
 
+The intended `main` policy requires every human change to use a PR with successful `verify (ubuntu-latest)`, `verify (macos-latest)` and `verify (windows-latest)` checks. Required approving reviews are zero for the sole maintainer, `RueDeRennes`. PR creation is already limited to collaborators; the PR/check protection and release App still need separate owner setup and verification. Force-push and deletion prevention belong in their own main-only rule without bypasses. No general administrator, human or all-Actions exception is part of this policy.
+
 Commit authored documentation and regenerated API artifacts together. Keep credentials, native CLI state, private transcripts, machine-specific paths and temporary archives out of the patch. Package publication, coordinated version changes and tags belong to the release owner; an ordinary contribution does not require them.
 
-Release owners can use the [local release commands](.docs/guides/releases.md#local-releases) to prepare, verify and publish from the checkout. The existing release commands continue to dispatch the main-branch workflow. Use `yarn release:dry-run:local` to preview the next patch version and changelog.
+Use `yarn release:dry-run:local` to preview the next patch version and changelog. The existing real `:local` runners push with a human Git identity and are incompatible with the intended PR-only main policy. Real releases use the main-branch workflow or `yarn release`, `yarn release:patch`, `yarn release:minor` or `yarn release:major` dispatch after the [App prerequisites](.docs/guides/releases.md#main-protection-and-release-app-prerequisites) are configured. The App key belongs only in the main-only `release-main` environment, with no per-release reviewer or wait requirement; it must not be a repository/organization secret or be copied into a local runner.
