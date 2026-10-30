@@ -1,6 +1,6 @@
 {
     "name": "@pixel-brewery/synapse-provider-opencode",
-    "version": "0.0.2",
+    "version": "0.0.3",
     "type": "module",
     "main": "./dist/index.js",
     "module": "./dist/index.js",
@@ -22,8 +22,8 @@
         "name": "synapse-provider-opencode"
     },
     "dependencies": {
-        "@pixel-brewery/synapse-core": "^0.0.2",
-        "@pixel-brewery/synapse-runtime": "^0.0.2"
+        "@pixel-brewery/synapse-core": "^0.0.3",
+        "@pixel-brewery/synapse-runtime": "^0.0.3"
     },
     "license": "MIT",
     "engines": {
