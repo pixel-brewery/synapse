@@ -1,0 +1,29 @@
+{
+    "name": "@pixel-brewery/synapse-meeting-notes-example",
+    "version": "0.1.0",
+    "scripts": {
+        "build": "tsc --build tsconfig.app.json",
+        "typecheck": "tsc --noEmit -p tsconfig.app.json && tsc --noEmit -p tsconfig.spec.json",
+        "test": "vitest run --config vitest.config.ts",
+        "start": "node dist/main.js"
+    },
+    "dependencies": {
+        "@pixel-brewery/synapse-auth": "workspace:^",
+        "@pixel-brewery/synapse-core": "workspace:^",
+        "@pixel-brewery/synapse-provider-claude": "workspace:^",
+        "@pixel-brewery/synapse-provider-codex": "workspace:^",
+        "@pixel-brewery/synapse-provider-opencode": "workspace:^",
+        "@pixel-brewery/synapse-runtime": "workspace:^",
+        "@pixel-brewery/synapse-testing": "workspace:^"
+    },
+    "private": true,
+    "type": "module",
+    "license": "MIT",
+    "engines": {
+        "node": ">=24.15.0"
+    },
+    "main": "./dist/main.js",
+    "nx": {
+        "name": "meeting-notes"
+    }
+}

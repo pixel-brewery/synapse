@@ -1,0 +1,1336 @@
+{
+  "schemaVersion": "2.0",
+  "id": 0,
+  "name": "@pixel-brewery/synapse-provider-claude",
+  "variant": "project",
+  "kind": 1,
+  "flags": {},
+  "comment": {
+    "summary": [
+      {
+        "kind": "text",
+        "text": "Native Claude print/stream-json integration with explicit isolated account profiles."
+      }
+    ]
+  },
+  "children": [
+    {
+      "id": 19,
+      "name": "ClaudeAuthDriver",
+      "variant": "declaration",
+      "kind": 128,
+      "flags": {
+        "isPublic": true
+      },
+      "comment": {
+        "summary": [
+          {
+            "kind": "text",
+            "text": "Native subscription, console and SSO authentication without a Synapse token broker."
+          }
+        ]
+      },
+      "children": [
+        {
+          "id": 20,
+          "name": "constructor",
+          "variant": "declaration",
+          "kind": 512,
+          "flags": {
+            "isPublic": true
+          },
+          "signatures": [
+            {
+              "id": 21,
+              "name": "ClaudeAuthDriver",
+              "variant": "signature",
+              "kind": 16384,
+              "flags": {
+                "isPublic": true
+              },
+              "comment": {
+                "summary": [
+                  {
+                    "kind": "text",
+                    "text": "Creates an inert native authentication adapter."
+                  }
+                ]
+              },
+              "parameters": [
+                {
+                  "id": 22,
+                  "name": "_runner",
+                  "variant": "param",
+                  "kind": 32768,
+                  "flags": {},
+                  "comment": {
+                    "summary": [
+                      {
+                        "kind": "text",
+                        "text": "Subprocess owner shared with this Claude driver's execution."
+                      }
+                    ]
+                  },
+                  "type": {
+                    "type": "reference",
+                    "target": {
+                      "packageName": "@pixel-brewery/synapse-runtime",
+                      "packagePath": "src/abstracts/ProcessRunnerBase.ts",
+                      "qualifiedName": "ProcessRunnerBase"
+                    },
+                    "name": "ProcessRunnerBase",
+                    "package": "@pixel-brewery/synapse-runtime",
+                    "externalUrl": "packages/synapse-runtime/api/classes/ProcessRunnerBase.md"
+                  }
+                }
+              ],
+              "type": {
+                "type": "reference",
+                "target": 19,
+                "name": "ClaudeAuthDriver",
+                "package": "@pixel-brewery/synapse-provider-claude"
+              },
+              "overwrites": {
+                "type": "reference",
+                "target": -1,
+                "name": "AiAuthDriverBase.constructor",
+                "package": "@pixel-brewery/synapse-core",
+                "externalUrl": "packages/synapse-core/api/classes/AiAuthDriverBase.md#constructor"
+              }
+            }
+          ],
+          "overwrites": {
+            "type": "reference",
+            "target": -1,
+            "name": "AiAuthDriverBase.constructor",
+            "package": "@pixel-brewery/synapse-core",
+            "externalUrl": "packages/synapse-core/api/classes/AiAuthDriverBase.md#constructor"
+          }
+        },
+        {
+          "id": 31,
+          "name": "login",
+          "variant": "declaration",
+          "kind": 2048,
+          "flags": {
+            "isPublic": true
+          },
+          "signatures": [
+            {
+              "id": 32,
+              "name": "login",
+              "variant": "signature",
+              "kind": 4096,
+              "flags": {
+                "isPublic": true
+              },
+              "comment": {
+                "summary": [
+                  {
+                    "kind": "text",
+                    "text": "Runs one explicitly selected native browser procedure with optional manual-code input."
+                  }
+                ],
+                "blockTags": [
+                  {
+                    "tag": "@returns",
+                    "content": [
+                      {
+                        "kind": "text",
+                        "text": "Completion of native login; the auth manager performs final verification."
+                      }
+                    ]
+                  },
+                  {
+                    "tag": "@throws",
+                    "content": [
+                      {
+                        "kind": "text",
+                        "text": "An AiError for unsupported methods, invalid responses or native rejection."
+                      }
+                    ]
+                  }
+                ]
+              },
+              "parameters": [
+                {
+                  "id": 33,
+                  "name": "context",
+                  "variant": "param",
+                  "kind": 32768,
+                  "flags": {},
+                  "comment": {
+                    "summary": [
+                      {
+                        "kind": "text",
+                        "text": "Isolated expiring auth operation and correlated host interaction owner."
+                      }
+                    ]
+                  },
+                  "type": {
+                    "type": "reference",
+                    "target": {
+                      "packageName": "@pixel-brewery/synapse-core",
+                      "packagePath": "src/interfaces/IAiAuthContext.ts",
+                      "qualifiedName": "IAiAuthContext"
+                    },
+                    "name": "IAiAuthContext",
+                    "package": "@pixel-brewery/synapse-core",
+                    "externalUrl": "packages/synapse-core/api/interfaces/IAiAuthContext.md"
+                  }
+                }
+              ],
+              "type": {
+                "type": "reference",
+                "target": {
+                  "packageName": "typescript",
+                  "packagePath": "lib/lib.es5.d.ts",
+                  "qualifiedName": "Promise"
+                },
+                "typeArguments": [
+                  {
+                    "type": "intrinsic",
+                    "name": "void"
+                  }
+                ],
+                "name": "Promise",
+                "package": "typescript"
+              },
+              "overwrites": {
+                "type": "reference",
+                "target": -1,
+                "name": "AiAuthDriverBase.login"
+              }
+            }
+          ],
+          "overwrites": {
+            "type": "reference",
+            "target": -1,
+            "name": "AiAuthDriverBase.login"
+          }
+        },
+        {
+          "id": 34,
+          "name": "logout",
+          "variant": "declaration",
+          "kind": 2048,
+          "flags": {
+            "isPublic": true
+          },
+          "signatures": [
+            {
+              "id": 35,
+              "name": "logout",
+              "variant": "signature",
+              "kind": 4096,
+              "flags": {
+                "isPublic": true
+              },
+              "comment": {
+                "summary": [
+                  {
+                    "kind": "text",
+                    "text": "Signs out only the selected native configuration/keychain service."
+                  }
+                ],
+                "blockTags": [
+                  {
+                    "tag": "@returns",
+                    "content": [
+                      {
+                        "kind": "text",
+                        "text": "Native logout completion after owned subprocess cleanup."
+                      }
+                    ]
+                  },
+                  {
+                    "tag": "@throws",
+                    "content": [
+                      {
+                        "kind": "text",
+                        "text": "An AiError when the native command fails."
+                      }
+                    ]
+                  }
+                ]
+              },
+              "parameters": [
+                {
+                  "id": 36,
+                  "name": "instance",
+                  "variant": "param",
+                  "kind": 32768,
+                  "flags": {},
+                  "comment": {
+                    "summary": [
+                      {
+                        "kind": "text",
+                        "text": "Isolated account configuration and secure-storage identity."
+                      }
+                    ]
+                  },
+                  "type": {
+                    "type": "reference",
+                    "target": {
+                      "packageName": "@pixel-brewery/synapse-core",
+                      "packagePath": "src/interfaces/IAiInstance.ts",
+                      "qualifiedName": "IAiInstance"
+                    },
+                    "name": "IAiInstance",
+                    "package": "@pixel-brewery/synapse-core",
+                    "externalUrl": "packages/synapse-core/api/interfaces/IAiInstance.md"
+                  }
+                },
+                {
+                  "id": 37,
+                  "name": "signal",
+                  "variant": "param",
+                  "kind": 32768,
+                  "flags": {},
+                  "comment": {
+                    "summary": [
+                      {
+                        "kind": "text",
+                        "text": "Logout cancellation controlled by the shared auth owner."
+                      }
+                    ]
+                  },
+                  "type": {
+                    "type": "reference",
+                    "target": {
+                      "packageName": "typescript",
+                      "packagePath": "lib/lib.dom.d.ts",
+                      "qualifiedName": "AbortSignal"
+                    },
+                    "name": "AbortSignal",
+                    "package": "typescript"
+                  }
+                }
+              ],
+              "type": {
+                "type": "reference",
+                "target": {
+                  "packageName": "typescript",
+                  "packagePath": "lib/lib.es5.d.ts",
+                  "qualifiedName": "Promise"
+                },
+                "typeArguments": [
+                  {
+                    "type": "intrinsic",
+                    "name": "void"
+                  }
+                ],
+                "name": "Promise",
+                "package": "typescript"
+              },
+              "overwrites": {
+                "type": "reference",
+                "target": -1,
+                "name": "AiAuthDriverBase.logout"
+              }
+            }
+          ],
+          "overwrites": {
+            "type": "reference",
+            "target": -1,
+            "name": "AiAuthDriverBase.logout"
+          }
+        },
+        {
+          "id": 24,
+          "name": "methods",
+          "variant": "declaration",
+          "kind": 2048,
+          "flags": {
+            "isPublic": true
+          },
+          "signatures": [
+            {
+              "id": 25,
+              "name": "methods",
+              "variant": "signature",
+              "kind": 4096,
+              "flags": {
+                "isPublic": true
+              },
+              "comment": {
+                "summary": [
+                  {
+                    "kind": "text",
+                    "text": "Lists only procedures supported by the characterized native CLI."
+                  }
+                ],
+                "blockTags": [
+                  {
+                    "tag": "@returns",
+                    "content": [
+                      {
+                        "kind": "text",
+                        "text": "Native subscription, console and SSO browser procedures."
+                      }
+                    ]
+                  }
+                ]
+              },
+              "parameters": [
+                {
+                  "id": 26,
+                  "name": "_instance",
+                  "variant": "param",
+                  "kind": 32768,
+                  "flags": {},
+                  "comment": {
+                    "summary": [
+                      {
+                        "kind": "text",
+                        "text": "Selected account; discovery does not inspect credentials."
+                      }
+                    ]
+                  },
+                  "type": {
+                    "type": "reference",
+                    "target": {
+                      "packageName": "@pixel-brewery/synapse-core",
+                      "packagePath": "src/interfaces/IAiInstance.ts",
+                      "qualifiedName": "IAiInstance"
+                    },
+                    "name": "IAiInstance",
+                    "package": "@pixel-brewery/synapse-core",
+                    "externalUrl": "packages/synapse-core/api/interfaces/IAiInstance.md"
+                  }
+                }
+              ],
+              "type": {
+                "type": "typeOperator",
+                "operator": "readonly",
+                "target": {
+                  "type": "array",
+                  "elementType": {
+                    "type": "reference",
+                    "target": {
+                      "packageName": "@pixel-brewery/synapse-core",
+                      "packagePath": "src/interfaces/IAiAuthMethod.ts",
+                      "qualifiedName": "IAiAuthMethod"
+                    },
+                    "name": "IAiAuthMethod",
+                    "package": "@pixel-brewery/synapse-core",
+                    "externalUrl": "packages/synapse-core/api/interfaces/IAiAuthMethod.md"
+                  }
+                }
+              },
+              "overwrites": {
+                "type": "reference",
+                "target": -1,
+                "name": "AiAuthDriverBase.methods",
+                "package": "@pixel-brewery/synapse-core",
+                "externalUrl": "packages/synapse-core/api/classes/AiAuthDriverBase.md#methods"
+              }
+            }
+          ],
+          "overwrites": {
+            "type": "reference",
+            "target": -1,
+            "name": "AiAuthDriverBase.methods",
+            "package": "@pixel-brewery/synapse-core",
+            "externalUrl": "packages/synapse-core/api/classes/AiAuthDriverBase.md#methods"
+          }
+        },
+        {
+          "id": 27,
+          "name": "status",
+          "variant": "declaration",
+          "kind": 2048,
+          "flags": {
+            "isPublic": true
+          },
+          "signatures": [
+            {
+              "id": 28,
+              "name": "status",
+              "variant": "signature",
+              "kind": 4096,
+              "flags": {
+                "isPublic": true
+              },
+              "comment": {
+                "summary": [
+                  {
+                    "kind": "text",
+                    "text": "Verifies the selected native profile without login, inference or MCP sessions."
+                  }
+                ],
+                "blockTags": [
+                  {
+                    "tag": "@returns",
+                    "content": [
+                      {
+                        "kind": "text",
+                        "text": "Safe native account metadata."
+                      }
+                    ]
+                  },
+                  {
+                    "tag": "@throws",
+                    "content": [
+                      {
+                        "kind": "text",
+                        "text": "An AiError for malformed native status or process failure."
+                      }
+                    ]
+                  }
+                ]
+              },
+              "parameters": [
+                {
+                  "id": 29,
+                  "name": "instance",
+                  "variant": "param",
+                  "kind": 32768,
+                  "flags": {},
+                  "comment": {
+                    "summary": [
+                      {
+                        "kind": "text",
+                        "text": "Isolated configuration and secure-storage identity."
+                      }
+                    ]
+                  },
+                  "type": {
+                    "type": "reference",
+                    "target": {
+                      "packageName": "@pixel-brewery/synapse-core",
+                      "packagePath": "src/interfaces/IAiInstance.ts",
+                      "qualifiedName": "IAiInstance"
+                    },
+                    "name": "IAiInstance",
+                    "package": "@pixel-brewery/synapse-core",
+                    "externalUrl": "packages/synapse-core/api/interfaces/IAiInstance.md"
+                  }
+                },
+                {
+                  "id": 30,
+                  "name": "signal",
+                  "variant": "param",
+                  "kind": 32768,
+                  "flags": {},
+                  "comment": {
+                    "summary": [
+                      {
+                        "kind": "text",
+                        "text": "Inspection cancellation."
+                      }
+                    ]
+                  },
+                  "type": {
+                    "type": "reference",
+                    "target": {
+                      "packageName": "typescript",
+                      "packagePath": "lib/lib.dom.d.ts",
+                      "qualifiedName": "AbortSignal"
+                    },
+                    "name": "AbortSignal",
+                    "package": "typescript"
+                  }
+                }
+              ],
+              "type": {
+                "type": "reference",
+                "target": {
+                  "packageName": "typescript",
+                  "packagePath": "lib/lib.es5.d.ts",
+                  "qualifiedName": "Promise"
+                },
+                "typeArguments": [
+                  {
+                    "type": "reference",
+                    "target": {
+                      "packageName": "@pixel-brewery/synapse-core",
+                      "packagePath": "src/interfaces/IAiAuthStatus.ts",
+                      "qualifiedName": "IAiAuthStatus"
+                    },
+                    "name": "IAiAuthStatus",
+                    "package": "@pixel-brewery/synapse-core",
+                    "externalUrl": "packages/synapse-core/api/interfaces/IAiAuthStatus.md"
+                  }
+                ],
+                "name": "Promise",
+                "package": "typescript"
+              },
+              "overwrites": {
+                "type": "reference",
+                "target": -1,
+                "name": "AiAuthDriverBase.status"
+              }
+            }
+          ],
+          "overwrites": {
+            "type": "reference",
+            "target": -1,
+            "name": "AiAuthDriverBase.status"
+          }
+        }
+      ],
+      "groups": [
+        {
+          "title": "Constructors",
+          "children": [
+            20
+          ]
+        },
+        {
+          "title": "Methods",
+          "children": [
+            31,
+            34,
+            24,
+            27
+          ]
+        }
+      ],
+      "extendedTypes": [
+        {
+          "type": "reference",
+          "target": {
+            "packageName": "@pixel-brewery/synapse-core",
+            "packagePath": "src/abstracts/AiAuthDriverBase.ts",
+            "qualifiedName": "AiAuthDriverBase"
+          },
+          "name": "AiAuthDriverBase",
+          "package": "@pixel-brewery/synapse-core",
+          "externalUrl": "packages/synapse-core/api/classes/AiAuthDriverBase.md"
+        }
+      ]
+    },
+    {
+      "id": 1,
+      "name": "ClaudeDriver",
+      "variant": "declaration",
+      "kind": 128,
+      "flags": {
+        "isPublic": true
+      },
+      "comment": {
+        "summary": [
+          {
+            "kind": "text",
+            "text": "Native Claude print/stream-json adapter with explicit account and permission isolation."
+          }
+        ],
+        "blockTags": [
+          {
+            "tag": "@remarks",
+            "content": [
+              {
+                "kind": "text",
+                "text": "Safe mode preserves native subscription authentication; no API key is required."
+              }
+            ]
+          }
+        ]
+      },
+      "children": [
+        {
+          "id": 7,
+          "name": "auth",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {
+            "isPublic": true,
+            "isReadonly": true
+          },
+          "comment": {
+            "summary": [
+              {
+                "kind": "text",
+                "text": "Native procedures sharing this driver's owned subprocess boundary."
+              }
+            ]
+          },
+          "type": {
+            "type": "reference",
+            "target": 19,
+            "name": "ClaudeAuthDriver",
+            "package": "@pixel-brewery/synapse-provider-claude"
+          },
+          "overwrites": {
+            "type": "reference",
+            "target": -1,
+            "name": "AiDriverBase.auth"
+          }
+        },
+        {
+          "id": 6,
+          "name": "capabilities",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {
+            "isPublic": true,
+            "isReadonly": true
+          },
+          "comment": {
+            "summary": [
+              {
+                "kind": "text",
+                "text": "Native plan/acceptEdits permissions, continuation and schema output support."
+              }
+            ]
+          },
+          "type": {
+            "type": "reference",
+            "target": {
+              "packageName": "@pixel-brewery/synapse-core",
+              "packagePath": "src/interfaces/IAiCapabilities.ts",
+              "qualifiedName": "IAiCapabilities"
+            },
+            "name": "IAiCapabilities",
+            "package": "@pixel-brewery/synapse-core",
+            "externalUrl": "packages/synapse-core/api/interfaces/IAiCapabilities.md"
+          },
+          "defaultValue": "...",
+          "overwrites": {
+            "type": "reference",
+            "target": -1,
+            "name": "AiDriverBase.capabilities"
+          }
+        },
+        {
+          "id": 2,
+          "name": "constructor",
+          "variant": "declaration",
+          "kind": 512,
+          "flags": {
+            "isPublic": true
+          },
+          "signatures": [
+            {
+              "id": 3,
+              "name": "ClaudeDriver",
+              "variant": "signature",
+              "kind": 16384,
+              "flags": {
+                "isPublic": true
+              },
+              "comment": {
+                "summary": [
+                  {
+                    "kind": "text",
+                    "text": "Creates an explicitly composed inert driver."
+                  }
+                ]
+              },
+              "parameters": [
+                {
+                  "id": 4,
+                  "name": "_runner",
+                  "variant": "param",
+                  "kind": 32768,
+                  "flags": {},
+                  "comment": {
+                    "summary": [
+                      {
+                        "kind": "text",
+                        "text": "Dedicated owned subprocess boundary; dispose drains its processes."
+                      }
+                    ]
+                  },
+                  "type": {
+                    "type": "reference",
+                    "target": {
+                      "packageName": "@pixel-brewery/synapse-runtime",
+                      "packagePath": "src/abstracts/ProcessRunnerBase.ts",
+                      "qualifiedName": "ProcessRunnerBase"
+                    },
+                    "name": "ProcessRunnerBase",
+                    "package": "@pixel-brewery/synapse-runtime",
+                    "externalUrl": "packages/synapse-runtime/api/classes/ProcessRunnerBase.md"
+                  }
+                }
+              ],
+              "type": {
+                "type": "reference",
+                "target": 1,
+                "name": "ClaudeDriver",
+                "package": "@pixel-brewery/synapse-provider-claude"
+              },
+              "overwrites": {
+                "type": "reference",
+                "target": -1,
+                "name": "AiDriverBase.constructor",
+                "package": "@pixel-brewery/synapse-core",
+                "externalUrl": "packages/synapse-core/api/classes/AiDriverBase.md#constructor"
+              }
+            }
+          ],
+          "overwrites": {
+            "type": "reference",
+            "target": -1,
+            "name": "AiDriverBase.constructor",
+            "package": "@pixel-brewery/synapse-core",
+            "externalUrl": "packages/synapse-core/api/classes/AiDriverBase.md#constructor"
+          }
+        },
+        {
+          "id": 13,
+          "name": "dispose",
+          "variant": "declaration",
+          "kind": 2048,
+          "flags": {
+            "isPublic": true
+          },
+          "signatures": [
+            {
+              "id": 14,
+              "name": "dispose",
+              "variant": "signature",
+              "kind": 4096,
+              "flags": {
+                "isPublic": true
+              },
+              "comment": {
+                "summary": [
+                  {
+                    "kind": "text",
+                    "text": "Stops and awaits every native execution/login owned by this driver."
+                  }
+                ],
+                "blockTags": [
+                  {
+                    "tag": "@returns",
+                    "content": [
+                      {
+                        "kind": "text",
+                        "text": "Completion after the injected owned runner drains."
+                      }
+                    ]
+                  }
+                ]
+              },
+              "type": {
+                "type": "reference",
+                "target": {
+                  "packageName": "typescript",
+                  "packagePath": "lib/lib.es5.d.ts",
+                  "qualifiedName": "Promise"
+                },
+                "typeArguments": [
+                  {
+                    "type": "intrinsic",
+                    "name": "void"
+                  }
+                ],
+                "name": "Promise",
+                "package": "typescript"
+              },
+              "overwrites": {
+                "type": "reference",
+                "target": -1,
+                "name": "AiDriverBase.dispose"
+              }
+            }
+          ],
+          "overwrites": {
+            "type": "reference",
+            "target": -1,
+            "name": "AiDriverBase.dispose"
+          }
+        },
+        {
+          "id": 10,
+          "name": "execute",
+          "variant": "declaration",
+          "kind": 2048,
+          "flags": {
+            "isPublic": true
+          },
+          "signatures": [
+            {
+              "id": 11,
+              "name": "execute",
+              "variant": "signature",
+              "kind": 4096,
+              "flags": {
+                "isPublic": true
+              },
+              "comment": {
+                "summary": [
+                  {
+                    "kind": "text",
+                    "text": "Executes one native print turn without putting the prompt in process arguments."
+                  }
+                ],
+                "blockTags": [
+                  {
+                    "tag": "@returns",
+                    "content": [
+                      {
+                        "kind": "text",
+                        "text": "The same invocation's final text, native structured output and usage."
+                      }
+                    ]
+                  },
+                  {
+                    "tag": "@throws",
+                    "content": [
+                      {
+                        "kind": "text",
+                        "text": "An AiError for configuration, native/protocol or cancellation failure."
+                      }
+                    ]
+                  }
+                ]
+              },
+              "parameters": [
+                {
+                  "id": 12,
+                  "name": "context",
+                  "variant": "param",
+                  "kind": 32768,
+                  "flags": {},
+                  "comment": {
+                    "summary": [
+                      {
+                        "kind": "text",
+                        "text": "Isolated authorized execution and critical event callback."
+                      }
+                    ]
+                  },
+                  "type": {
+                    "type": "reference",
+                    "target": {
+                      "packageName": "@pixel-brewery/synapse-core",
+                      "packagePath": "src/interfaces/IAiExecutionContext.ts",
+                      "qualifiedName": "IAiExecutionContext"
+                    },
+                    "name": "IAiExecutionContext",
+                    "package": "@pixel-brewery/synapse-core",
+                    "externalUrl": "packages/synapse-core/api/interfaces/IAiExecutionContext.md"
+                  }
+                }
+              ],
+              "type": {
+                "type": "reference",
+                "target": {
+                  "packageName": "typescript",
+                  "packagePath": "lib/lib.es5.d.ts",
+                  "qualifiedName": "Promise"
+                },
+                "typeArguments": [
+                  {
+                    "type": "reference",
+                    "target": {
+                      "packageName": "@pixel-brewery/synapse-core",
+                      "packagePath": "src/interfaces/IAiDriverResult.ts",
+                      "qualifiedName": "IAiDriverResult"
+                    },
+                    "name": "IAiDriverResult",
+                    "package": "@pixel-brewery/synapse-core",
+                    "externalUrl": "packages/synapse-core/api/interfaces/IAiDriverResult.md"
+                  }
+                ],
+                "name": "Promise",
+                "package": "typescript"
+              },
+              "overwrites": {
+                "type": "reference",
+                "target": -1,
+                "name": "AiDriverBase.execute"
+              }
+            }
+          ],
+          "overwrites": {
+            "type": "reference",
+            "target": -1,
+            "name": "AiDriverBase.execute"
+          }
+        },
+        {
+          "id": 5,
+          "name": "id",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {
+            "isPublic": true,
+            "isReadonly": true
+          },
+          "comment": {
+            "summary": [
+              {
+                "kind": "text",
+                "text": "Open identity used for explicit consumer registration."
+              }
+            ]
+          },
+          "type": {
+            "type": "intrinsic",
+            "name": "string"
+          },
+          "defaultValue": "'claude'",
+          "overwrites": {
+            "type": "reference",
+            "target": -1,
+            "name": "AiDriverBase.id"
+          }
+        },
+        {
+          "id": 15,
+          "name": "inspect",
+          "variant": "declaration",
+          "kind": 2048,
+          "flags": {
+            "isPublic": true,
+            "isInherited": true
+          },
+          "signatures": [
+            {
+              "id": 16,
+              "name": "inspect",
+              "variant": "signature",
+              "kind": 4096,
+              "flags": {
+                "isPublic": true,
+                "isInherited": true
+              },
+              "comment": {
+                "summary": [
+                  {
+                    "kind": "text",
+                    "text": "Explicitly inspects bounded metadata without initiating login or inference."
+                  }
+                ],
+                "blockTags": [
+                  {
+                    "tag": "@returns",
+                    "content": [
+                      {
+                        "kind": "text",
+                        "text": "Safe provider/account/model metadata."
+                      }
+                    ]
+                  }
+                ]
+              },
+              "parameters": [
+                {
+                  "id": 17,
+                  "name": "instance",
+                  "variant": "param",
+                  "kind": 32768,
+                  "flags": {},
+                  "comment": {
+                    "summary": [
+                      {
+                        "kind": "text",
+                        "text": "Selected isolated instance."
+                      }
+                    ]
+                  },
+                  "type": {
+                    "type": "reference",
+                    "target": {
+                      "packageName": "@pixel-brewery/synapse-core",
+                      "packagePath": "src/interfaces/IAiInstance.ts",
+                      "qualifiedName": "IAiInstance"
+                    },
+                    "name": "IAiInstance",
+                    "package": "@pixel-brewery/synapse-core",
+                    "externalUrl": "packages/synapse-core/api/interfaces/IAiInstance.md"
+                  }
+                },
+                {
+                  "id": 18,
+                  "name": "signal",
+                  "variant": "param",
+                  "kind": 32768,
+                  "flags": {},
+                  "comment": {
+                    "summary": [
+                      {
+                        "kind": "text",
+                        "text": "Bounded inspection cancellation."
+                      }
+                    ]
+                  },
+                  "type": {
+                    "type": "reference",
+                    "target": {
+                      "packageName": "typescript",
+                      "packagePath": "lib/lib.dom.d.ts",
+                      "qualifiedName": "AbortSignal"
+                    },
+                    "name": "AbortSignal",
+                    "package": "typescript"
+                  }
+                }
+              ],
+              "type": {
+                "type": "reference",
+                "target": {
+                  "packageName": "typescript",
+                  "packagePath": "lib/lib.es5.d.ts",
+                  "qualifiedName": "Promise"
+                },
+                "typeArguments": [
+                  {
+                    "type": "reference",
+                    "target": {
+                      "packageName": "@pixel-brewery/synapse-core",
+                      "packagePath": "src/interfaces/IAiInspection.ts",
+                      "qualifiedName": "IAiInspection"
+                    },
+                    "name": "IAiInspection",
+                    "package": "@pixel-brewery/synapse-core",
+                    "externalUrl": "packages/synapse-core/api/interfaces/IAiInspection.md"
+                  }
+                ],
+                "name": "Promise",
+                "package": "typescript"
+              },
+              "inheritedFrom": {
+                "type": "reference",
+                "target": -1,
+                "name": "AiDriverBase.inspect"
+              }
+            }
+          ],
+          "inheritedFrom": {
+            "type": "reference",
+            "target": -1,
+            "name": "AiDriverBase.inspect"
+          }
+        }
+      ],
+      "groups": [
+        {
+          "title": "Constructors",
+          "children": [
+            2
+          ]
+        },
+        {
+          "title": "Properties",
+          "children": [
+            7,
+            6,
+            5
+          ]
+        },
+        {
+          "title": "Methods",
+          "children": [
+            13,
+            10,
+            15
+          ]
+        }
+      ],
+      "extendedTypes": [
+        {
+          "type": "reference",
+          "target": {
+            "packageName": "@pixel-brewery/synapse-core",
+            "packagePath": "src/abstracts/AiDriverBase.ts",
+            "qualifiedName": "AiDriverBase"
+          },
+          "name": "AiDriverBase",
+          "package": "@pixel-brewery/synapse-core",
+          "externalUrl": "packages/synapse-core/api/classes/AiDriverBase.md"
+        }
+      ]
+    }
+  ],
+  "groups": [
+    {
+      "title": "Classes",
+      "children": [
+        19,
+        1
+      ]
+    }
+  ],
+  "packageName": "@pixel-brewery/synapse-provider-claude",
+  "symbolIdMap": {
+    "0": {
+      "packageName": "@pixel-brewery/synapse-provider-claude",
+      "packagePath": "src/index.ts",
+      "qualifiedName": ""
+    },
+    "1": {
+      "packageName": "@pixel-brewery/synapse-provider-claude",
+      "packagePath": "src/adapters/ClaudeDriver.ts",
+      "qualifiedName": "ClaudeDriver"
+    },
+    "2": {
+      "packageName": "@pixel-brewery/synapse-provider-claude",
+      "packagePath": "src/adapters/ClaudeDriver.ts",
+      "qualifiedName": "ClaudeDriver.__constructor"
+    },
+    "3": {
+      "packageName": "@pixel-brewery/synapse-provider-claude",
+      "packagePath": "src/adapters/ClaudeDriver.ts",
+      "qualifiedName": "ClaudeDriver"
+    },
+    "4": {
+      "packageName": "@pixel-brewery/synapse-provider-claude",
+      "packagePath": "src/adapters/ClaudeDriver.ts",
+      "qualifiedName": "_runner"
+    },
+    "5": {
+      "packageName": "@pixel-brewery/synapse-provider-claude",
+      "packagePath": "src/adapters/ClaudeDriver.ts",
+      "qualifiedName": "ClaudeDriver.id"
+    },
+    "6": {
+      "packageName": "@pixel-brewery/synapse-provider-claude",
+      "packagePath": "src/adapters/ClaudeDriver.ts",
+      "qualifiedName": "ClaudeDriver.capabilities"
+    },
+    "7": {
+      "packageName": "@pixel-brewery/synapse-provider-claude",
+      "packagePath": "src/adapters/ClaudeDriver.ts",
+      "qualifiedName": "ClaudeDriver.auth"
+    },
+    "10": {
+      "packageName": "@pixel-brewery/synapse-provider-claude",
+      "packagePath": "src/adapters/ClaudeDriver.ts",
+      "qualifiedName": "ClaudeDriver.execute"
+    },
+    "11": {
+      "packageName": "@pixel-brewery/synapse-provider-claude",
+      "packagePath": "src/adapters/ClaudeDriver.ts",
+      "qualifiedName": "ClaudeDriver.execute"
+    },
+    "12": {
+      "packageName": "@pixel-brewery/synapse-provider-claude",
+      "packagePath": "src/adapters/ClaudeDriver.ts",
+      "qualifiedName": "context"
+    },
+    "13": {
+      "packageName": "@pixel-brewery/synapse-provider-claude",
+      "packagePath": "src/adapters/ClaudeDriver.ts",
+      "qualifiedName": "ClaudeDriver.dispose"
+    },
+    "14": {
+      "packageName": "@pixel-brewery/synapse-provider-claude",
+      "packagePath": "src/adapters/ClaudeDriver.ts",
+      "qualifiedName": "ClaudeDriver.dispose"
+    },
+    "15": {
+      "packageName": "@pixel-brewery/synapse-core",
+      "packagePath": "src/abstracts/AiDriverBase.ts",
+      "qualifiedName": "AiDriverBase.inspect"
+    },
+    "16": {
+      "packageName": "@pixel-brewery/synapse-core",
+      "packagePath": "src/abstracts/AiDriverBase.ts",
+      "qualifiedName": "AiDriverBase.inspect"
+    },
+    "17": {
+      "packageName": "@pixel-brewery/synapse-core",
+      "packagePath": "src/abstracts/AiDriverBase.ts",
+      "qualifiedName": "instance"
+    },
+    "18": {
+      "packageName": "@pixel-brewery/synapse-core",
+      "packagePath": "src/abstracts/AiDriverBase.ts",
+      "qualifiedName": "signal"
+    },
+    "19": {
+      "packageName": "@pixel-brewery/synapse-provider-claude",
+      "packagePath": "src/auth/ClaudeAuthDriver.ts",
+      "qualifiedName": "ClaudeAuthDriver"
+    },
+    "20": {
+      "packageName": "@pixel-brewery/synapse-provider-claude",
+      "packagePath": "src/auth/ClaudeAuthDriver.ts",
+      "qualifiedName": "ClaudeAuthDriver.__constructor"
+    },
+    "21": {
+      "packageName": "@pixel-brewery/synapse-provider-claude",
+      "packagePath": "src/auth/ClaudeAuthDriver.ts",
+      "qualifiedName": "ClaudeAuthDriver"
+    },
+    "22": {
+      "packageName": "@pixel-brewery/synapse-provider-claude",
+      "packagePath": "src/auth/ClaudeAuthDriver.ts",
+      "qualifiedName": "_runner"
+    },
+    "24": {
+      "packageName": "@pixel-brewery/synapse-provider-claude",
+      "packagePath": "src/auth/ClaudeAuthDriver.ts",
+      "qualifiedName": "ClaudeAuthDriver.methods"
+    },
+    "25": {
+      "packageName": "@pixel-brewery/synapse-provider-claude",
+      "packagePath": "src/auth/ClaudeAuthDriver.ts",
+      "qualifiedName": "ClaudeAuthDriver.methods"
+    },
+    "26": {
+      "packageName": "@pixel-brewery/synapse-provider-claude",
+      "packagePath": "src/auth/ClaudeAuthDriver.ts",
+      "qualifiedName": "_instance"
+    },
+    "27": {
+      "packageName": "@pixel-brewery/synapse-provider-claude",
+      "packagePath": "src/auth/ClaudeAuthDriver.ts",
+      "qualifiedName": "ClaudeAuthDriver.status"
+    },
+    "28": {
+      "packageName": "@pixel-brewery/synapse-provider-claude",
+      "packagePath": "src/auth/ClaudeAuthDriver.ts",
+      "qualifiedName": "ClaudeAuthDriver.status"
+    },
+    "29": {
+      "packageName": "@pixel-brewery/synapse-provider-claude",
+      "packagePath": "src/auth/ClaudeAuthDriver.ts",
+      "qualifiedName": "instance"
+    },
+    "30": {
+      "packageName": "@pixel-brewery/synapse-provider-claude",
+      "packagePath": "src/auth/ClaudeAuthDriver.ts",
+      "qualifiedName": "signal"
+    },
+    "31": {
+      "packageName": "@pixel-brewery/synapse-provider-claude",
+      "packagePath": "src/auth/ClaudeAuthDriver.ts",
+      "qualifiedName": "ClaudeAuthDriver.login"
+    },
+    "32": {
+      "packageName": "@pixel-brewery/synapse-provider-claude",
+      "packagePath": "src/auth/ClaudeAuthDriver.ts",
+      "qualifiedName": "ClaudeAuthDriver.login"
+    },
+    "33": {
+      "packageName": "@pixel-brewery/synapse-provider-claude",
+      "packagePath": "src/auth/ClaudeAuthDriver.ts",
+      "qualifiedName": "context"
+    },
+    "34": {
+      "packageName": "@pixel-brewery/synapse-provider-claude",
+      "packagePath": "src/auth/ClaudeAuthDriver.ts",
+      "qualifiedName": "ClaudeAuthDriver.logout"
+    },
+    "35": {
+      "packageName": "@pixel-brewery/synapse-provider-claude",
+      "packagePath": "src/auth/ClaudeAuthDriver.ts",
+      "qualifiedName": "ClaudeAuthDriver.logout"
+    },
+    "36": {
+      "packageName": "@pixel-brewery/synapse-provider-claude",
+      "packagePath": "src/auth/ClaudeAuthDriver.ts",
+      "qualifiedName": "instance"
+    },
+    "37": {
+      "packageName": "@pixel-brewery/synapse-provider-claude",
+      "packagePath": "src/auth/ClaudeAuthDriver.ts",
+      "qualifiedName": "signal"
+    }
+  },
+  "files": {
+    "entries": {
+      "1": "libs/synapse-provider-claude/src/index.ts"
+    },
+    "reflections": {
+      "1": 0
+    }
+  }
+}

@@ -1,0 +1,66 @@
+{
+    "name": "api-docs",
+    "$schema": "../../node_modules/nx/schemas/project-schema.json",
+    "projectType": "application",
+    "implicitDependencies": [
+        "synapse-core",
+        "synapse-runtime",
+        "synapse-auth",
+        "synapse-routing",
+        "synapse-provider-codex",
+        "synapse-provider-claude",
+        "synapse-provider-opencode",
+        "synapse-provider-acp",
+        "synapse-testing"
+    ],
+    "targets": {
+        "generate": {
+            "executor": "nx:run-commands",
+            "dependsOn": ["^build"],
+            "cache": true,
+            "inputs": [
+                "{projectRoot}/**/*",
+                "{workspaceRoot}/libs/**/*",
+                "!{workspaceRoot}/libs/**/dist/**/*",
+                "{workspaceRoot}/tsconfig.base.json",
+                "{workspaceRoot}/package.json",
+                "{workspaceRoot}/yarn.lock"
+            ],
+            "outputs": ["{workspaceRoot}/.docs/packages/*/api", "{workspaceRoot}/.docs/api"],
+            "options": {
+                "command": "node tools/api-docs/generate.mjs"
+            }
+        },
+        "check": {
+            "executor": "nx:run-commands",
+            "dependsOn": ["^build"],
+            "cache": true,
+            "inputs": [
+                "{projectRoot}/**/*",
+                "{workspaceRoot}/libs/**/*",
+                "!{workspaceRoot}/libs/**/dist/**/*",
+                "{workspaceRoot}/.docs/packages/**/*",
+                "{workspaceRoot}/.docs/api/**/*",
+                "{workspaceRoot}/tsconfig.base.json",
+                "{workspaceRoot}/package.json",
+                "{workspaceRoot}/yarn.lock"
+            ],
+            "options": {
+                "command": "node tools/api-docs/generate.mjs --check"
+            }
+        },
+        "test": {
+            "executor": "nx:run-commands",
+            "cache": true,
+            "inputs": [
+                "{projectRoot}/**/*",
+                "{workspaceRoot}/package.json",
+                "{workspaceRoot}/yarn.lock"
+            ],
+            "options": {
+                "command": "vitest run --config tools/api-docs/vitest.config.mjs"
+            }
+        }
+    },
+    "tags": ["scope:tooling"]
+}

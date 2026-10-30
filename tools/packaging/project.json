@@ -1,0 +1,23 @@
+{
+    "$schema": "../../node_modules/nx/schemas/project-schema.json",
+    "name": "packaging",
+    "implicitDependencies": ["synapse-*", "meeting-notes"],
+    "targets": {
+        "verify": {
+            "executor": "nx:run-commands",
+            "dependsOn": ["^build"],
+            "cache": false,
+            "options": { "command": "node tools/packaging/verify.mjs" }
+        },
+        "test": {
+            "executor": "nx:run-commands",
+            "cache": true,
+            "inputs": [
+                "{projectRoot}/**/*",
+                "{workspaceRoot}/package.json",
+                "{workspaceRoot}/yarn.lock"
+            ],
+            "options": { "command": "vitest run --config tools/packaging/vitest.config.mjs" }
+        }
+    }
+}

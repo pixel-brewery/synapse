@@ -1,0 +1,60 @@
+{
+    "name": "@pixel-brewery/synapse-routing",
+    "version": "0.0.3",
+    "type": "module",
+    "main": "./dist/index.js",
+    "module": "./dist/index.js",
+    "types": "./dist/index.d.ts",
+    "exports": {
+        ".": {
+            "types": "./dist/index.d.ts",
+            "import": "./dist/index.js"
+        },
+        "./package.json": "./package.json"
+    },
+    "files": [
+        "dist",
+        "README.md",
+        "LICENSE",
+        "!**/*.tsbuildinfo"
+    ],
+    "nx": {
+        "name": "synapse-routing"
+    },
+    "dependencies": {
+        "@pixel-brewery/synapse-core": "^0.0.3"
+    },
+    "license": "MIT",
+    "engines": {
+        "node": ">=24.15.0"
+    },
+    "sideEffects": false,
+    "publishConfig": {
+        "access": "public",
+        "registry": "https://npm.pkg.github.com"
+    },
+    "description": "Policy-controlled AI CLI routing with queues, concurrency limits, circuit state and quota cooldowns.",
+    "scripts": {
+        "build": "tsc --build tsconfig.lib.json",
+        "typecheck": "tsc --noEmit -p tsconfig.lib.json && tsc --noEmit -p tsconfig.spec.json",
+        "lint": "eslint src",
+        "test": "vitest run --config vitest.config.ts"
+    },
+    "keywords": [
+        "ai",
+        "cli",
+        "typescript",
+        "routing",
+        "failover",
+        "queues"
+    ],
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/pixel-brewery/synapse.git",
+        "directory": "libs/synapse-routing"
+    },
+    "homepage": "https://github.com/pixel-brewery/synapse#packages",
+    "bugs": {
+        "url": "https://github.com/pixel-brewery/synapse/issues"
+    }
+}

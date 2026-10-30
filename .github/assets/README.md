@@ -1,0 +1,11 @@
+# Synapse artwork
+
+`synapse-hero.png` is the GitHub landing-page hero: a 2172 × 724 opaque PNG generated on 2026-10-29 with the built-in Imagegen tool. It is original brand artwork, rather than a product screenshot, protocol diagram or claim about where inference runs. No third-party logos are included. The repository's MIT license applies to this project asset.
+
+## Generation prompt
+
+```text
+Use case: ads-marketing. Create an exceptionally art-directed hero image for the GitHub README of Synapse, a TypeScript library connecting local applications to installed AI CLIs. This is original brand artwork, not a screenshot or a literal technical diagram. Format: very wide landscape banner, ideally 2400 by 800 pixels, 3:1 ratio, all important content comfortably inside a 7% safe margin. Main visual idea: a sculptural, precision-engineered synapse junction, connecting several distinct terminal-like modules with delicate luminous signal paths. One coherent, memorable central junction, four modular ports, clear feeling of software infrastructure and controlled connection. Premium editorial 3D still life with smoked translucent glass, matte ceramic, anodized metal, tiny machined details and restrained luminous traces; bespoke composition, not generic AI clip art. Deep ink/navy background with a subtle tactile grain; warm ivory typography; electric tangerine and soft mint accents. Large crisp tasteful wordmark on the left reads exactly 'Synapse' in a strong contemporary sans-serif with generous spacing, clearly readable at GitHub README width. Sculptural modules and elegant light traces occupy the right half, balanced negative space, dramatic yet restrained studio lighting, high contrast, refined technical aesthetic. Small terminal glyphs such as >_ may appear on the physical modules, but no other words or small labels. No third-party logos, no robot, no brain illustration, no infinity symbol, no people, no purple gradient blobs, no padlocks, no badges, no claims about local inference or privacy, no watermark. It should look like the confident cover of a serious open-source infrastructure project, not a consumer chatbot advertisement.
+```
+
+Embed the asset with a repository-relative path and meaningful alternative text. It should remain legible at ordinary GitHub README width without making essential information available only in the image.

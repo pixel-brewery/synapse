@@ -1,0 +1,1775 @@
+{
+  "schemaVersion": "2.0",
+  "id": 0,
+  "name": "@pixel-brewery/synapse-testing",
+  "variant": "project",
+  "kind": 1,
+  "flags": {},
+  "comment": {
+    "summary": [
+      {
+        "kind": "text",
+        "text": "Explicit synthetic drivers and provider-neutral external subprocess replays for local tests."
+      }
+    ]
+  },
+  "children": [
+    {
+      "id": 53,
+      "name": "IProcessReplay",
+      "variant": "declaration",
+      "kind": 256,
+      "flags": {
+        "isPublic": true
+      },
+      "comment": {
+        "summary": [
+          {
+            "kind": "text",
+            "text": "One externally supplied native-process response, without importing a concrete AI provider."
+          }
+        ]
+      },
+      "children": [
+        {
+          "id": 55,
+          "name": "args",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {
+            "isOptional": true,
+            "isReadonly": true
+          },
+          "comment": {
+            "summary": [
+              {
+                "kind": "text",
+                "text": "Optional exact expected argument vector; no prompts or credentials are recorded by the runner."
+              }
+            ]
+          },
+          "type": {
+            "type": "typeOperator",
+            "operator": "readonly",
+            "target": {
+              "type": "array",
+              "elementType": {
+                "type": "intrinsic",
+                "name": "string"
+              }
+            }
+          }
+        },
+        {
+          "id": 54,
+          "name": "executable",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {
+            "isOptional": true,
+            "isReadonly": true
+          },
+          "comment": {
+            "summary": [
+              {
+                "kind": "text",
+                "text": "Optional expected executable; mismatches reject rather than replaying the wrong procedure."
+              }
+            ]
+          },
+          "type": {
+            "type": "intrinsic",
+            "name": "string"
+          }
+        },
+        {
+          "id": 58,
+          "name": "exitCode",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {
+            "isOptional": true,
+            "isReadonly": true
+          },
+          "comment": {
+            "summary": [
+              {
+                "kind": "text",
+                "text": "Native status, defaulting to zero."
+              }
+            ]
+          },
+          "type": {
+            "type": "union",
+            "types": [
+              {
+                "type": "intrinsic",
+                "name": "number"
+              },
+              {
+                "type": "literal",
+                "value": null
+              }
+            ]
+          }
+        },
+        {
+          "id": 61,
+          "name": "onInput",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {
+            "isOptional": true,
+            "isReadonly": true
+          },
+          "comment": {
+            "summary": [
+              {
+                "kind": "text",
+                "text": "Optional explicit observer for native stdin, which may contain secrets."
+              }
+            ]
+          },
+          "type": {
+            "type": "reflection",
+            "declaration": {
+              "id": 62,
+              "name": "__type",
+              "variant": "declaration",
+              "kind": 65536,
+              "flags": {},
+              "signatures": [
+                {
+                  "id": 63,
+                  "name": "__type",
+                  "variant": "signature",
+                  "kind": 4096,
+                  "flags": {},
+                  "parameters": [
+                    {
+                      "id": 64,
+                      "name": "value",
+                      "variant": "param",
+                      "kind": 32768,
+                      "flags": {},
+                      "comment": {
+                        "summary": [
+                          {
+                            "kind": "text",
+                            "text": "Original stdin data; the replay runner itself never stores or logs it."
+                          }
+                        ]
+                      },
+                      "type": {
+                        "type": "intrinsic",
+                        "name": "string"
+                      }
+                    }
+                  ],
+                  "type": {
+                    "type": "intrinsic",
+                    "name": "void"
+                  }
+                }
+              ]
+            }
+          }
+        },
+        {
+          "id": 59,
+          "name": "signal",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {
+            "isOptional": true,
+            "isReadonly": true
+          },
+          "comment": {
+            "summary": [
+              {
+                "kind": "text",
+                "text": "Native signal name, defaulting to null."
+              }
+            ]
+          },
+          "type": {
+            "type": "union",
+            "types": [
+              {
+                "type": "intrinsic",
+                "name": "string"
+              },
+              {
+                "type": "literal",
+                "value": null
+              }
+            ]
+          }
+        },
+        {
+          "id": 57,
+          "name": "stderr",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {
+            "isOptional": true,
+            "isReadonly": true
+          },
+          "comment": {
+            "summary": [
+              {
+                "kind": "text",
+                "text": "Ordered standard-error fragments; consumers must redact them before presentation."
+              }
+            ]
+          },
+          "type": {
+            "type": "typeOperator",
+            "operator": "readonly",
+            "target": {
+              "type": "array",
+              "elementType": {
+                "type": "intrinsic",
+                "name": "string"
+              }
+            }
+          }
+        },
+        {
+          "id": 56,
+          "name": "stdout",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {
+            "isOptional": true,
+            "isReadonly": true
+          },
+          "comment": {
+            "summary": [
+              {
+                "kind": "text",
+                "text": "Ordered standard-output fragments, retaining the external protocol's actual framing."
+              }
+            ]
+          },
+          "type": {
+            "type": "typeOperator",
+            "operator": "readonly",
+            "target": {
+              "type": "array",
+              "elementType": {
+                "type": "intrinsic",
+                "name": "string"
+              }
+            }
+          }
+        },
+        {
+          "id": 60,
+          "name": "waitForStop",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {
+            "isOptional": true,
+            "isReadonly": true
+          },
+          "comment": {
+            "summary": [
+              {
+                "kind": "text",
+                "text": "Whether the external process remains live after its fragments until cancellation or stop."
+              }
+            ]
+          },
+          "type": {
+            "type": "intrinsic",
+            "name": "boolean"
+          }
+        }
+      ],
+      "groups": [
+        {
+          "title": "Properties",
+          "children": [
+            55,
+            54,
+            58,
+            61,
+            59,
+            57,
+            56,
+            60
+          ]
+        }
+      ]
+    },
+    {
+      "id": 45,
+      "name": "ISimulatedDriverOptions",
+      "variant": "declaration",
+      "kind": 256,
+      "flags": {
+        "isPublic": true
+      },
+      "comment": {
+        "summary": [
+          {
+            "kind": "text",
+            "text": "Explicit synthetic driver behavior for deterministic tests and clearly labeled demonstrations."
+          }
+        ]
+      },
+      "children": [
+        {
+          "id": 47,
+          "name": "capabilities",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {
+            "isOptional": true,
+            "isReadonly": true
+          },
+          "comment": {
+            "summary": [
+              {
+                "kind": "text",
+                "text": "Optional native guarantees to exercise runtime capability checks."
+              }
+            ]
+          },
+          "type": {
+            "type": "reference",
+            "target": {
+              "packageName": "@pixel-brewery/synapse-core",
+              "packagePath": "src/interfaces/IAiCapabilities.ts",
+              "qualifiedName": "IAiCapabilities"
+            },
+            "name": "IAiCapabilities",
+            "package": "@pixel-brewery/synapse-core",
+            "externalUrl": "packages/synapse-core/api/interfaces/IAiCapabilities.md"
+          }
+        },
+        {
+          "id": 48,
+          "name": "events",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {
+            "isOptional": true,
+            "isReadonly": true
+          },
+          "comment": {
+            "summary": [
+              {
+                "kind": "text",
+                "text": "Synthetic normalized events emitted through the actual runtime event sink."
+              }
+            ]
+          },
+          "type": {
+            "type": "typeOperator",
+            "operator": "readonly",
+            "target": {
+              "type": "array",
+              "elementType": {
+                "type": "reference",
+                "target": {
+                  "packageName": "@pixel-brewery/synapse-core",
+                  "packagePath": "src/models/AiEvent.ts",
+                  "qualifiedName": "AiEvent"
+                },
+                "name": "AiEvent",
+                "package": "@pixel-brewery/synapse-core",
+                "externalUrl": "packages/synapse-core/api/type-aliases/AiEvent.md"
+              }
+            }
+          }
+        },
+        {
+          "id": 46,
+          "name": "id",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {
+            "isOptional": true,
+            "isReadonly": true
+          },
+          "comment": {
+            "summary": [
+              {
+                "kind": "text",
+                "text": "Open driver ID, defaulting to simulated."
+              }
+            ]
+          },
+          "type": {
+            "type": "intrinsic",
+            "name": "string"
+          }
+        },
+        {
+          "id": 49,
+          "name": "result",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {
+            "isReadonly": true
+          },
+          "comment": {
+            "summary": [
+              {
+                "kind": "text",
+                "text": "Explicit fixture result, or caller-supplied synthetic behavior; never a hidden AI fallback."
+              }
+            ],
+            "blockTags": [
+              {
+                "tag": "@param",
+                "name": "context",
+                "content": [
+                  {
+                    "kind": "text",
+                    "text": "Selected execution context used by a custom simulation."
+                  }
+                ]
+              },
+              {
+                "tag": "@returns",
+                "content": [
+                  {
+                    "kind": "text",
+                    "text": "The synthetic final native result, possibly asynchronously."
+                  }
+                ]
+              }
+            ]
+          },
+          "type": {
+            "type": "union",
+            "types": [
+              {
+                "type": "reference",
+                "target": {
+                  "packageName": "@pixel-brewery/synapse-core",
+                  "packagePath": "src/interfaces/IAiDriverResult.ts",
+                  "qualifiedName": "IAiDriverResult"
+                },
+                "name": "IAiDriverResult",
+                "package": "@pixel-brewery/synapse-core",
+                "externalUrl": "packages/synapse-core/api/interfaces/IAiDriverResult.md"
+              },
+              {
+                "type": "reflection",
+                "declaration": {
+                  "id": 50,
+                  "name": "__type",
+                  "variant": "declaration",
+                  "kind": 65536,
+                  "flags": {},
+                  "signatures": [
+                    {
+                      "id": 51,
+                      "name": "__type",
+                      "variant": "signature",
+                      "kind": 4096,
+                      "flags": {},
+                      "parameters": [
+                        {
+                          "id": 52,
+                          "name": "context",
+                          "variant": "param",
+                          "kind": 32768,
+                          "flags": {},
+                          "type": {
+                            "type": "reference",
+                            "target": {
+                              "packageName": "@pixel-brewery/synapse-core",
+                              "packagePath": "src/interfaces/IAiExecutionContext.ts",
+                              "qualifiedName": "IAiExecutionContext"
+                            },
+                            "name": "IAiExecutionContext",
+                            "package": "@pixel-brewery/synapse-core",
+                            "externalUrl": "packages/synapse-core/api/interfaces/IAiExecutionContext.md"
+                          }
+                        }
+                      ],
+                      "type": {
+                        "type": "union",
+                        "types": [
+                          {
+                            "type": "reference",
+                            "target": {
+                              "packageName": "@pixel-brewery/synapse-core",
+                              "packagePath": "src/interfaces/IAiDriverResult.ts",
+                              "qualifiedName": "IAiDriverResult"
+                            },
+                            "name": "IAiDriverResult",
+                            "package": "@pixel-brewery/synapse-core",
+                            "externalUrl": "packages/synapse-core/api/interfaces/IAiDriverResult.md"
+                          },
+                          {
+                            "type": "reference",
+                            "target": {
+                              "packageName": "typescript",
+                              "packagePath": "lib/lib.es5.d.ts",
+                              "qualifiedName": "Promise"
+                            },
+                            "typeArguments": [
+                              {
+                                "type": "reference",
+                                "target": {
+                                  "packageName": "@pixel-brewery/synapse-core",
+                                  "packagePath": "src/interfaces/IAiDriverResult.ts",
+                                  "qualifiedName": "IAiDriverResult"
+                                },
+                                "name": "IAiDriverResult",
+                                "package": "@pixel-brewery/synapse-core",
+                                "externalUrl": "packages/synapse-core/api/interfaces/IAiDriverResult.md"
+                              }
+                            ],
+                            "name": "Promise",
+                            "package": "typescript"
+                          }
+                        ]
+                      }
+                    }
+                  ]
+                }
+              }
+            ]
+          }
+        }
+      ],
+      "groups": [
+        {
+          "title": "Properties",
+          "children": [
+            47,
+            48,
+            46,
+            49
+          ]
+        }
+      ]
+    },
+    {
+      "id": 24,
+      "name": "ReplayProcessRunner",
+      "variant": "declaration",
+      "kind": 128,
+      "flags": {
+        "isPublic": true
+      },
+      "comment": {
+        "summary": [
+          {
+            "kind": "text",
+            "text": "Replays sanitized external process fragments through actual provider parsing and normalization."
+          }
+        ],
+        "blockTags": [
+          {
+            "tag": "@remarks",
+            "content": [
+              {
+                "kind": "text",
+                "text": "No provider dependency, CLI, filesystem discovery or credential state is used."
+              }
+            ]
+          }
+        ]
+      },
+      "children": [
+        {
+          "id": 25,
+          "name": "constructor",
+          "variant": "declaration",
+          "kind": 512,
+          "flags": {
+            "isPublic": true
+          },
+          "signatures": [
+            {
+              "id": 26,
+              "name": "ReplayProcessRunner",
+              "variant": "signature",
+              "kind": 16384,
+              "flags": {
+                "isPublic": true
+              },
+              "comment": {
+                "summary": [
+                  {
+                    "kind": "text",
+                    "text": "Captures a deterministic transport script without executing it."
+                  }
+                ]
+              },
+              "parameters": [
+                {
+                  "id": 27,
+                  "name": "steps",
+                  "variant": "param",
+                  "kind": 32768,
+                  "flags": {},
+                  "comment": {
+                    "summary": [
+                      {
+                        "kind": "text",
+                        "text": "Externally supplied responses, one per actual native invocation."
+                      }
+                    ]
+                  },
+                  "type": {
+                    "type": "typeOperator",
+                    "operator": "readonly",
+                    "target": {
+                      "type": "array",
+                      "elementType": {
+                        "type": "reference",
+                        "target": 53,
+                        "name": "IProcessReplay",
+                        "package": "@pixel-brewery/synapse-testing"
+                      }
+                    }
+                  }
+                }
+              ],
+              "type": {
+                "type": "reference",
+                "target": 24,
+                "name": "ReplayProcessRunner",
+                "package": "@pixel-brewery/synapse-testing"
+              },
+              "overwrites": {
+                "type": "reference",
+                "target": -1,
+                "name": "ProcessRunnerBase.constructor",
+                "package": "@pixel-brewery/synapse-runtime",
+                "externalUrl": "packages/synapse-runtime/api/classes/ProcessRunnerBase.md#constructor"
+              }
+            }
+          ],
+          "overwrites": {
+            "type": "reference",
+            "target": -1,
+            "name": "ProcessRunnerBase.constructor",
+            "package": "@pixel-brewery/synapse-runtime",
+            "externalUrl": "packages/synapse-runtime/api/classes/ProcessRunnerBase.md#constructor"
+          }
+        },
+        {
+          "id": 38,
+          "name": "dispose",
+          "variant": "declaration",
+          "kind": 2048,
+          "flags": {
+            "isPublic": true
+          },
+          "signatures": [
+            {
+              "id": 39,
+              "name": "dispose",
+              "variant": "signature",
+              "kind": 4096,
+              "flags": {
+                "isPublic": true
+              },
+              "comment": {
+                "summary": [
+                  {
+                    "kind": "text",
+                    "text": "Cancels and awaits all live replayed invocations without creating an operating-system process."
+                  }
+                ],
+                "blockTags": [
+                  {
+                    "tag": "@returns",
+                    "content": [
+                      {
+                        "kind": "text",
+                        "text": "Completion after every active transport replay settles."
+                      }
+                    ]
+                  }
+                ]
+              },
+              "type": {
+                "type": "reference",
+                "target": {
+                  "packageName": "typescript",
+                  "packagePath": "lib/lib.es5.d.ts",
+                  "qualifiedName": "Promise"
+                },
+                "typeArguments": [
+                  {
+                    "type": "intrinsic",
+                    "name": "void"
+                  }
+                ],
+                "name": "Promise",
+                "package": "typescript"
+              },
+              "overwrites": {
+                "type": "reference",
+                "target": -1,
+                "name": "ProcessRunnerBase.dispose"
+              }
+            }
+          ],
+          "overwrites": {
+            "type": "reference",
+            "target": -1,
+            "name": "ProcessRunnerBase.dispose"
+          }
+        },
+        {
+          "id": 33,
+          "name": "executionCount",
+          "variant": "declaration",
+          "kind": 262144,
+          "flags": {
+            "isPublic": true
+          },
+          "getSignature": {
+            "id": 34,
+            "name": "executionCount",
+            "variant": "signature",
+            "kind": 524288,
+            "flags": {
+              "isPublic": true
+            },
+            "comment": {
+              "summary": [
+                {
+                  "kind": "text",
+                  "text": "Returns the number of native invocations consumed from this transport script."
+                }
+              ],
+              "blockTags": [
+                {
+                  "tag": "@returns",
+                  "content": [
+                    {
+                      "kind": "text",
+                      "text": "The replay invocation count, excluding calls rejected after disposal."
+                    }
+                  ]
+                }
+              ]
+            },
+            "type": {
+              "type": "intrinsic",
+              "name": "number"
+            }
+          }
+        },
+        {
+          "id": 35,
+          "name": "run",
+          "variant": "declaration",
+          "kind": 2048,
+          "flags": {
+            "isPublic": true
+          },
+          "signatures": [
+            {
+              "id": 36,
+              "name": "run",
+              "variant": "signature",
+              "kind": 4096,
+              "flags": {
+                "isPublic": true
+              },
+              "comment": {
+                "summary": [
+                  {
+                    "kind": "text",
+                    "text": "Replays one native response through the caller's real serialized output callbacks."
+                  }
+                ],
+                "blockTags": [
+                  {
+                    "tag": "@returns",
+                    "content": [
+                      {
+                        "kind": "text",
+                        "text": "Bounded captured output and configured native completion status."
+                      }
+                    ]
+                  },
+                  {
+                    "tag": "@throws",
+                    "content": [
+                      {
+                        "kind": "text",
+                        "text": "An AiError for script mismatch, cancellation, limits or disposal; callback failures remain unchanged."
+                      }
+                    ]
+                  }
+                ]
+              },
+              "parameters": [
+                {
+                  "id": 37,
+                  "name": "request",
+                  "variant": "param",
+                  "kind": 32768,
+                  "flags": {},
+                  "comment": {
+                    "summary": [
+                      {
+                        "kind": "text",
+                        "text": "Actual provider subprocess request, including cancellation and byte limits."
+                      }
+                    ]
+                  },
+                  "type": {
+                    "type": "reference",
+                    "target": {
+                      "packageName": "@pixel-brewery/synapse-runtime",
+                      "packagePath": "src/interfaces/IProcessRequest.ts",
+                      "qualifiedName": "IProcessRequest"
+                    },
+                    "name": "IProcessRequest",
+                    "package": "@pixel-brewery/synapse-runtime",
+                    "externalUrl": "packages/synapse-runtime/api/interfaces/IProcessRequest.md"
+                  }
+                }
+              ],
+              "type": {
+                "type": "reference",
+                "target": {
+                  "packageName": "typescript",
+                  "packagePath": "lib/lib.es5.d.ts",
+                  "qualifiedName": "Promise"
+                },
+                "typeArguments": [
+                  {
+                    "type": "reference",
+                    "target": {
+                      "packageName": "@pixel-brewery/synapse-runtime",
+                      "packagePath": "src/interfaces/IProcessResult.ts",
+                      "qualifiedName": "IProcessResult"
+                    },
+                    "name": "IProcessResult",
+                    "package": "@pixel-brewery/synapse-runtime",
+                    "externalUrl": "packages/synapse-runtime/api/interfaces/IProcessResult.md"
+                  }
+                ],
+                "name": "Promise",
+                "package": "typescript"
+              },
+              "overwrites": {
+                "type": "reference",
+                "target": -1,
+                "name": "ProcessRunnerBase.run"
+              }
+            }
+          ],
+          "overwrites": {
+            "type": "reference",
+            "target": -1,
+            "name": "ProcessRunnerBase.run"
+          }
+        }
+      ],
+      "groups": [
+        {
+          "title": "Constructors",
+          "children": [
+            25
+          ]
+        },
+        {
+          "title": "Accessors",
+          "children": [
+            33
+          ]
+        },
+        {
+          "title": "Methods",
+          "children": [
+            38,
+            35
+          ]
+        }
+      ],
+      "extendedTypes": [
+        {
+          "type": "reference",
+          "target": {
+            "packageName": "@pixel-brewery/synapse-runtime",
+            "packagePath": "src/abstracts/ProcessRunnerBase.ts",
+            "qualifiedName": "ProcessRunnerBase"
+          },
+          "name": "ProcessRunnerBase",
+          "package": "@pixel-brewery/synapse-runtime",
+          "externalUrl": "packages/synapse-runtime/api/classes/ProcessRunnerBase.md"
+        }
+      ]
+    },
+    {
+      "id": 1,
+      "name": "SimulatedDriver",
+      "variant": "declaration",
+      "kind": 128,
+      "flags": {
+        "isPublic": true
+      },
+      "comment": {
+        "summary": [
+          {
+            "kind": "text",
+            "text": "Explicit synthetic execution through the same runtime contracts as real providers."
+          }
+        ],
+        "blockTags": [
+          {
+            "tag": "@remarks",
+            "content": [
+              {
+                "kind": "text",
+                "text": "This adapter performs no inference. A consumer must label simulation explicitly."
+              }
+            ]
+          }
+        ]
+      },
+      "children": [
+        {
+          "id": 17,
+          "name": "auth",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {
+            "isPublic": true,
+            "isOptional": true,
+            "isReadonly": true,
+            "isInherited": true
+          },
+          "comment": {
+            "summary": [
+              {
+                "kind": "text",
+                "text": "Optional supported native authentication owner."
+              }
+            ]
+          },
+          "type": {
+            "type": "reference",
+            "target": {
+              "packageName": "@pixel-brewery/synapse-core",
+              "packagePath": "src/abstracts/AiAuthDriverBase.ts",
+              "qualifiedName": "AiAuthDriverBase"
+            },
+            "name": "AiAuthDriverBase",
+            "package": "@pixel-brewery/synapse-core",
+            "externalUrl": "packages/synapse-core/api/classes/AiAuthDriverBase.md"
+          },
+          "inheritedFrom": {
+            "type": "reference",
+            "target": -1,
+            "name": "AiDriverBase.auth"
+          }
+        },
+        {
+          "id": 6,
+          "name": "capabilities",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {
+            "isPublic": true,
+            "isReadonly": true
+          },
+          "comment": {
+            "summary": [
+              {
+                "kind": "text",
+                "text": "Synthetic guarantees supplied to runtime capability validation."
+              }
+            ]
+          },
+          "type": {
+            "type": "reference",
+            "target": {
+              "packageName": "@pixel-brewery/synapse-core",
+              "packagePath": "src/interfaces/IAiCapabilities.ts",
+              "qualifiedName": "IAiCapabilities"
+            },
+            "name": "IAiCapabilities",
+            "package": "@pixel-brewery/synapse-core",
+            "externalUrl": "packages/synapse-core/api/interfaces/IAiCapabilities.md"
+          },
+          "overwrites": {
+            "type": "reference",
+            "target": -1,
+            "name": "AiDriverBase.capabilities"
+          }
+        },
+        {
+          "id": 2,
+          "name": "constructor",
+          "variant": "declaration",
+          "kind": 512,
+          "flags": {
+            "isPublic": true
+          },
+          "signatures": [
+            {
+              "id": 3,
+              "name": "SimulatedDriver",
+              "variant": "signature",
+              "kind": 16384,
+              "flags": {
+                "isPublic": true
+              },
+              "comment": {
+                "summary": [
+                  {
+                    "kind": "text",
+                    "text": "Captures fixture behavior without performing work or retaining prompts."
+                  }
+                ]
+              },
+              "parameters": [
+                {
+                  "id": 4,
+                  "name": "_options",
+                  "variant": "param",
+                  "kind": 32768,
+                  "flags": {},
+                  "comment": {
+                    "summary": [
+                      {
+                        "kind": "text",
+                        "text": "Explicit synthetic events, capabilities and result."
+                      }
+                    ]
+                  },
+                  "type": {
+                    "type": "reference",
+                    "target": 45,
+                    "name": "ISimulatedDriverOptions",
+                    "package": "@pixel-brewery/synapse-testing"
+                  }
+                }
+              ],
+              "type": {
+                "type": "reference",
+                "target": 1,
+                "name": "SimulatedDriver",
+                "package": "@pixel-brewery/synapse-testing"
+              },
+              "overwrites": {
+                "type": "reference",
+                "target": -1,
+                "name": "AiDriverBase.constructor",
+                "package": "@pixel-brewery/synapse-core",
+                "externalUrl": "packages/synapse-core/api/classes/AiDriverBase.md#constructor"
+              }
+            }
+          ],
+          "overwrites": {
+            "type": "reference",
+            "target": -1,
+            "name": "AiDriverBase.constructor",
+            "package": "@pixel-brewery/synapse-core",
+            "externalUrl": "packages/synapse-core/api/classes/AiDriverBase.md#constructor"
+          }
+        },
+        {
+          "id": 22,
+          "name": "dispose",
+          "variant": "declaration",
+          "kind": 2048,
+          "flags": {
+            "isPublic": true,
+            "isInherited": true
+          },
+          "signatures": [
+            {
+              "id": 23,
+              "name": "dispose",
+              "variant": "signature",
+              "kind": 4096,
+              "flags": {
+                "isPublic": true,
+                "isInherited": true
+              },
+              "comment": {
+                "summary": [
+                  {
+                    "kind": "text",
+                    "text": "Releases implementation-owned resources after all its executions have been cancelled."
+                  }
+                ],
+                "blockTags": [
+                  {
+                    "tag": "@returns",
+                    "content": [
+                      {
+                        "kind": "text",
+                        "text": "Completion of the explicit teardown."
+                      }
+                    ]
+                  }
+                ]
+              },
+              "type": {
+                "type": "reference",
+                "target": {
+                  "packageName": "typescript",
+                  "packagePath": "lib/lib.es5.d.ts",
+                  "qualifiedName": "Promise"
+                },
+                "typeArguments": [
+                  {
+                    "type": "intrinsic",
+                    "name": "void"
+                  }
+                ],
+                "name": "Promise",
+                "package": "typescript"
+              },
+              "inheritedFrom": {
+                "type": "reference",
+                "target": -1,
+                "name": "AiDriverBase.dispose"
+              }
+            }
+          ],
+          "inheritedFrom": {
+            "type": "reference",
+            "target": -1,
+            "name": "AiDriverBase.dispose"
+          }
+        },
+        {
+          "id": 11,
+          "name": "execute",
+          "variant": "declaration",
+          "kind": 2048,
+          "flags": {
+            "isPublic": true
+          },
+          "signatures": [
+            {
+              "id": 12,
+              "name": "execute",
+              "variant": "signature",
+              "kind": 4096,
+              "flags": {
+                "isPublic": true
+              },
+              "comment": {
+                "summary": [
+                  {
+                    "kind": "text",
+                    "text": "Emits fixture events and returns the explicitly supplied synthetic result."
+                  }
+                ],
+                "blockTags": [
+                  {
+                    "tag": "@returns",
+                    "content": [
+                      {
+                        "kind": "text",
+                        "text": "The configured synthetic result of this same invocation."
+                      }
+                    ]
+                  },
+                  {
+                    "tag": "@throws",
+                    "content": [
+                      {
+                        "kind": "text",
+                        "text": "An AiError on cancellation; host callback failures propagate unchanged."
+                      }
+                    ]
+                  }
+                ]
+              },
+              "parameters": [
+                {
+                  "id": 13,
+                  "name": "context",
+                  "variant": "param",
+                  "kind": 32768,
+                  "flags": {},
+                  "comment": {
+                    "summary": [
+                      {
+                        "kind": "text",
+                        "text": "Real runtime context, cancellation and critical event sink."
+                      }
+                    ]
+                  },
+                  "type": {
+                    "type": "reference",
+                    "target": {
+                      "packageName": "@pixel-brewery/synapse-core",
+                      "packagePath": "src/interfaces/IAiExecutionContext.ts",
+                      "qualifiedName": "IAiExecutionContext"
+                    },
+                    "name": "IAiExecutionContext",
+                    "package": "@pixel-brewery/synapse-core",
+                    "externalUrl": "packages/synapse-core/api/interfaces/IAiExecutionContext.md"
+                  }
+                }
+              ],
+              "type": {
+                "type": "reference",
+                "target": {
+                  "packageName": "typescript",
+                  "packagePath": "lib/lib.es5.d.ts",
+                  "qualifiedName": "Promise"
+                },
+                "typeArguments": [
+                  {
+                    "type": "reference",
+                    "target": {
+                      "packageName": "@pixel-brewery/synapse-core",
+                      "packagePath": "src/interfaces/IAiDriverResult.ts",
+                      "qualifiedName": "IAiDriverResult"
+                    },
+                    "name": "IAiDriverResult",
+                    "package": "@pixel-brewery/synapse-core",
+                    "externalUrl": "packages/synapse-core/api/interfaces/IAiDriverResult.md"
+                  }
+                ],
+                "name": "Promise",
+                "package": "typescript"
+              },
+              "overwrites": {
+                "type": "reference",
+                "target": -1,
+                "name": "AiDriverBase.execute"
+              }
+            }
+          ],
+          "overwrites": {
+            "type": "reference",
+            "target": -1,
+            "name": "AiDriverBase.execute"
+          }
+        },
+        {
+          "id": 9,
+          "name": "executionCount",
+          "variant": "declaration",
+          "kind": 262144,
+          "flags": {
+            "isPublic": true
+          },
+          "getSignature": {
+            "id": 10,
+            "name": "executionCount",
+            "variant": "signature",
+            "kind": 524288,
+            "flags": {
+              "isPublic": true
+            },
+            "comment": {
+              "summary": [
+                {
+                  "kind": "text",
+                  "text": "Returns the number of actual execute calls, without storing their private inputs."
+                }
+              ],
+              "blockTags": [
+                {
+                  "tag": "@returns",
+                  "content": [
+                    {
+                      "kind": "text",
+                      "text": "Completed or attempted synthetic invocation count."
+                    }
+                  ]
+                }
+              ]
+            },
+            "type": {
+              "type": "intrinsic",
+              "name": "number"
+            }
+          }
+        },
+        {
+          "id": 5,
+          "name": "id",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {
+            "isPublic": true,
+            "isReadonly": true
+          },
+          "comment": {
+            "summary": [
+              {
+                "kind": "text",
+                "text": "Open synthetic implementation identifier."
+              }
+            ]
+          },
+          "type": {
+            "type": "intrinsic",
+            "name": "string"
+          },
+          "overwrites": {
+            "type": "reference",
+            "target": -1,
+            "name": "AiDriverBase.id"
+          }
+        },
+        {
+          "id": 18,
+          "name": "inspect",
+          "variant": "declaration",
+          "kind": 2048,
+          "flags": {
+            "isPublic": true,
+            "isInherited": true
+          },
+          "signatures": [
+            {
+              "id": 19,
+              "name": "inspect",
+              "variant": "signature",
+              "kind": 4096,
+              "flags": {
+                "isPublic": true,
+                "isInherited": true
+              },
+              "comment": {
+                "summary": [
+                  {
+                    "kind": "text",
+                    "text": "Explicitly inspects bounded metadata without initiating login or inference."
+                  }
+                ],
+                "blockTags": [
+                  {
+                    "tag": "@returns",
+                    "content": [
+                      {
+                        "kind": "text",
+                        "text": "Safe provider/account/model metadata."
+                      }
+                    ]
+                  }
+                ]
+              },
+              "parameters": [
+                {
+                  "id": 20,
+                  "name": "instance",
+                  "variant": "param",
+                  "kind": 32768,
+                  "flags": {},
+                  "comment": {
+                    "summary": [
+                      {
+                        "kind": "text",
+                        "text": "Selected isolated instance."
+                      }
+                    ]
+                  },
+                  "type": {
+                    "type": "reference",
+                    "target": {
+                      "packageName": "@pixel-brewery/synapse-core",
+                      "packagePath": "src/interfaces/IAiInstance.ts",
+                      "qualifiedName": "IAiInstance"
+                    },
+                    "name": "IAiInstance",
+                    "package": "@pixel-brewery/synapse-core",
+                    "externalUrl": "packages/synapse-core/api/interfaces/IAiInstance.md"
+                  }
+                },
+                {
+                  "id": 21,
+                  "name": "signal",
+                  "variant": "param",
+                  "kind": 32768,
+                  "flags": {},
+                  "comment": {
+                    "summary": [
+                      {
+                        "kind": "text",
+                        "text": "Bounded inspection cancellation."
+                      }
+                    ]
+                  },
+                  "type": {
+                    "type": "reference",
+                    "target": {
+                      "packageName": "typescript",
+                      "packagePath": "lib/lib.dom.d.ts",
+                      "qualifiedName": "AbortSignal"
+                    },
+                    "name": "AbortSignal",
+                    "package": "typescript"
+                  }
+                }
+              ],
+              "type": {
+                "type": "reference",
+                "target": {
+                  "packageName": "typescript",
+                  "packagePath": "lib/lib.es5.d.ts",
+                  "qualifiedName": "Promise"
+                },
+                "typeArguments": [
+                  {
+                    "type": "reference",
+                    "target": {
+                      "packageName": "@pixel-brewery/synapse-core",
+                      "packagePath": "src/interfaces/IAiInspection.ts",
+                      "qualifiedName": "IAiInspection"
+                    },
+                    "name": "IAiInspection",
+                    "package": "@pixel-brewery/synapse-core",
+                    "externalUrl": "packages/synapse-core/api/interfaces/IAiInspection.md"
+                  }
+                ],
+                "name": "Promise",
+                "package": "typescript"
+              },
+              "inheritedFrom": {
+                "type": "reference",
+                "target": -1,
+                "name": "AiDriverBase.inspect"
+              }
+            }
+          ],
+          "inheritedFrom": {
+            "type": "reference",
+            "target": -1,
+            "name": "AiDriverBase.inspect"
+          }
+        }
+      ],
+      "groups": [
+        {
+          "title": "Constructors",
+          "children": [
+            2
+          ]
+        },
+        {
+          "title": "Properties",
+          "children": [
+            17,
+            6,
+            5
+          ]
+        },
+        {
+          "title": "Accessors",
+          "children": [
+            9
+          ]
+        },
+        {
+          "title": "Methods",
+          "children": [
+            22,
+            11,
+            18
+          ]
+        }
+      ],
+      "extendedTypes": [
+        {
+          "type": "reference",
+          "target": {
+            "packageName": "@pixel-brewery/synapse-core",
+            "packagePath": "src/abstracts/AiDriverBase.ts",
+            "qualifiedName": "AiDriverBase"
+          },
+          "name": "AiDriverBase",
+          "package": "@pixel-brewery/synapse-core",
+          "externalUrl": "packages/synapse-core/api/classes/AiDriverBase.md"
+        }
+      ]
+    }
+  ],
+  "groups": [
+    {
+      "title": "Classes",
+      "children": [
+        24,
+        1
+      ]
+    },
+    {
+      "title": "Interfaces",
+      "children": [
+        53,
+        45
+      ]
+    }
+  ],
+  "packageName": "@pixel-brewery/synapse-testing",
+  "symbolIdMap": {
+    "0": {
+      "packageName": "@pixel-brewery/synapse-testing",
+      "packagePath": "src/index.ts",
+      "qualifiedName": ""
+    },
+    "1": {
+      "packageName": "@pixel-brewery/synapse-testing",
+      "packagePath": "src/adapters/SimulatedDriver.ts",
+      "qualifiedName": "SimulatedDriver"
+    },
+    "2": {
+      "packageName": "@pixel-brewery/synapse-testing",
+      "packagePath": "src/adapters/SimulatedDriver.ts",
+      "qualifiedName": "SimulatedDriver.__constructor"
+    },
+    "3": {
+      "packageName": "@pixel-brewery/synapse-testing",
+      "packagePath": "src/adapters/SimulatedDriver.ts",
+      "qualifiedName": "SimulatedDriver"
+    },
+    "4": {
+      "packageName": "@pixel-brewery/synapse-testing",
+      "packagePath": "src/adapters/SimulatedDriver.ts",
+      "qualifiedName": "_options"
+    },
+    "5": {
+      "packageName": "@pixel-brewery/synapse-testing",
+      "packagePath": "src/adapters/SimulatedDriver.ts",
+      "qualifiedName": "SimulatedDriver.id"
+    },
+    "6": {
+      "packageName": "@pixel-brewery/synapse-testing",
+      "packagePath": "src/adapters/SimulatedDriver.ts",
+      "qualifiedName": "SimulatedDriver.capabilities"
+    },
+    "9": {
+      "packageName": "@pixel-brewery/synapse-testing",
+      "packagePath": "src/adapters/SimulatedDriver.ts",
+      "qualifiedName": "SimulatedDriver.executionCount"
+    },
+    "10": {
+      "packageName": "@pixel-brewery/synapse-testing",
+      "packagePath": "src/adapters/SimulatedDriver.ts",
+      "qualifiedName": "SimulatedDriver.executionCount"
+    },
+    "11": {
+      "packageName": "@pixel-brewery/synapse-testing",
+      "packagePath": "src/adapters/SimulatedDriver.ts",
+      "qualifiedName": "SimulatedDriver.execute"
+    },
+    "12": {
+      "packageName": "@pixel-brewery/synapse-testing",
+      "packagePath": "src/adapters/SimulatedDriver.ts",
+      "qualifiedName": "SimulatedDriver.execute"
+    },
+    "13": {
+      "packageName": "@pixel-brewery/synapse-testing",
+      "packagePath": "src/adapters/SimulatedDriver.ts",
+      "qualifiedName": "context"
+    },
+    "17": {
+      "packageName": "@pixel-brewery/synapse-core",
+      "packagePath": "src/abstracts/AiDriverBase.ts",
+      "qualifiedName": "AiDriverBase.auth"
+    },
+    "18": {
+      "packageName": "@pixel-brewery/synapse-core",
+      "packagePath": "src/abstracts/AiDriverBase.ts",
+      "qualifiedName": "AiDriverBase.inspect"
+    },
+    "19": {
+      "packageName": "@pixel-brewery/synapse-core",
+      "packagePath": "src/abstracts/AiDriverBase.ts",
+      "qualifiedName": "AiDriverBase.inspect"
+    },
+    "20": {
+      "packageName": "@pixel-brewery/synapse-core",
+      "packagePath": "src/abstracts/AiDriverBase.ts",
+      "qualifiedName": "instance"
+    },
+    "21": {
+      "packageName": "@pixel-brewery/synapse-core",
+      "packagePath": "src/abstracts/AiDriverBase.ts",
+      "qualifiedName": "signal"
+    },
+    "22": {
+      "packageName": "@pixel-brewery/synapse-core",
+      "packagePath": "src/abstracts/AiDriverBase.ts",
+      "qualifiedName": "AiDriverBase.dispose"
+    },
+    "23": {
+      "packageName": "@pixel-brewery/synapse-core",
+      "packagePath": "src/abstracts/AiDriverBase.ts",
+      "qualifiedName": "AiDriverBase.dispose"
+    },
+    "24": {
+      "packageName": "@pixel-brewery/synapse-testing",
+      "packagePath": "src/adapters/ReplayProcessRunner.ts",
+      "qualifiedName": "ReplayProcessRunner"
+    },
+    "25": {
+      "packageName": "@pixel-brewery/synapse-testing",
+      "packagePath": "src/adapters/ReplayProcessRunner.ts",
+      "qualifiedName": "ReplayProcessRunner.__constructor"
+    },
+    "26": {
+      "packageName": "@pixel-brewery/synapse-testing",
+      "packagePath": "src/adapters/ReplayProcessRunner.ts",
+      "qualifiedName": "ReplayProcessRunner"
+    },
+    "27": {
+      "packageName": "@pixel-brewery/synapse-testing",
+      "packagePath": "src/adapters/ReplayProcessRunner.ts",
+      "qualifiedName": "steps"
+    },
+    "33": {
+      "packageName": "@pixel-brewery/synapse-testing",
+      "packagePath": "src/adapters/ReplayProcessRunner.ts",
+      "qualifiedName": "ReplayProcessRunner.executionCount"
+    },
+    "34": {
+      "packageName": "@pixel-brewery/synapse-testing",
+      "packagePath": "src/adapters/ReplayProcessRunner.ts",
+      "qualifiedName": "ReplayProcessRunner.executionCount"
+    },
+    "35": {
+      "packageName": "@pixel-brewery/synapse-testing",
+      "packagePath": "src/adapters/ReplayProcessRunner.ts",
+      "qualifiedName": "ReplayProcessRunner.run"
+    },
+    "36": {
+      "packageName": "@pixel-brewery/synapse-testing",
+      "packagePath": "src/adapters/ReplayProcessRunner.ts",
+      "qualifiedName": "ReplayProcessRunner.run"
+    },
+    "37": {
+      "packageName": "@pixel-brewery/synapse-testing",
+      "packagePath": "src/adapters/ReplayProcessRunner.ts",
+      "qualifiedName": "request"
+    },
+    "38": {
+      "packageName": "@pixel-brewery/synapse-testing",
+      "packagePath": "src/adapters/ReplayProcessRunner.ts",
+      "qualifiedName": "ReplayProcessRunner.dispose"
+    },
+    "39": {
+      "packageName": "@pixel-brewery/synapse-testing",
+      "packagePath": "src/adapters/ReplayProcessRunner.ts",
+      "qualifiedName": "ReplayProcessRunner.dispose"
+    },
+    "45": {
+      "packageName": "@pixel-brewery/synapse-testing",
+      "packagePath": "src/interfaces/ISimulatedDriverOptions.ts",
+      "qualifiedName": "ISimulatedDriverOptions"
+    },
+    "46": {
+      "packageName": "@pixel-brewery/synapse-testing",
+      "packagePath": "src/interfaces/ISimulatedDriverOptions.ts",
+      "qualifiedName": "ISimulatedDriverOptions.id"
+    },
+    "47": {
+      "packageName": "@pixel-brewery/synapse-testing",
+      "packagePath": "src/interfaces/ISimulatedDriverOptions.ts",
+      "qualifiedName": "ISimulatedDriverOptions.capabilities"
+    },
+    "48": {
+      "packageName": "@pixel-brewery/synapse-testing",
+      "packagePath": "src/interfaces/ISimulatedDriverOptions.ts",
+      "qualifiedName": "ISimulatedDriverOptions.events"
+    },
+    "49": {
+      "packageName": "@pixel-brewery/synapse-testing",
+      "packagePath": "src/interfaces/ISimulatedDriverOptions.ts",
+      "qualifiedName": "ISimulatedDriverOptions.result"
+    },
+    "50": {
+      "packageName": "@pixel-brewery/synapse-testing",
+      "packagePath": "src/interfaces/ISimulatedDriverOptions.ts",
+      "qualifiedName": "__type"
+    },
+    "51": {
+      "packageName": "@pixel-brewery/synapse-testing",
+      "packagePath": "src/interfaces/ISimulatedDriverOptions.ts",
+      "qualifiedName": "__type"
+    },
+    "52": {
+      "packageName": "@pixel-brewery/synapse-testing",
+      "packagePath": "src/interfaces/ISimulatedDriverOptions.ts",
+      "qualifiedName": "context"
+    },
+    "53": {
+      "packageName": "@pixel-brewery/synapse-testing",
+      "packagePath": "src/interfaces/IProcessReplay.ts",
+      "qualifiedName": "IProcessReplay"
+    },
+    "54": {
+      "packageName": "@pixel-brewery/synapse-testing",
+      "packagePath": "src/interfaces/IProcessReplay.ts",
+      "qualifiedName": "IProcessReplay.executable"
+    },
+    "55": {
+      "packageName": "@pixel-brewery/synapse-testing",
+      "packagePath": "src/interfaces/IProcessReplay.ts",
+      "qualifiedName": "IProcessReplay.args"
+    },
+    "56": {
+      "packageName": "@pixel-brewery/synapse-testing",
+      "packagePath": "src/interfaces/IProcessReplay.ts",
+      "qualifiedName": "IProcessReplay.stdout"
+    },
+    "57": {
+      "packageName": "@pixel-brewery/synapse-testing",
+      "packagePath": "src/interfaces/IProcessReplay.ts",
+      "qualifiedName": "IProcessReplay.stderr"
+    },
+    "58": {
+      "packageName": "@pixel-brewery/synapse-testing",
+      "packagePath": "src/interfaces/IProcessReplay.ts",
+      "qualifiedName": "IProcessReplay.exitCode"
+    },
+    "59": {
+      "packageName": "@pixel-brewery/synapse-testing",
+      "packagePath": "src/interfaces/IProcessReplay.ts",
+      "qualifiedName": "IProcessReplay.signal"
+    },
+    "60": {
+      "packageName": "@pixel-brewery/synapse-testing",
+      "packagePath": "src/interfaces/IProcessReplay.ts",
+      "qualifiedName": "IProcessReplay.waitForStop"
+    },
+    "61": {
+      "packageName": "@pixel-brewery/synapse-testing",
+      "packagePath": "src/interfaces/IProcessReplay.ts",
+      "qualifiedName": "IProcessReplay.onInput"
+    },
+    "62": {
+      "packageName": "@pixel-brewery/synapse-testing",
+      "packagePath": "src/interfaces/IProcessReplay.ts",
+      "qualifiedName": "__type"
+    },
+    "63": {
+      "packageName": "@pixel-brewery/synapse-testing",
+      "packagePath": "src/interfaces/IProcessReplay.ts",
+      "qualifiedName": "__type"
+    },
+    "64": {
+      "packageName": "@pixel-brewery/synapse-testing",
+      "packagePath": "src/interfaces/IProcessReplay.ts",
+      "qualifiedName": "value"
+    }
+  },
+  "files": {
+    "entries": {
+      "1": "libs/synapse-testing/src/index.ts"
+    },
+    "reflections": {
+      "1": 0
+    }
+  }
+}

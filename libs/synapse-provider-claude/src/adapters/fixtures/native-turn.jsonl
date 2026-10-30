@@ -1,0 +1,4 @@
+{"type":"system","subtype":"init","session_id":"claude-session-fixture-1"}
+{"type":"assistant","message":{"content":[{"type":"thinking","thinking":"Checking the supplied transcript."},{"type":"tool_use","id":"call-1","name":"Bash","input":{"command":"API_TOKEN=synthetic-private-value cat meeting.txt"}},{"type":"tool_use","id":"call-2","name":"Edit","input":{"file_path":"src/Notes.ts","old_string":"private old content","new_string":"private new content"}},{"type":"text","text":"Drafting the meeting summary."}]}}
+{"type":"user","message":{"content":[{"type":"tool_result","tool_use_id":"call-1","content":"synthetic-private-tool-output","is_error":true}]}}
+{"type":"result","subtype":"success","session_id":"claude-session-fixture-1","is_error":false,"result":"Meeting summary: publish the draft tomorrow.","usage":{"input_tokens":20,"cache_read_input_tokens":4,"cache_creation_input_tokens":2,"output_tokens":8}}

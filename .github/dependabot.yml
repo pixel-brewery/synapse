@@ -1,0 +1,27 @@
+version: 2
+updates:
+    - package-ecosystem: 'npm'
+      directory: '/'
+      rebase-strategy: 'auto'
+      schedule:
+          interval: 'weekly'
+      open-pull-requests-limit: 10
+      # TypeScript upgrades are chosen by maintainers.
+      ignore:
+          - dependency-name: 'typescript'
+      groups:
+          nx:
+              patterns:
+                  - '@nx/*'
+                  - 'nx'
+          testing:
+              patterns:
+                  - 'vitest'
+                  - '@vitest/*'
+
+    - package-ecosystem: 'github-actions'
+      directory: '/'
+      rebase-strategy: 'auto'
+      schedule:
+          interval: 'weekly'
+      open-pull-requests-limit: 5

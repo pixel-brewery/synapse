@@ -1,0 +1,6 @@
+interface:
+    display_name: 'Synapse Architect'
+    short_description: 'Architecture, implementation and API docs for Synapse'
+    default_prompt: 'Use $synapse-architect for this task and apply its relevant foundations and Synapse project rules.'
+policy:
+    allow_implicit_invocation: true

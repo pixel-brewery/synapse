@@ -1,0 +1,2135 @@
+{
+  "schemaVersion": "2.0",
+  "id": 0,
+  "name": "@pixel-brewery/synapse-provider-codex",
+  "variant": "project",
+  "kind": 1,
+  "flags": {},
+  "comment": {
+    "summary": [
+      {
+        "kind": "text",
+        "text": "Native Codex exec/JSONL integration with explicit isolated account profiles."
+      }
+    ]
+  },
+  "children": [
+    {
+      "id": 32,
+      "name": "CodexAuthDriver",
+      "variant": "declaration",
+      "kind": 128,
+      "flags": {
+        "isPublic": true
+      },
+      "comment": {
+        "summary": [
+          {
+            "kind": "text",
+            "text": "Native Codex login procedures scoped to one application's account profile."
+          }
+        ]
+      },
+      "children": [
+        {
+          "id": 33,
+          "name": "constructor",
+          "variant": "declaration",
+          "kind": 512,
+          "flags": {
+            "isPublic": true
+          },
+          "signatures": [
+            {
+              "id": 34,
+              "name": "CodexAuthDriver",
+              "variant": "signature",
+              "kind": 16384,
+              "flags": {
+                "isPublic": true
+              },
+              "comment": {
+                "summary": [
+                  {
+                    "kind": "text",
+                    "text": "Creates an inert authentication adapter."
+                  }
+                ]
+              },
+              "parameters": [
+                {
+                  "id": 35,
+                  "name": "_runner",
+                  "variant": "param",
+                  "kind": 32768,
+                  "flags": {},
+                  "comment": {
+                    "summary": [
+                      {
+                        "kind": "text",
+                        "text": "Explicit subprocess boundary shared with this Codex driver's executions."
+                      }
+                    ]
+                  },
+                  "type": {
+                    "type": "reference",
+                    "target": {
+                      "packageName": "@pixel-brewery/synapse-runtime",
+                      "packagePath": "src/abstracts/ProcessRunnerBase.ts",
+                      "qualifiedName": "ProcessRunnerBase"
+                    },
+                    "name": "ProcessRunnerBase",
+                    "package": "@pixel-brewery/synapse-runtime",
+                    "externalUrl": "packages/synapse-runtime/api/classes/ProcessRunnerBase.md"
+                  }
+                }
+              ],
+              "type": {
+                "type": "reference",
+                "target": 32,
+                "name": "CodexAuthDriver",
+                "package": "@pixel-brewery/synapse-provider-codex"
+              },
+              "overwrites": {
+                "type": "reference",
+                "target": -1,
+                "name": "AiAuthDriverBase.constructor",
+                "package": "@pixel-brewery/synapse-core",
+                "externalUrl": "packages/synapse-core/api/classes/AiAuthDriverBase.md#constructor"
+              }
+            }
+          ],
+          "overwrites": {
+            "type": "reference",
+            "target": -1,
+            "name": "AiAuthDriverBase.constructor",
+            "package": "@pixel-brewery/synapse-core",
+            "externalUrl": "packages/synapse-core/api/classes/AiAuthDriverBase.md#constructor"
+          }
+        },
+        {
+          "id": 44,
+          "name": "login",
+          "variant": "declaration",
+          "kind": 2048,
+          "flags": {
+            "isPublic": true
+          },
+          "signatures": [
+            {
+              "id": 45,
+              "name": "login",
+              "variant": "signature",
+              "kind": 4096,
+              "flags": {
+                "isPublic": true
+              },
+              "comment": {
+                "summary": [
+                  {
+                    "kind": "text",
+                    "text": "Runs one explicitly chosen native login; the shared auth owner verifies status afterward."
+                  }
+                ],
+                "blockTags": [
+                  {
+                    "tag": "@returns",
+                    "content": [
+                      {
+                        "kind": "text",
+                        "text": "Completion after native login exits and owned process cleanup finishes."
+                      }
+                    ]
+                  },
+                  {
+                    "tag": "@throws",
+                    "content": [
+                      {
+                        "kind": "text",
+                        "text": "An AiError for unsupported methods, invalid credentials or native failure."
+                      }
+                    ]
+                  }
+                ]
+              },
+              "parameters": [
+                {
+                  "id": 46,
+                  "name": "context",
+                  "variant": "param",
+                  "kind": 32768,
+                  "flags": {},
+                  "comment": {
+                    "summary": [
+                      {
+                        "kind": "text",
+                        "text": "Isolated, expiring operation and correlated user interactions."
+                      }
+                    ]
+                  },
+                  "type": {
+                    "type": "reference",
+                    "target": {
+                      "packageName": "@pixel-brewery/synapse-core",
+                      "packagePath": "src/interfaces/IAiAuthContext.ts",
+                      "qualifiedName": "IAiAuthContext"
+                    },
+                    "name": "IAiAuthContext",
+                    "package": "@pixel-brewery/synapse-core",
+                    "externalUrl": "packages/synapse-core/api/interfaces/IAiAuthContext.md"
+                  }
+                }
+              ],
+              "type": {
+                "type": "reference",
+                "target": {
+                  "packageName": "typescript",
+                  "packagePath": "lib/lib.es5.d.ts",
+                  "qualifiedName": "Promise"
+                },
+                "typeArguments": [
+                  {
+                    "type": "intrinsic",
+                    "name": "void"
+                  }
+                ],
+                "name": "Promise",
+                "package": "typescript"
+              },
+              "overwrites": {
+                "type": "reference",
+                "target": -1,
+                "name": "AiAuthDriverBase.login"
+              }
+            }
+          ],
+          "overwrites": {
+            "type": "reference",
+            "target": -1,
+            "name": "AiAuthDriverBase.login"
+          }
+        },
+        {
+          "id": 47,
+          "name": "logout",
+          "variant": "declaration",
+          "kind": 2048,
+          "flags": {
+            "isPublic": true
+          },
+          "signatures": [
+            {
+              "id": 48,
+              "name": "logout",
+              "variant": "signature",
+              "kind": 4096,
+              "flags": {
+                "isPublic": true
+              },
+              "comment": {
+                "summary": [
+                  {
+                    "kind": "text",
+                    "text": "Signs out only this account and removes its owned execution credential snapshots."
+                  }
+                ],
+                "blockTags": [
+                  {
+                    "tag": "@returns",
+                    "content": [
+                      {
+                        "kind": "text",
+                        "text": "Completion after native logout and owned snapshot cleanup."
+                      }
+                    ]
+                  },
+                  {
+                    "tag": "@throws",
+                    "content": [
+                      {
+                        "kind": "text",
+                        "text": "An AiError when native logout or local cleanup fails."
+                      }
+                    ]
+                  }
+                ]
+              },
+              "parameters": [
+                {
+                  "id": 49,
+                  "name": "instance",
+                  "variant": "param",
+                  "kind": 32768,
+                  "flags": {},
+                  "comment": {
+                    "summary": [
+                      {
+                        "kind": "text",
+                        "text": "Isolated native credential owner."
+                      }
+                    ]
+                  },
+                  "type": {
+                    "type": "reference",
+                    "target": {
+                      "packageName": "@pixel-brewery/synapse-core",
+                      "packagePath": "src/interfaces/IAiInstance.ts",
+                      "qualifiedName": "IAiInstance"
+                    },
+                    "name": "IAiInstance",
+                    "package": "@pixel-brewery/synapse-core",
+                    "externalUrl": "packages/synapse-core/api/interfaces/IAiInstance.md"
+                  }
+                },
+                {
+                  "id": 50,
+                  "name": "signal",
+                  "variant": "param",
+                  "kind": 32768,
+                  "flags": {},
+                  "comment": {
+                    "summary": [
+                      {
+                        "kind": "text",
+                        "text": "Logout cancellation, controlled by the shared auth lifecycle."
+                      }
+                    ]
+                  },
+                  "type": {
+                    "type": "reference",
+                    "target": {
+                      "packageName": "typescript",
+                      "packagePath": "lib/lib.dom.d.ts",
+                      "qualifiedName": "AbortSignal"
+                    },
+                    "name": "AbortSignal",
+                    "package": "typescript"
+                  }
+                }
+              ],
+              "type": {
+                "type": "reference",
+                "target": {
+                  "packageName": "typescript",
+                  "packagePath": "lib/lib.es5.d.ts",
+                  "qualifiedName": "Promise"
+                },
+                "typeArguments": [
+                  {
+                    "type": "intrinsic",
+                    "name": "void"
+                  }
+                ],
+                "name": "Promise",
+                "package": "typescript"
+              },
+              "overwrites": {
+                "type": "reference",
+                "target": -1,
+                "name": "AiAuthDriverBase.logout"
+              }
+            }
+          ],
+          "overwrites": {
+            "type": "reference",
+            "target": -1,
+            "name": "AiAuthDriverBase.logout"
+          }
+        },
+        {
+          "id": 37,
+          "name": "methods",
+          "variant": "declaration",
+          "kind": 2048,
+          "flags": {
+            "isPublic": true
+          },
+          "signatures": [
+            {
+              "id": 38,
+              "name": "methods",
+              "variant": "signature",
+              "kind": 4096,
+              "flags": {
+                "isPublic": true
+              },
+              "comment": {
+                "summary": [
+                  {
+                    "kind": "text",
+                    "text": "Describes the native procedures supported by the characterized Codex CLI."
+                  }
+                ],
+                "blockTags": [
+                  {
+                    "tag": "@returns",
+                    "content": [
+                      {
+                        "kind": "text",
+                        "text": "Browser, device code and stdin-based API/access-token procedures."
+                      }
+                    ]
+                  }
+                ]
+              },
+              "parameters": [
+                {
+                  "id": 39,
+                  "name": "_instance",
+                  "variant": "param",
+                  "kind": 32768,
+                  "flags": {},
+                  "comment": {
+                    "summary": [
+                      {
+                        "kind": "text",
+                        "text": "Selected account; no state is read during method discovery."
+                      }
+                    ]
+                  },
+                  "type": {
+                    "type": "reference",
+                    "target": {
+                      "packageName": "@pixel-brewery/synapse-core",
+                      "packagePath": "src/interfaces/IAiInstance.ts",
+                      "qualifiedName": "IAiInstance"
+                    },
+                    "name": "IAiInstance",
+                    "package": "@pixel-brewery/synapse-core",
+                    "externalUrl": "packages/synapse-core/api/interfaces/IAiInstance.md"
+                  }
+                }
+              ],
+              "type": {
+                "type": "typeOperator",
+                "operator": "readonly",
+                "target": {
+                  "type": "array",
+                  "elementType": {
+                    "type": "reference",
+                    "target": {
+                      "packageName": "@pixel-brewery/synapse-core",
+                      "packagePath": "src/interfaces/IAiAuthMethod.ts",
+                      "qualifiedName": "IAiAuthMethod"
+                    },
+                    "name": "IAiAuthMethod",
+                    "package": "@pixel-brewery/synapse-core",
+                    "externalUrl": "packages/synapse-core/api/interfaces/IAiAuthMethod.md"
+                  }
+                }
+              },
+              "overwrites": {
+                "type": "reference",
+                "target": -1,
+                "name": "AiAuthDriverBase.methods",
+                "package": "@pixel-brewery/synapse-core",
+                "externalUrl": "packages/synapse-core/api/classes/AiAuthDriverBase.md#methods"
+              }
+            }
+          ],
+          "overwrites": {
+            "type": "reference",
+            "target": -1,
+            "name": "AiAuthDriverBase.methods",
+            "package": "@pixel-brewery/synapse-core",
+            "externalUrl": "packages/synapse-core/api/classes/AiAuthDriverBase.md#methods"
+          }
+        },
+        {
+          "id": 40,
+          "name": "status",
+          "variant": "declaration",
+          "kind": 2048,
+          "flags": {
+            "isPublic": true
+          },
+          "signatures": [
+            {
+              "id": 41,
+              "name": "status",
+              "variant": "signature",
+              "kind": 4096,
+              "flags": {
+                "isPublic": true
+              },
+              "comment": {
+                "summary": [
+                  {
+                    "kind": "text",
+                    "text": "Checks only native login status, without inference, hooks or a login attempt."
+                  }
+                ],
+                "blockTags": [
+                  {
+                    "tag": "@returns",
+                    "content": [
+                      {
+                        "kind": "text",
+                        "text": "Safe verified native authentication state."
+                      }
+                    ]
+                  }
+                ]
+              },
+              "parameters": [
+                {
+                  "id": 42,
+                  "name": "instance",
+                  "variant": "param",
+                  "kind": 32768,
+                  "flags": {},
+                  "comment": {
+                    "summary": [
+                      {
+                        "kind": "text",
+                        "text": "Isolated native credential owner."
+                      }
+                    ]
+                  },
+                  "type": {
+                    "type": "reference",
+                    "target": {
+                      "packageName": "@pixel-brewery/synapse-core",
+                      "packagePath": "src/interfaces/IAiInstance.ts",
+                      "qualifiedName": "IAiInstance"
+                    },
+                    "name": "IAiInstance",
+                    "package": "@pixel-brewery/synapse-core",
+                    "externalUrl": "packages/synapse-core/api/interfaces/IAiInstance.md"
+                  }
+                },
+                {
+                  "id": 43,
+                  "name": "signal",
+                  "variant": "param",
+                  "kind": 32768,
+                  "flags": {},
+                  "comment": {
+                    "summary": [
+                      {
+                        "kind": "text",
+                        "text": "Bounded caller cancellation."
+                      }
+                    ]
+                  },
+                  "type": {
+                    "type": "reference",
+                    "target": {
+                      "packageName": "typescript",
+                      "packagePath": "lib/lib.dom.d.ts",
+                      "qualifiedName": "AbortSignal"
+                    },
+                    "name": "AbortSignal",
+                    "package": "typescript"
+                  }
+                }
+              ],
+              "type": {
+                "type": "reference",
+                "target": {
+                  "packageName": "typescript",
+                  "packagePath": "lib/lib.es5.d.ts",
+                  "qualifiedName": "Promise"
+                },
+                "typeArguments": [
+                  {
+                    "type": "reference",
+                    "target": {
+                      "packageName": "@pixel-brewery/synapse-core",
+                      "packagePath": "src/interfaces/IAiAuthStatus.ts",
+                      "qualifiedName": "IAiAuthStatus"
+                    },
+                    "name": "IAiAuthStatus",
+                    "package": "@pixel-brewery/synapse-core",
+                    "externalUrl": "packages/synapse-core/api/interfaces/IAiAuthStatus.md"
+                  }
+                ],
+                "name": "Promise",
+                "package": "typescript"
+              },
+              "overwrites": {
+                "type": "reference",
+                "target": -1,
+                "name": "AiAuthDriverBase.status"
+              }
+            }
+          ],
+          "overwrites": {
+            "type": "reference",
+            "target": -1,
+            "name": "AiAuthDriverBase.status"
+          }
+        }
+      ],
+      "groups": [
+        {
+          "title": "Constructors",
+          "children": [
+            33
+          ]
+        },
+        {
+          "title": "Methods",
+          "children": [
+            44,
+            47,
+            37,
+            40
+          ]
+        }
+      ],
+      "extendedTypes": [
+        {
+          "type": "reference",
+          "target": {
+            "packageName": "@pixel-brewery/synapse-core",
+            "packagePath": "src/abstracts/AiAuthDriverBase.ts",
+            "qualifiedName": "AiAuthDriverBase"
+          },
+          "name": "AiAuthDriverBase",
+          "package": "@pixel-brewery/synapse-core",
+          "externalUrl": "packages/synapse-core/api/classes/AiAuthDriverBase.md"
+        }
+      ]
+    },
+    {
+      "id": 1,
+      "name": "CodexDriver",
+      "variant": "declaration",
+      "kind": 128,
+      "flags": {
+        "isPublic": true
+      },
+      "comment": {
+        "summary": [
+          {
+            "kind": "text",
+            "text": "Native Codex exec/JSONL adapter with isolated credentials and legacy-compatible sessions."
+          }
+        ],
+        "blockTags": [
+          {
+            "tag": "@remarks",
+            "content": [
+              {
+                "kind": "text",
+                "text": "Constructing this driver performs no discovery, authentication or process work."
+              }
+            ]
+          }
+        ]
+      },
+      "children": [
+        {
+          "id": 7,
+          "name": "auth",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {
+            "isPublic": true,
+            "isReadonly": true
+          },
+          "comment": {
+            "summary": [
+              {
+                "kind": "text",
+                "text": "Native account procedures sharing the driver's subprocess owner."
+              }
+            ]
+          },
+          "type": {
+            "type": "reference",
+            "target": 32,
+            "name": "CodexAuthDriver",
+            "package": "@pixel-brewery/synapse-provider-codex"
+          },
+          "overwrites": {
+            "type": "reference",
+            "target": -1,
+            "name": "AiDriverBase.auth"
+          }
+        },
+        {
+          "id": 6,
+          "name": "capabilities",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {
+            "isPublic": true,
+            "isReadonly": true
+          },
+          "comment": {
+            "summary": [
+              {
+                "kind": "text",
+                "text": "Native sandbox, resume and schema capabilities enforced by this adapter."
+              }
+            ]
+          },
+          "type": {
+            "type": "reference",
+            "target": {
+              "packageName": "@pixel-brewery/synapse-core",
+              "packagePath": "src/interfaces/IAiCapabilities.ts",
+              "qualifiedName": "IAiCapabilities"
+            },
+            "name": "IAiCapabilities",
+            "package": "@pixel-brewery/synapse-core",
+            "externalUrl": "packages/synapse-core/api/interfaces/IAiCapabilities.md"
+          },
+          "defaultValue": "...",
+          "overwrites": {
+            "type": "reference",
+            "target": -1,
+            "name": "AiDriverBase.capabilities"
+          }
+        },
+        {
+          "id": 2,
+          "name": "constructor",
+          "variant": "declaration",
+          "kind": 512,
+          "flags": {
+            "isPublic": true
+          },
+          "signatures": [
+            {
+              "id": 3,
+              "name": "CodexDriver",
+              "variant": "signature",
+              "kind": 16384,
+              "flags": {
+                "isPublic": true
+              },
+              "comment": {
+                "summary": [
+                  {
+                    "kind": "text",
+                    "text": "Creates an explicitly composed native driver without startup effects."
+                  }
+                ]
+              },
+              "parameters": [
+                {
+                  "id": 4,
+                  "name": "_runner",
+                  "variant": "param",
+                  "kind": 32768,
+                  "flags": {},
+                  "comment": {
+                    "summary": [
+                      {
+                        "kind": "text",
+                        "text": "Dedicated owned subprocess runner; dispose releases its processes."
+                      }
+                    ]
+                  },
+                  "type": {
+                    "type": "reference",
+                    "target": {
+                      "packageName": "@pixel-brewery/synapse-runtime",
+                      "packagePath": "src/abstracts/ProcessRunnerBase.ts",
+                      "qualifiedName": "ProcessRunnerBase"
+                    },
+                    "name": "ProcessRunnerBase",
+                    "package": "@pixel-brewery/synapse-runtime",
+                    "externalUrl": "packages/synapse-runtime/api/classes/ProcessRunnerBase.md"
+                  }
+                }
+              ],
+              "type": {
+                "type": "reference",
+                "target": 1,
+                "name": "CodexDriver",
+                "package": "@pixel-brewery/synapse-provider-codex"
+              },
+              "overwrites": {
+                "type": "reference",
+                "target": -1,
+                "name": "AiDriverBase.constructor",
+                "package": "@pixel-brewery/synapse-core",
+                "externalUrl": "packages/synapse-core/api/classes/AiDriverBase.md#constructor"
+              }
+            }
+          ],
+          "overwrites": {
+            "type": "reference",
+            "target": -1,
+            "name": "AiDriverBase.constructor",
+            "package": "@pixel-brewery/synapse-core",
+            "externalUrl": "packages/synapse-core/api/classes/AiDriverBase.md#constructor"
+          }
+        },
+        {
+          "id": 19,
+          "name": "dispose",
+          "variant": "declaration",
+          "kind": 2048,
+          "flags": {
+            "isPublic": true
+          },
+          "signatures": [
+            {
+              "id": 20,
+              "name": "dispose",
+              "variant": "signature",
+              "kind": 4096,
+              "flags": {
+                "isPublic": true
+              },
+              "comment": {
+                "summary": [
+                  {
+                    "kind": "text",
+                    "text": "Stops owned native processes and awaits queued same-profile operations."
+                  }
+                ],
+                "blockTags": [
+                  {
+                    "tag": "@returns",
+                    "content": [
+                      {
+                        "kind": "text",
+                        "text": "Completion once this driver's process and profile queues are drained."
+                      }
+                    ]
+                  }
+                ]
+              },
+              "type": {
+                "type": "reference",
+                "target": {
+                  "packageName": "typescript",
+                  "packagePath": "lib/lib.es5.d.ts",
+                  "qualifiedName": "Promise"
+                },
+                "typeArguments": [
+                  {
+                    "type": "intrinsic",
+                    "name": "void"
+                  }
+                ],
+                "name": "Promise",
+                "package": "typescript"
+              },
+              "overwrites": {
+                "type": "reference",
+                "target": -1,
+                "name": "AiDriverBase.dispose"
+              }
+            }
+          ],
+          "overwrites": {
+            "type": "reference",
+            "target": -1,
+            "name": "AiDriverBase.dispose"
+          }
+        },
+        {
+          "id": 12,
+          "name": "execute",
+          "variant": "declaration",
+          "kind": 2048,
+          "flags": {
+            "isPublic": true
+          },
+          "signatures": [
+            {
+              "id": 13,
+              "name": "execute",
+              "variant": "signature",
+              "kind": 4096,
+              "flags": {
+                "isPublic": true
+              },
+              "comment": {
+                "summary": [
+                  {
+                    "kind": "text",
+                    "text": "Executes one turn through native Codex exec; prompts never enter argv."
+                  }
+                ],
+                "blockTags": [
+                  {
+                    "tag": "@returns",
+                    "content": [
+                      {
+                        "kind": "text",
+                        "text": "Final text, session and usage from this same native turn."
+                      }
+                    ]
+                  },
+                  {
+                    "tag": "@throws",
+                    "content": [
+                      {
+                        "kind": "text",
+                        "text": "An AiError for unsupported policy, native/protocol failure or credential persistence failure."
+                      }
+                    ]
+                  },
+                  {
+                    "tag": "@remarks",
+                    "content": [
+                      {
+                        "kind": "text",
+                        "text": "Same-profile turns serialize credential snapshots and native token refresh commits. Different profiles remain independent. Unconfirmed native process cleanup blocks credential refresh commits."
+                      }
+                    ]
+                  }
+                ]
+              },
+              "parameters": [
+                {
+                  "id": 14,
+                  "name": "context",
+                  "variant": "param",
+                  "kind": 32768,
+                  "flags": {},
+                  "comment": {
+                    "summary": [
+                      {
+                        "kind": "text",
+                        "text": "Isolated authorized request and critical event callback."
+                      }
+                    ]
+                  },
+                  "type": {
+                    "type": "reference",
+                    "target": {
+                      "packageName": "@pixel-brewery/synapse-core",
+                      "packagePath": "src/interfaces/IAiExecutionContext.ts",
+                      "qualifiedName": "IAiExecutionContext"
+                    },
+                    "name": "IAiExecutionContext",
+                    "package": "@pixel-brewery/synapse-core",
+                    "externalUrl": "packages/synapse-core/api/interfaces/IAiExecutionContext.md"
+                  }
+                }
+              ],
+              "type": {
+                "type": "reference",
+                "target": {
+                  "packageName": "typescript",
+                  "packagePath": "lib/lib.es5.d.ts",
+                  "qualifiedName": "Promise"
+                },
+                "typeArguments": [
+                  {
+                    "type": "reference",
+                    "target": {
+                      "packageName": "@pixel-brewery/synapse-core",
+                      "packagePath": "src/interfaces/IAiDriverResult.ts",
+                      "qualifiedName": "IAiDriverResult"
+                    },
+                    "name": "IAiDriverResult",
+                    "package": "@pixel-brewery/synapse-core",
+                    "externalUrl": "packages/synapse-core/api/interfaces/IAiDriverResult.md"
+                  }
+                ],
+                "name": "Promise",
+                "package": "typescript"
+              },
+              "overwrites": {
+                "type": "reference",
+                "target": -1,
+                "name": "AiDriverBase.execute"
+              }
+            }
+          ],
+          "overwrites": {
+            "type": "reference",
+            "target": -1,
+            "name": "AiDriverBase.execute"
+          }
+        },
+        {
+          "id": 5,
+          "name": "id",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {
+            "isPublic": true,
+            "isReadonly": true
+          },
+          "comment": {
+            "summary": [
+              {
+                "kind": "text",
+                "text": "Open driver identity used for explicit runtime registration."
+              }
+            ]
+          },
+          "type": {
+            "type": "intrinsic",
+            "name": "string"
+          },
+          "defaultValue": "'codex'",
+          "overwrites": {
+            "type": "reference",
+            "target": -1,
+            "name": "AiDriverBase.id"
+          }
+        },
+        {
+          "id": 15,
+          "name": "inspect",
+          "variant": "declaration",
+          "kind": 2048,
+          "flags": {
+            "isPublic": true
+          },
+          "signatures": [
+            {
+              "id": 16,
+              "name": "inspect",
+              "variant": "signature",
+              "kind": 4096,
+              "flags": {
+                "isPublic": true
+              },
+              "comment": {
+                "summary": [
+                  {
+                    "kind": "text",
+                    "text": "Inspects metadata through a separate credential-only native home, without agent startup."
+                  }
+                ],
+                "blockTags": [
+                  {
+                    "tag": "@returns",
+                    "content": [
+                      {
+                        "kind": "text",
+                        "text": "Native models, account limits and safe optional usage details."
+                      }
+                    ]
+                  },
+                  {
+                    "tag": "@throws",
+                    "content": [
+                      {
+                        "kind": "text",
+                        "text": "An AiError for model/protocol or host persistence failure."
+                      }
+                    ]
+                  },
+                  {
+                    "tag": "@remarks",
+                    "content": [
+                      {
+                        "kind": "text",
+                        "text": "Unconfirmed native process cleanup blocks credential refresh commits."
+                      }
+                    ]
+                  }
+                ]
+              },
+              "parameters": [
+                {
+                  "id": 17,
+                  "name": "instance",
+                  "variant": "param",
+                  "kind": 32768,
+                  "flags": {},
+                  "comment": {
+                    "summary": [
+                      {
+                        "kind": "text",
+                        "text": "Selected isolated account and explicit native paths."
+                      }
+                    ]
+                  },
+                  "type": {
+                    "type": "reference",
+                    "target": {
+                      "packageName": "@pixel-brewery/synapse-core",
+                      "packagePath": "src/interfaces/IAiInstance.ts",
+                      "qualifiedName": "IAiInstance"
+                    },
+                    "name": "IAiInstance",
+                    "package": "@pixel-brewery/synapse-core",
+                    "externalUrl": "packages/synapse-core/api/interfaces/IAiInstance.md"
+                  }
+                },
+                {
+                  "id": 18,
+                  "name": "signal",
+                  "variant": "param",
+                  "kind": 32768,
+                  "flags": {},
+                  "comment": {
+                    "summary": [
+                      {
+                        "kind": "text",
+                        "text": "Bounded inspection cancellation."
+                      }
+                    ]
+                  },
+                  "type": {
+                    "type": "reference",
+                    "target": {
+                      "packageName": "typescript",
+                      "packagePath": "lib/lib.dom.d.ts",
+                      "qualifiedName": "AbortSignal"
+                    },
+                    "name": "AbortSignal",
+                    "package": "typescript"
+                  }
+                }
+              ],
+              "type": {
+                "type": "reference",
+                "target": {
+                  "packageName": "typescript",
+                  "packagePath": "lib/lib.es5.d.ts",
+                  "qualifiedName": "Promise"
+                },
+                "typeArguments": [
+                  {
+                    "type": "reference",
+                    "target": 55,
+                    "name": "ICodexInspection",
+                    "package": "@pixel-brewery/synapse-provider-codex"
+                  }
+                ],
+                "name": "Promise",
+                "package": "typescript"
+              },
+              "overwrites": {
+                "type": "reference",
+                "target": -1,
+                "name": "AiDriverBase.inspect"
+              }
+            }
+          ],
+          "overwrites": {
+            "type": "reference",
+            "target": -1,
+            "name": "AiDriverBase.inspect"
+          }
+        }
+      ],
+      "groups": [
+        {
+          "title": "Constructors",
+          "children": [
+            2
+          ]
+        },
+        {
+          "title": "Properties",
+          "children": [
+            7,
+            6,
+            5
+          ]
+        },
+        {
+          "title": "Methods",
+          "children": [
+            19,
+            12,
+            15
+          ]
+        }
+      ],
+      "extendedTypes": [
+        {
+          "type": "reference",
+          "target": {
+            "packageName": "@pixel-brewery/synapse-core",
+            "packagePath": "src/abstracts/AiDriverBase.ts",
+            "qualifiedName": "AiDriverBase"
+          },
+          "name": "AiDriverBase",
+          "package": "@pixel-brewery/synapse-core",
+          "externalUrl": "packages/synapse-core/api/classes/AiDriverBase.md"
+        }
+      ]
+    },
+    {
+      "id": 61,
+      "name": "ICodexAccountUsage",
+      "variant": "declaration",
+      "kind": 256,
+      "flags": {
+        "isPublic": true
+      },
+      "comment": {
+        "summary": [
+          {
+            "kind": "text",
+            "text": "Safe native Codex account metadata retained for host integrations."
+          }
+        ]
+      },
+      "children": [
+        {
+          "id": 64,
+          "name": "credits",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {
+            "isOptional": true,
+            "isReadonly": true
+          },
+          "comment": {
+            "summary": [
+              {
+                "kind": "text",
+                "text": "Optional native account-credit information."
+              }
+            ]
+          },
+          "type": {
+            "type": "reference",
+            "target": 71,
+            "name": "ICodexCredits",
+            "package": "@pixel-brewery/synapse-provider-codex"
+          }
+        },
+        {
+          "id": 62,
+          "name": "planType",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {
+            "isOptional": true,
+            "isReadonly": true
+          },
+          "comment": {
+            "summary": [
+              {
+                "kind": "text",
+                "text": "Native account/subscription plan name when reported."
+              }
+            ]
+          },
+          "type": {
+            "type": "intrinsic",
+            "name": "string"
+          }
+        },
+        {
+          "id": 65,
+          "name": "tokenUsage",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {
+            "isOptional": true,
+            "isReadonly": true
+          },
+          "comment": {
+            "summary": [
+              {
+                "kind": "text",
+                "text": "Optional native account usage statistics."
+              }
+            ]
+          },
+          "type": {
+            "type": "reference",
+            "target": 75,
+            "name": "ICodexTokenUsage",
+            "package": "@pixel-brewery/synapse-provider-codex"
+          }
+        },
+        {
+          "id": 63,
+          "name": "windows",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {
+            "isReadonly": true
+          },
+          "comment": {
+            "summary": [
+              {
+                "kind": "text",
+                "text": "Native primary and secondary capacity windows."
+              }
+            ]
+          },
+          "type": {
+            "type": "typeOperator",
+            "operator": "readonly",
+            "target": {
+              "type": "array",
+              "elementType": {
+                "type": "reference",
+                "target": 66,
+                "name": "ICodexUsageWindow",
+                "package": "@pixel-brewery/synapse-provider-codex"
+              }
+            }
+          }
+        }
+      ],
+      "groups": [
+        {
+          "title": "Properties",
+          "children": [
+            64,
+            62,
+            65,
+            63
+          ]
+        }
+      ]
+    },
+    {
+      "id": 71,
+      "name": "ICodexCredits",
+      "variant": "declaration",
+      "kind": 256,
+      "flags": {
+        "isPublic": true
+      },
+      "comment": {
+        "summary": [
+          {
+            "kind": "text",
+            "text": "Safe native account-credit metadata, without reusable credentials."
+          }
+        ]
+      },
+      "children": [
+        {
+          "id": 74,
+          "name": "balance",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {
+            "isOptional": true,
+            "isReadonly": true
+          },
+          "comment": {
+            "summary": [
+              {
+                "kind": "text",
+                "text": "Native formatted credit balance when available."
+              }
+            ]
+          },
+          "type": {
+            "type": "intrinsic",
+            "name": "string"
+          }
+        },
+        {
+          "id": 72,
+          "name": "hasCredits",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {
+            "isReadonly": true
+          },
+          "comment": {
+            "summary": [
+              {
+                "kind": "text",
+                "text": "Whether the native account reports available paid credits."
+              }
+            ]
+          },
+          "type": {
+            "type": "intrinsic",
+            "name": "boolean"
+          }
+        },
+        {
+          "id": 73,
+          "name": "unlimited",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {
+            "isReadonly": true
+          },
+          "comment": {
+            "summary": [
+              {
+                "kind": "text",
+                "text": "Whether the native account reports unlimited credits."
+              }
+            ]
+          },
+          "type": {
+            "type": "intrinsic",
+            "name": "boolean"
+          }
+        }
+      ],
+      "groups": [
+        {
+          "title": "Properties",
+          "children": [
+            74,
+            72,
+            73
+          ]
+        }
+      ]
+    },
+    {
+      "id": 55,
+      "name": "ICodexInspection",
+      "variant": "declaration",
+      "kind": 256,
+      "flags": {
+        "isPublic": true
+      },
+      "comment": {
+        "summary": [
+          {
+            "kind": "text",
+            "text": "Generic inspection plus safe native usage details used by existing desktop consumers."
+          }
+        ]
+      },
+      "children": [
+        {
+          "id": 58,
+          "name": "auth",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {
+            "isReadonly": true,
+            "isInherited": true
+          },
+          "comment": {
+            "summary": [
+              {
+                "kind": "text",
+                "text": "Verified account state."
+              }
+            ]
+          },
+          "type": {
+            "type": "reference",
+            "target": {
+              "packageName": "@pixel-brewery/synapse-core",
+              "packagePath": "src/interfaces/IAiAuthStatus.ts",
+              "qualifiedName": "IAiAuthStatus"
+            },
+            "name": "IAiAuthStatus",
+            "package": "@pixel-brewery/synapse-core",
+            "externalUrl": "packages/synapse-core/api/interfaces/IAiAuthStatus.md"
+          },
+          "inheritedFrom": {
+            "type": "reference",
+            "target": -1,
+            "name": "IAiInspection.auth"
+          }
+        },
+        {
+          "id": 60,
+          "name": "limits",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {
+            "isOptional": true,
+            "isReadonly": true,
+            "isInherited": true
+          },
+          "comment": {
+            "summary": [
+              {
+                "kind": "text",
+                "text": "Optional account/model usage limits and reset instants."
+              }
+            ]
+          },
+          "type": {
+            "type": "typeOperator",
+            "operator": "readonly",
+            "target": {
+              "type": "array",
+              "elementType": {
+                "type": "reference",
+                "target": {
+                  "packageName": "@pixel-brewery/synapse-core",
+                  "packagePath": "src/interfaces/IAiLimit.ts",
+                  "qualifiedName": "IAiLimit"
+                },
+                "name": "IAiLimit",
+                "package": "@pixel-brewery/synapse-core",
+                "externalUrl": "packages/synapse-core/api/interfaces/IAiLimit.md"
+              }
+            }
+          },
+          "inheritedFrom": {
+            "type": "reference",
+            "target": -1,
+            "name": "IAiInspection.limits"
+          }
+        },
+        {
+          "id": 57,
+          "name": "metadataWarnings",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {
+            "isOptional": true,
+            "isReadonly": true
+          },
+          "comment": {
+            "summary": [
+              {
+                "kind": "text",
+                "text": "Safe optional-metadata degradation categories; raw RPC errors never cross this boundary."
+              }
+            ]
+          },
+          "type": {
+            "type": "typeOperator",
+            "operator": "readonly",
+            "target": {
+              "type": "array",
+              "elementType": {
+                "type": "union",
+                "types": [
+                  {
+                    "type": "literal",
+                    "value": "rate-limits-unavailable"
+                  },
+                  {
+                    "type": "literal",
+                    "value": "usage-unavailable"
+                  }
+                ]
+              }
+            }
+          }
+        },
+        {
+          "id": 59,
+          "name": "models",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {
+            "isOptional": true,
+            "isReadonly": true,
+            "isInherited": true
+          },
+          "comment": {
+            "summary": [
+              {
+                "kind": "text",
+                "text": "Provider-advertised models; the consumer owns eligibility and catalog policy."
+              }
+            ]
+          },
+          "type": {
+            "type": "typeOperator",
+            "operator": "readonly",
+            "target": {
+              "type": "array",
+              "elementType": {
+                "type": "reference",
+                "target": {
+                  "packageName": "@pixel-brewery/synapse-core",
+                  "packagePath": "src/interfaces/IAiModel.ts",
+                  "qualifiedName": "IAiModel"
+                },
+                "name": "IAiModel",
+                "package": "@pixel-brewery/synapse-core",
+                "externalUrl": "packages/synapse-core/api/interfaces/IAiModel.md"
+              }
+            }
+          },
+          "inheritedFrom": {
+            "type": "reference",
+            "target": -1,
+            "name": "IAiInspection.models"
+          }
+        },
+        {
+          "id": 56,
+          "name": "usage",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {
+            "isOptional": true,
+            "isReadonly": true
+          },
+          "comment": {
+            "summary": [
+              {
+                "kind": "text",
+                "text": "Optional native account/subscription usage details."
+              }
+            ]
+          },
+          "type": {
+            "type": "reference",
+            "target": 61,
+            "name": "ICodexAccountUsage",
+            "package": "@pixel-brewery/synapse-provider-codex"
+          }
+        }
+      ],
+      "groups": [
+        {
+          "title": "Properties",
+          "children": [
+            58,
+            60,
+            57,
+            59,
+            56
+          ]
+        }
+      ],
+      "extendedTypes": [
+        {
+          "type": "reference",
+          "target": {
+            "packageName": "@pixel-brewery/synapse-core",
+            "packagePath": "src/interfaces/IAiInspection.ts",
+            "qualifiedName": "IAiInspection"
+          },
+          "name": "IAiInspection",
+          "package": "@pixel-brewery/synapse-core",
+          "externalUrl": "packages/synapse-core/api/interfaces/IAiInspection.md"
+        }
+      ]
+    },
+    {
+      "id": 75,
+      "name": "ICodexTokenUsage",
+      "variant": "declaration",
+      "kind": 256,
+      "flags": {
+        "isPublic": true
+      },
+      "comment": {
+        "summary": [
+          {
+            "kind": "text",
+            "text": "Native account usage statistics, distinct from per-turn token usage."
+          }
+        ]
+      },
+      "children": [
+        {
+          "id": 78,
+          "name": "currentStreakDays",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {
+            "isOptional": true,
+            "isReadonly": true
+          },
+          "comment": {
+            "summary": [
+              {
+                "kind": "text",
+                "text": "Native current activity streak in calendar days."
+              }
+            ]
+          },
+          "type": {
+            "type": "intrinsic",
+            "name": "number"
+          }
+        },
+        {
+          "id": 76,
+          "name": "lifetimeTokens",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {
+            "isOptional": true,
+            "isReadonly": true
+          },
+          "comment": {
+            "summary": [
+              {
+                "kind": "text",
+                "text": "Native lifetime token total when reported."
+              }
+            ]
+          },
+          "type": {
+            "type": "intrinsic",
+            "name": "number"
+          }
+        },
+        {
+          "id": 77,
+          "name": "peakDailyTokens",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {
+            "isOptional": true,
+            "isReadonly": true
+          },
+          "comment": {
+            "summary": [
+              {
+                "kind": "text",
+                "text": "Native highest daily token total when reported."
+              }
+            ]
+          },
+          "type": {
+            "type": "intrinsic",
+            "name": "number"
+          }
+        }
+      ],
+      "groups": [
+        {
+          "title": "Properties",
+          "children": [
+            78,
+            76,
+            77
+          ]
+        }
+      ]
+    },
+    {
+      "id": 66,
+      "name": "ICodexUsageWindow",
+      "variant": "declaration",
+      "kind": 256,
+      "flags": {
+        "isPublic": true
+      },
+      "comment": {
+        "summary": [
+          {
+            "kind": "text",
+            "text": "One native account usage window normalized without consumer catalog policy."
+          }
+        ]
+      },
+      "children": [
+        {
+          "id": 68,
+          "name": "remainingPercent",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {
+            "isReadonly": true
+          },
+          "comment": {
+            "summary": [
+              {
+                "kind": "text",
+                "text": "Remaining percentage in the same native scale."
+              }
+            ]
+          },
+          "type": {
+            "type": "intrinsic",
+            "name": "number"
+          }
+        },
+        {
+          "id": 70,
+          "name": "resetsAt",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {
+            "isOptional": true,
+            "isReadonly": true
+          },
+          "comment": {
+            "summary": [
+              {
+                "kind": "text",
+                "text": "Absolute UTC epoch-millisecond reset instant."
+              }
+            ]
+          },
+          "type": {
+            "type": "intrinsic",
+            "name": "number"
+          }
+        },
+        {
+          "id": 67,
+          "name": "usedPercent",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {
+            "isReadonly": true
+          },
+          "comment": {
+            "summary": [
+              {
+                "kind": "text",
+                "text": "Used percentage clamped to the inclusive range zero to one hundred."
+              }
+            ]
+          },
+          "type": {
+            "type": "intrinsic",
+            "name": "number"
+          }
+        },
+        {
+          "id": 69,
+          "name": "windowDurationMinutes",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {
+            "isOptional": true,
+            "isReadonly": true
+          },
+          "comment": {
+            "summary": [
+              {
+                "kind": "text",
+                "text": "Duration of the native rolling window in minutes."
+              }
+            ]
+          },
+          "type": {
+            "type": "intrinsic",
+            "name": "number"
+          }
+        }
+      ],
+      "groups": [
+        {
+          "title": "Properties",
+          "children": [
+            68,
+            70,
+            67,
+            69
+          ]
+        }
+      ]
+    }
+  ],
+  "groups": [
+    {
+      "title": "Classes",
+      "children": [
+        32,
+        1
+      ]
+    },
+    {
+      "title": "Interfaces",
+      "children": [
+        61,
+        71,
+        55,
+        75,
+        66
+      ]
+    }
+  ],
+  "packageName": "@pixel-brewery/synapse-provider-codex",
+  "symbolIdMap": {
+    "0": {
+      "packageName": "@pixel-brewery/synapse-provider-codex",
+      "packagePath": "src/index.ts",
+      "qualifiedName": ""
+    },
+    "1": {
+      "packageName": "@pixel-brewery/synapse-provider-codex",
+      "packagePath": "src/adapters/CodexDriver.ts",
+      "qualifiedName": "CodexDriver"
+    },
+    "2": {
+      "packageName": "@pixel-brewery/synapse-provider-codex",
+      "packagePath": "src/adapters/CodexDriver.ts",
+      "qualifiedName": "CodexDriver.__constructor"
+    },
+    "3": {
+      "packageName": "@pixel-brewery/synapse-provider-codex",
+      "packagePath": "src/adapters/CodexDriver.ts",
+      "qualifiedName": "CodexDriver"
+    },
+    "4": {
+      "packageName": "@pixel-brewery/synapse-provider-codex",
+      "packagePath": "src/adapters/CodexDriver.ts",
+      "qualifiedName": "_runner"
+    },
+    "5": {
+      "packageName": "@pixel-brewery/synapse-provider-codex",
+      "packagePath": "src/adapters/CodexDriver.ts",
+      "qualifiedName": "CodexDriver.id"
+    },
+    "6": {
+      "packageName": "@pixel-brewery/synapse-provider-codex",
+      "packagePath": "src/adapters/CodexDriver.ts",
+      "qualifiedName": "CodexDriver.capabilities"
+    },
+    "7": {
+      "packageName": "@pixel-brewery/synapse-provider-codex",
+      "packagePath": "src/adapters/CodexDriver.ts",
+      "qualifiedName": "CodexDriver.auth"
+    },
+    "12": {
+      "packageName": "@pixel-brewery/synapse-provider-codex",
+      "packagePath": "src/adapters/CodexDriver.ts",
+      "qualifiedName": "CodexDriver.execute"
+    },
+    "13": {
+      "packageName": "@pixel-brewery/synapse-provider-codex",
+      "packagePath": "src/adapters/CodexDriver.ts",
+      "qualifiedName": "CodexDriver.execute"
+    },
+    "14": {
+      "packageName": "@pixel-brewery/synapse-provider-codex",
+      "packagePath": "src/adapters/CodexDriver.ts",
+      "qualifiedName": "context"
+    },
+    "15": {
+      "packageName": "@pixel-brewery/synapse-provider-codex",
+      "packagePath": "src/adapters/CodexDriver.ts",
+      "qualifiedName": "CodexDriver.inspect"
+    },
+    "16": {
+      "packageName": "@pixel-brewery/synapse-provider-codex",
+      "packagePath": "src/adapters/CodexDriver.ts",
+      "qualifiedName": "CodexDriver.inspect"
+    },
+    "17": {
+      "packageName": "@pixel-brewery/synapse-provider-codex",
+      "packagePath": "src/adapters/CodexDriver.ts",
+      "qualifiedName": "instance"
+    },
+    "18": {
+      "packageName": "@pixel-brewery/synapse-provider-codex",
+      "packagePath": "src/adapters/CodexDriver.ts",
+      "qualifiedName": "signal"
+    },
+    "19": {
+      "packageName": "@pixel-brewery/synapse-provider-codex",
+      "packagePath": "src/adapters/CodexDriver.ts",
+      "qualifiedName": "CodexDriver.dispose"
+    },
+    "20": {
+      "packageName": "@pixel-brewery/synapse-provider-codex",
+      "packagePath": "src/adapters/CodexDriver.ts",
+      "qualifiedName": "CodexDriver.dispose"
+    },
+    "32": {
+      "packageName": "@pixel-brewery/synapse-provider-codex",
+      "packagePath": "src/auth/CodexAuthDriver.ts",
+      "qualifiedName": "CodexAuthDriver"
+    },
+    "33": {
+      "packageName": "@pixel-brewery/synapse-provider-codex",
+      "packagePath": "src/auth/CodexAuthDriver.ts",
+      "qualifiedName": "CodexAuthDriver.__constructor"
+    },
+    "34": {
+      "packageName": "@pixel-brewery/synapse-provider-codex",
+      "packagePath": "src/auth/CodexAuthDriver.ts",
+      "qualifiedName": "CodexAuthDriver"
+    },
+    "35": {
+      "packageName": "@pixel-brewery/synapse-provider-codex",
+      "packagePath": "src/auth/CodexAuthDriver.ts",
+      "qualifiedName": "_runner"
+    },
+    "37": {
+      "packageName": "@pixel-brewery/synapse-provider-codex",
+      "packagePath": "src/auth/CodexAuthDriver.ts",
+      "qualifiedName": "CodexAuthDriver.methods"
+    },
+    "38": {
+      "packageName": "@pixel-brewery/synapse-provider-codex",
+      "packagePath": "src/auth/CodexAuthDriver.ts",
+      "qualifiedName": "CodexAuthDriver.methods"
+    },
+    "39": {
+      "packageName": "@pixel-brewery/synapse-provider-codex",
+      "packagePath": "src/auth/CodexAuthDriver.ts",
+      "qualifiedName": "_instance"
+    },
+    "40": {
+      "packageName": "@pixel-brewery/synapse-provider-codex",
+      "packagePath": "src/auth/CodexAuthDriver.ts",
+      "qualifiedName": "CodexAuthDriver.status"
+    },
+    "41": {
+      "packageName": "@pixel-brewery/synapse-provider-codex",
+      "packagePath": "src/auth/CodexAuthDriver.ts",
+      "qualifiedName": "CodexAuthDriver.status"
+    },
+    "42": {
+      "packageName": "@pixel-brewery/synapse-provider-codex",
+      "packagePath": "src/auth/CodexAuthDriver.ts",
+      "qualifiedName": "instance"
+    },
+    "43": {
+      "packageName": "@pixel-brewery/synapse-provider-codex",
+      "packagePath": "src/auth/CodexAuthDriver.ts",
+      "qualifiedName": "signal"
+    },
+    "44": {
+      "packageName": "@pixel-brewery/synapse-provider-codex",
+      "packagePath": "src/auth/CodexAuthDriver.ts",
+      "qualifiedName": "CodexAuthDriver.login"
+    },
+    "45": {
+      "packageName": "@pixel-brewery/synapse-provider-codex",
+      "packagePath": "src/auth/CodexAuthDriver.ts",
+      "qualifiedName": "CodexAuthDriver.login"
+    },
+    "46": {
+      "packageName": "@pixel-brewery/synapse-provider-codex",
+      "packagePath": "src/auth/CodexAuthDriver.ts",
+      "qualifiedName": "context"
+    },
+    "47": {
+      "packageName": "@pixel-brewery/synapse-provider-codex",
+      "packagePath": "src/auth/CodexAuthDriver.ts",
+      "qualifiedName": "CodexAuthDriver.logout"
+    },
+    "48": {
+      "packageName": "@pixel-brewery/synapse-provider-codex",
+      "packagePath": "src/auth/CodexAuthDriver.ts",
+      "qualifiedName": "CodexAuthDriver.logout"
+    },
+    "49": {
+      "packageName": "@pixel-brewery/synapse-provider-codex",
+      "packagePath": "src/auth/CodexAuthDriver.ts",
+      "qualifiedName": "instance"
+    },
+    "50": {
+      "packageName": "@pixel-brewery/synapse-provider-codex",
+      "packagePath": "src/auth/CodexAuthDriver.ts",
+      "qualifiedName": "signal"
+    },
+    "55": {
+      "packageName": "@pixel-brewery/synapse-provider-codex",
+      "packagePath": "src/interfaces/ICodexInspection.ts",
+      "qualifiedName": "ICodexInspection"
+    },
+    "56": {
+      "packageName": "@pixel-brewery/synapse-provider-codex",
+      "packagePath": "src/interfaces/ICodexInspection.ts",
+      "qualifiedName": "ICodexInspection.usage"
+    },
+    "57": {
+      "packageName": "@pixel-brewery/synapse-provider-codex",
+      "packagePath": "src/interfaces/ICodexInspection.ts",
+      "qualifiedName": "ICodexInspection.metadataWarnings"
+    },
+    "58": {
+      "packageName": "@pixel-brewery/synapse-core",
+      "packagePath": "src/interfaces/IAiInspection.ts",
+      "qualifiedName": "IAiInspection.auth"
+    },
+    "59": {
+      "packageName": "@pixel-brewery/synapse-core",
+      "packagePath": "src/interfaces/IAiInspection.ts",
+      "qualifiedName": "IAiInspection.models"
+    },
+    "60": {
+      "packageName": "@pixel-brewery/synapse-core",
+      "packagePath": "src/interfaces/IAiInspection.ts",
+      "qualifiedName": "IAiInspection.limits"
+    },
+    "61": {
+      "packageName": "@pixel-brewery/synapse-provider-codex",
+      "packagePath": "src/interfaces/ICodexAccountUsage.ts",
+      "qualifiedName": "ICodexAccountUsage"
+    },
+    "62": {
+      "packageName": "@pixel-brewery/synapse-provider-codex",
+      "packagePath": "src/interfaces/ICodexAccountUsage.ts",
+      "qualifiedName": "ICodexAccountUsage.planType"
+    },
+    "63": {
+      "packageName": "@pixel-brewery/synapse-provider-codex",
+      "packagePath": "src/interfaces/ICodexAccountUsage.ts",
+      "qualifiedName": "ICodexAccountUsage.windows"
+    },
+    "64": {
+      "packageName": "@pixel-brewery/synapse-provider-codex",
+      "packagePath": "src/interfaces/ICodexAccountUsage.ts",
+      "qualifiedName": "ICodexAccountUsage.credits"
+    },
+    "65": {
+      "packageName": "@pixel-brewery/synapse-provider-codex",
+      "packagePath": "src/interfaces/ICodexAccountUsage.ts",
+      "qualifiedName": "ICodexAccountUsage.tokenUsage"
+    },
+    "66": {
+      "packageName": "@pixel-brewery/synapse-provider-codex",
+      "packagePath": "src/interfaces/ICodexUsageWindow.ts",
+      "qualifiedName": "ICodexUsageWindow"
+    },
+    "67": {
+      "packageName": "@pixel-brewery/synapse-provider-codex",
+      "packagePath": "src/interfaces/ICodexUsageWindow.ts",
+      "qualifiedName": "ICodexUsageWindow.usedPercent"
+    },
+    "68": {
+      "packageName": "@pixel-brewery/synapse-provider-codex",
+      "packagePath": "src/interfaces/ICodexUsageWindow.ts",
+      "qualifiedName": "ICodexUsageWindow.remainingPercent"
+    },
+    "69": {
+      "packageName": "@pixel-brewery/synapse-provider-codex",
+      "packagePath": "src/interfaces/ICodexUsageWindow.ts",
+      "qualifiedName": "ICodexUsageWindow.windowDurationMinutes"
+    },
+    "70": {
+      "packageName": "@pixel-brewery/synapse-provider-codex",
+      "packagePath": "src/interfaces/ICodexUsageWindow.ts",
+      "qualifiedName": "ICodexUsageWindow.resetsAt"
+    },
+    "71": {
+      "packageName": "@pixel-brewery/synapse-provider-codex",
+      "packagePath": "src/interfaces/ICodexCredits.ts",
+      "qualifiedName": "ICodexCredits"
+    },
+    "72": {
+      "packageName": "@pixel-brewery/synapse-provider-codex",
+      "packagePath": "src/interfaces/ICodexCredits.ts",
+      "qualifiedName": "ICodexCredits.hasCredits"
+    },
+    "73": {
+      "packageName": "@pixel-brewery/synapse-provider-codex",
+      "packagePath": "src/interfaces/ICodexCredits.ts",
+      "qualifiedName": "ICodexCredits.unlimited"
+    },
+    "74": {
+      "packageName": "@pixel-brewery/synapse-provider-codex",
+      "packagePath": "src/interfaces/ICodexCredits.ts",
+      "qualifiedName": "ICodexCredits.balance"
+    },
+    "75": {
+      "packageName": "@pixel-brewery/synapse-provider-codex",
+      "packagePath": "src/interfaces/ICodexTokenUsage.ts",
+      "qualifiedName": "ICodexTokenUsage"
+    },
+    "76": {
+      "packageName": "@pixel-brewery/synapse-provider-codex",
+      "packagePath": "src/interfaces/ICodexTokenUsage.ts",
+      "qualifiedName": "ICodexTokenUsage.lifetimeTokens"
+    },
+    "77": {
+      "packageName": "@pixel-brewery/synapse-provider-codex",
+      "packagePath": "src/interfaces/ICodexTokenUsage.ts",
+      "qualifiedName": "ICodexTokenUsage.peakDailyTokens"
+    },
+    "78": {
+      "packageName": "@pixel-brewery/synapse-provider-codex",
+      "packagePath": "src/interfaces/ICodexTokenUsage.ts",
+      "qualifiedName": "ICodexTokenUsage.currentStreakDays"
+    }
+  },
+  "files": {
+    "entries": {
+      "1": "libs/synapse-provider-codex/src/index.ts"
+    },
+    "reflections": {
+      "1": 0
+    }
+  }
+}

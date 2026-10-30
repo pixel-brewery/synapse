@@ -1,0 +1,52 @@
+{
+    "name": "@pixel-brewery/synapse-mcp",
+    "version": "0.0.3",
+    "description": "Local MCP knowledge server for Synapse documentation, API references and architecture patterns.",
+    "license": "MIT",
+    "type": "module",
+    "engines": {
+        "node": ">=24.15.0"
+    },
+    "sideEffects": false,
+    "bin": "./dist/main.js",
+    "exports": {
+        "./package.json": "./package.json"
+    },
+    "files": [
+        "dist",
+        "README.md",
+        "LICENSE",
+        "!**/*.tsbuildinfo"
+    ],
+    "scripts": {
+        "build": "tsc --build tsconfig.app.json && node buildCorpus.mjs",
+        "typecheck": "tsc --noEmit -p tsconfig.app.json && tsc --noEmit -p tsconfig.spec.json",
+        "lint": "eslint src",
+        "test": "vitest run --config vitest.config.ts",
+        "start": "node dist/main.js"
+    },
+    "publishConfig": {
+        "access": "public",
+        "registry": "https://npm.pkg.github.com"
+    },
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/pixel-brewery/synapse.git",
+        "directory": "tools/mcp"
+    },
+    "homepage": "https://github.com/pixel-brewery/synapse#readme",
+    "bugs": {
+        "url": "https://github.com/pixel-brewery/synapse/issues"
+    },
+    "keywords": [
+        "mcp",
+        "synapse",
+        "typescript",
+        "documentation",
+        "ai"
+    ],
+    "dependencies": {
+        "@modelcontextprotocol/sdk": "1.32.2",
+        "zod": "4.6.7"
+    }
+}

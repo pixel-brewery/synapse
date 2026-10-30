@@ -1,0 +1,21 @@
+{
+  "mcpServers": {
+    "nx": {
+      "type": "stdio",
+      "command": "yarn",
+      "args": [
+        "nx",
+        "mcp"
+      ]
+    },
+    "synapse": {
+      "type": "stdio",
+      "command": "yarn",
+      "args": [
+        "workspace",
+        "@pixel-brewery/synapse-mcp",
+        "start"
+      ]
+    }
+  }
+}

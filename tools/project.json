@@ -1,0 +1,42 @@
+{
+    "$schema": "../node_modules/nx/schemas/project-schema.json",
+    "name": "agent-tooling",
+    "root": "tools",
+    "targets": {
+        "check": {
+            "executor": "nx:run-commands",
+            "options": {
+                "commands": [
+                    "node tools/sync-agents.mjs --check",
+                    "node tools/check-architect-origin.mjs",
+                    "yarn source:check"
+                ],
+                "parallel": false
+            },
+            "cache": false
+        },
+        "test": {
+            "executor": "nx:run-commands",
+            "options": {
+                "command": "vitest run --config tools/vitest.config.mjs"
+            },
+            "inputs": [
+                "{projectRoot}/**/*",
+                "{workspaceRoot}/.agents/**/*",
+                "{workspaceRoot}/.vscode/mcp.json",
+                "{workspaceRoot}/package.json",
+                "{workspaceRoot}/yarn.lock",
+                "^production"
+            ],
+            "cache": true
+        }
+    },
+    "implicitDependencies": [
+        "synapse-core",
+        "synapse-runtime",
+        "synapse-auth",
+        "synapse-provider-codex",
+        "synapse-provider-claude",
+        "synapse-provider-opencode"
+    ]
+}
