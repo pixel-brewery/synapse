@@ -1,0 +1,14 @@
+{
+    "extends": "./tsconfig.lib.json",
+    "compilerOptions": {
+        "composite": false,
+        "incremental": true,
+        "noEmit": true,
+        "declaration": false,
+        "declarationMap": false,
+        "tsBuildInfoFile": "dist/tsconfig.spec.tsbuildinfo",
+        "types": ["node", "vitest/globals"]
+    },
+    "include": ["src/**/*.ts"],
+    "exclude": []
+}

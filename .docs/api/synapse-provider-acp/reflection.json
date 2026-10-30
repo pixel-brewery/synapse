@@ -1,0 +1,1475 @@
+{
+  "schemaVersion": "2.0",
+  "id": 0,
+  "name": "@pixel-brewery/synapse-provider-acp",
+  "variant": "project",
+  "kind": 1,
+  "flags": {},
+  "comment": {
+    "summary": [
+      {
+        "kind": "text",
+        "text": "Explicitly configured local ACP agents through the official TypeScript SDK and owned stdio."
+      }
+    ]
+  },
+  "children": [
+    {
+      "id": 1,
+      "name": "AcpDriver",
+      "variant": "declaration",
+      "kind": 128,
+      "flags": {
+        "isPublic": true
+      },
+      "comment": {
+        "summary": [
+          {
+            "kind": "text",
+            "text": "Generic installed-agent ACP stdio adapter using the official TypeScript SDK."
+          }
+        ],
+        "blockTags": [
+          {
+            "tag": "@remarks",
+            "content": [
+              {
+                "kind": "text",
+                "text": "ACP does not define a universal filesystem sandbox. The host must supply trusted native policy-mode mappings; unsupported guarantees fail before prompting. Client filesystem and terminal capabilities are never advertised."
+              }
+            ]
+          }
+        ]
+      },
+      "children": [
+        {
+          "id": 8,
+          "name": "auth",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {
+            "isPublic": true,
+            "isReadonly": true
+          },
+          "comment": {
+            "summary": [
+              {
+                "kind": "text",
+                "text": "Optional separately verified native authentication implementation."
+              }
+            ]
+          },
+          "type": {
+            "type": "union",
+            "types": [
+              {
+                "type": "reference",
+                "target": {
+                  "packageName": "@pixel-brewery/synapse-core",
+                  "packagePath": "src/abstracts/AiAuthDriverBase.ts",
+                  "qualifiedName": "AiAuthDriverBase"
+                },
+                "name": "AiAuthDriverBase",
+                "package": "@pixel-brewery/synapse-core",
+                "externalUrl": "packages/synapse-core/api/classes/AiAuthDriverBase.md"
+              },
+              {
+                "type": "intrinsic",
+                "name": "undefined"
+              }
+            ]
+          },
+          "overwrites": {
+            "type": "reference",
+            "target": -1,
+            "name": "AiDriverBase.auth"
+          }
+        },
+        {
+          "id": 7,
+          "name": "capabilities",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {
+            "isPublic": true,
+            "isReadonly": true
+          },
+          "comment": {
+            "summary": [
+              {
+                "kind": "text",
+                "text": "Host-declared native policy modes, with resume verified again through negotiation."
+              }
+            ]
+          },
+          "type": {
+            "type": "reference",
+            "target": {
+              "packageName": "@pixel-brewery/synapse-core",
+              "packagePath": "src/interfaces/IAiCapabilities.ts",
+              "qualifiedName": "IAiCapabilities"
+            },
+            "name": "IAiCapabilities",
+            "package": "@pixel-brewery/synapse-core",
+            "externalUrl": "packages/synapse-core/api/interfaces/IAiCapabilities.md"
+          },
+          "overwrites": {
+            "type": "reference",
+            "target": -1,
+            "name": "AiDriverBase.capabilities"
+          }
+        },
+        {
+          "id": 2,
+          "name": "constructor",
+          "variant": "declaration",
+          "kind": 512,
+          "flags": {
+            "isPublic": true
+          },
+          "signatures": [
+            {
+              "id": 3,
+              "name": "AcpDriver",
+              "variant": "signature",
+              "kind": 16384,
+              "flags": {
+                "isPublic": true
+              },
+              "comment": {
+                "summary": [
+                  {
+                    "kind": "text",
+                    "text": "Creates an inert protocol adapter with explicit native policy semantics."
+                  }
+                ],
+                "blockTags": [
+                  {
+                    "tag": "@throws",
+                    "content": [
+                      {
+                        "kind": "text",
+                        "text": "An AiError when deterministic native mode or resource settings are invalid."
+                      }
+                    ]
+                  }
+                ]
+              },
+              "parameters": [
+                {
+                  "id": 4,
+                  "name": "_runner",
+                  "variant": "param",
+                  "kind": 32768,
+                  "flags": {},
+                  "comment": {
+                    "summary": [
+                      {
+                        "kind": "text",
+                        "text": "Owned process boundary, shared with the runtime."
+                      }
+                    ]
+                  },
+                  "type": {
+                    "type": "reference",
+                    "target": {
+                      "packageName": "@pixel-brewery/synapse-runtime",
+                      "packagePath": "src/abstracts/ProcessRunnerBase.ts",
+                      "qualifiedName": "ProcessRunnerBase"
+                    },
+                    "name": "ProcessRunnerBase",
+                    "package": "@pixel-brewery/synapse-runtime",
+                    "externalUrl": "packages/synapse-runtime/api/classes/ProcessRunnerBase.md"
+                  }
+                },
+                {
+                  "id": 5,
+                  "name": "_options",
+                  "variant": "param",
+                  "kind": 32768,
+                  "flags": {},
+                  "comment": {
+                    "summary": [
+                      {
+                        "kind": "text",
+                        "text": "Native arguments, trusted mode mappings and optional host permissions."
+                      }
+                    ]
+                  },
+                  "type": {
+                    "type": "reference",
+                    "target": 57,
+                    "name": "IAcpDriverOptions",
+                    "package": "@pixel-brewery/synapse-provider-acp"
+                  }
+                }
+              ],
+              "type": {
+                "type": "reference",
+                "target": 1,
+                "name": "AcpDriver",
+                "package": "@pixel-brewery/synapse-provider-acp"
+              },
+              "overwrites": {
+                "type": "reference",
+                "target": -1,
+                "name": "AiDriverBase.constructor",
+                "package": "@pixel-brewery/synapse-core",
+                "externalUrl": "packages/synapse-core/api/classes/AiDriverBase.md#constructor"
+              }
+            }
+          ],
+          "overwrites": {
+            "type": "reference",
+            "target": -1,
+            "name": "AiDriverBase.constructor",
+            "package": "@pixel-brewery/synapse-core",
+            "externalUrl": "packages/synapse-core/api/classes/AiDriverBase.md#constructor"
+          }
+        },
+        {
+          "id": 19,
+          "name": "dispose",
+          "variant": "declaration",
+          "kind": 2048,
+          "flags": {
+            "isPublic": true
+          },
+          "signatures": [
+            {
+              "id": 20,
+              "name": "dispose",
+              "variant": "signature",
+              "kind": 4096,
+              "flags": {
+                "isPublic": true
+              },
+              "comment": {
+                "summary": [
+                  {
+                    "kind": "text",
+                    "text": "Stops and awaits processes owned by this explicitly injected runner."
+                  }
+                ],
+                "blockTags": [
+                  {
+                    "tag": "@returns",
+                    "content": [
+                      {
+                        "kind": "text",
+                        "text": "Completion after native execution, protocol and login processes have drained."
+                      }
+                    ]
+                  }
+                ]
+              },
+              "type": {
+                "type": "reference",
+                "target": {
+                  "packageName": "typescript",
+                  "packagePath": "lib/lib.es5.d.ts",
+                  "qualifiedName": "Promise"
+                },
+                "typeArguments": [
+                  {
+                    "type": "intrinsic",
+                    "name": "void"
+                  }
+                ],
+                "name": "Promise",
+                "package": "typescript"
+              },
+              "overwrites": {
+                "type": "reference",
+                "target": -1,
+                "name": "AiDriverBase.dispose"
+              }
+            }
+          ],
+          "overwrites": {
+            "type": "reference",
+            "target": -1,
+            "name": "AiDriverBase.dispose"
+          }
+        },
+        {
+          "id": 12,
+          "name": "execute",
+          "variant": "declaration",
+          "kind": 2048,
+          "flags": {
+            "isPublic": true
+          },
+          "signatures": [
+            {
+              "id": 13,
+              "name": "execute",
+              "variant": "signature",
+              "kind": 4096,
+              "flags": {
+                "isPublic": true
+              },
+              "comment": {
+                "summary": [
+                  {
+                    "kind": "text",
+                    "text": "Negotiates the agent, binds a session, enforces configured native policy and executes one turn."
+                  }
+                ],
+                "blockTags": [
+                  {
+                    "tag": "@returns",
+                    "content": [
+                      {
+                        "kind": "text",
+                        "text": "The same turn's final text and bound native continuation ID."
+                      }
+                    ]
+                  },
+                  {
+                    "tag": "@throws",
+                    "content": [
+                      {
+                        "kind": "text",
+                        "text": "An AiError for unsupported security/model capabilities, protocol failure, cancellation or unconfirmed native process cleanup. Cleanup uncertainty takes precedence over another failure and disables retries."
+                      }
+                    ]
+                  }
+                ]
+              },
+              "parameters": [
+                {
+                  "id": 14,
+                  "name": "context",
+                  "variant": "param",
+                  "kind": 32768,
+                  "flags": {},
+                  "comment": {
+                    "summary": [
+                      {
+                        "kind": "text",
+                        "text": "Isolated profile, explicit request, cancellation and critical event callback."
+                      }
+                    ]
+                  },
+                  "type": {
+                    "type": "reference",
+                    "target": {
+                      "packageName": "@pixel-brewery/synapse-core",
+                      "packagePath": "src/interfaces/IAiExecutionContext.ts",
+                      "qualifiedName": "IAiExecutionContext"
+                    },
+                    "name": "IAiExecutionContext",
+                    "package": "@pixel-brewery/synapse-core",
+                    "externalUrl": "packages/synapse-core/api/interfaces/IAiExecutionContext.md"
+                  }
+                }
+              ],
+              "type": {
+                "type": "reference",
+                "target": {
+                  "packageName": "typescript",
+                  "packagePath": "lib/lib.es5.d.ts",
+                  "qualifiedName": "Promise"
+                },
+                "typeArguments": [
+                  {
+                    "type": "reference",
+                    "target": {
+                      "packageName": "@pixel-brewery/synapse-core",
+                      "packagePath": "src/interfaces/IAiDriverResult.ts",
+                      "qualifiedName": "IAiDriverResult"
+                    },
+                    "name": "IAiDriverResult",
+                    "package": "@pixel-brewery/synapse-core",
+                    "externalUrl": "packages/synapse-core/api/interfaces/IAiDriverResult.md"
+                  }
+                ],
+                "name": "Promise",
+                "package": "typescript"
+              },
+              "overwrites": {
+                "type": "reference",
+                "target": -1,
+                "name": "AiDriverBase.execute"
+              }
+            }
+          ],
+          "overwrites": {
+            "type": "reference",
+            "target": -1,
+            "name": "AiDriverBase.execute"
+          }
+        },
+        {
+          "id": 6,
+          "name": "id",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {
+            "isPublic": true,
+            "isReadonly": true
+          },
+          "comment": {
+            "summary": [
+              {
+                "kind": "text",
+                "text": "Open implementation ID, defaulting to acp."
+              }
+            ]
+          },
+          "type": {
+            "type": "intrinsic",
+            "name": "string"
+          },
+          "overwrites": {
+            "type": "reference",
+            "target": -1,
+            "name": "AiDriverBase.id"
+          }
+        },
+        {
+          "id": 15,
+          "name": "inspect",
+          "variant": "declaration",
+          "kind": 2048,
+          "flags": {
+            "isPublic": true
+          },
+          "signatures": [
+            {
+              "id": 16,
+              "name": "inspect",
+              "variant": "signature",
+              "kind": 4096,
+              "flags": {
+                "isPublic": true
+              },
+              "comment": {
+                "summary": [
+                  {
+                    "kind": "text",
+                    "text": "Performs only bounded initialization and optional independent native account verification."
+                  }
+                ],
+                "blockTags": [
+                  {
+                    "tag": "@returns",
+                    "content": [
+                      {
+                        "kind": "text",
+                        "text": "Safe account metadata, without sending session, filesystem, terminal or MCP setup requests."
+                      }
+                    ]
+                  },
+                  {
+                    "tag": "@throws",
+                    "content": [
+                      {
+                        "kind": "text",
+                        "text": "An AiError if the native handshake fails or negotiates an incompatible protocol."
+                      }
+                    ]
+                  }
+                ]
+              },
+              "parameters": [
+                {
+                  "id": 17,
+                  "name": "instance",
+                  "variant": "param",
+                  "kind": 32768,
+                  "flags": {},
+                  "comment": {
+                    "summary": [
+                      {
+                        "kind": "text",
+                        "text": "Isolated native agent instance."
+                      }
+                    ]
+                  },
+                  "type": {
+                    "type": "reference",
+                    "target": {
+                      "packageName": "@pixel-brewery/synapse-core",
+                      "packagePath": "src/interfaces/IAiInstance.ts",
+                      "qualifiedName": "IAiInstance"
+                    },
+                    "name": "IAiInstance",
+                    "package": "@pixel-brewery/synapse-core",
+                    "externalUrl": "packages/synapse-core/api/interfaces/IAiInstance.md"
+                  }
+                },
+                {
+                  "id": 18,
+                  "name": "signal",
+                  "variant": "param",
+                  "kind": 32768,
+                  "flags": {},
+                  "comment": {
+                    "summary": [
+                      {
+                        "kind": "text",
+                        "text": "Inspection cancellation."
+                      }
+                    ]
+                  },
+                  "type": {
+                    "type": "reference",
+                    "target": {
+                      "packageName": "typescript",
+                      "packagePath": "lib/lib.dom.d.ts",
+                      "qualifiedName": "AbortSignal"
+                    },
+                    "name": "AbortSignal",
+                    "package": "typescript"
+                  }
+                }
+              ],
+              "type": {
+                "type": "reference",
+                "target": {
+                  "packageName": "typescript",
+                  "packagePath": "lib/lib.es5.d.ts",
+                  "qualifiedName": "Promise"
+                },
+                "typeArguments": [
+                  {
+                    "type": "reference",
+                    "target": {
+                      "packageName": "@pixel-brewery/synapse-core",
+                      "packagePath": "src/interfaces/IAiInspection.ts",
+                      "qualifiedName": "IAiInspection"
+                    },
+                    "name": "IAiInspection",
+                    "package": "@pixel-brewery/synapse-core",
+                    "externalUrl": "packages/synapse-core/api/interfaces/IAiInspection.md"
+                  }
+                ],
+                "name": "Promise",
+                "package": "typescript"
+              },
+              "overwrites": {
+                "type": "reference",
+                "target": -1,
+                "name": "AiDriverBase.inspect"
+              }
+            }
+          ],
+          "overwrites": {
+            "type": "reference",
+            "target": -1,
+            "name": "AiDriverBase.inspect"
+          }
+        }
+      ],
+      "groups": [
+        {
+          "title": "Constructors",
+          "children": [
+            2
+          ]
+        },
+        {
+          "title": "Properties",
+          "children": [
+            8,
+            7,
+            6
+          ]
+        },
+        {
+          "title": "Methods",
+          "children": [
+            19,
+            12,
+            15
+          ]
+        }
+      ],
+      "extendedTypes": [
+        {
+          "type": "reference",
+          "target": {
+            "packageName": "@pixel-brewery/synapse-core",
+            "packagePath": "src/abstracts/AiDriverBase.ts",
+            "qualifiedName": "AiDriverBase"
+          },
+          "name": "AiDriverBase",
+          "package": "@pixel-brewery/synapse-core",
+          "externalUrl": "packages/synapse-core/api/classes/AiDriverBase.md"
+        }
+      ]
+    },
+    {
+      "id": 57,
+      "name": "IAcpDriverOptions",
+      "variant": "declaration",
+      "kind": 256,
+      "flags": {
+        "isPublic": true
+      },
+      "comment": {
+        "summary": [
+          {
+            "kind": "text",
+            "text": "Explicit native ACP configuration; the host attests the meaning of each advertised policy mode."
+          }
+        ]
+      },
+      "children": [
+        {
+          "id": 59,
+          "name": "args",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {
+            "isOptional": true,
+            "isReadonly": true
+          },
+          "comment": {
+            "summary": [
+              {
+                "kind": "text",
+                "text": "Native CLI arguments used for its stdio ACP mode; never an installer command."
+              }
+            ]
+          },
+          "type": {
+            "type": "typeOperator",
+            "operator": "readonly",
+            "target": {
+              "type": "array",
+              "elementType": {
+                "type": "intrinsic",
+                "name": "string"
+              }
+            }
+          }
+        },
+        {
+          "id": 61,
+          "name": "auth",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {
+            "isOptional": true,
+            "isReadonly": true
+          },
+          "comment": {
+            "summary": [
+              {
+                "kind": "text",
+                "text": "Optional verified native CLI auth adapter; ACP alone exposes no safe account-status check."
+              }
+            ]
+          },
+          "type": {
+            "type": "reference",
+            "target": {
+              "packageName": "@pixel-brewery/synapse-core",
+              "packagePath": "src/abstracts/AiAuthDriverBase.ts",
+              "qualifiedName": "AiAuthDriverBase"
+            },
+            "name": "AiAuthDriverBase",
+            "package": "@pixel-brewery/synapse-core",
+            "externalUrl": "packages/synapse-core/api/classes/AiAuthDriverBase.md"
+          }
+        },
+        {
+          "id": 58,
+          "name": "id",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {
+            "isOptional": true,
+            "isReadonly": true
+          },
+          "comment": {
+            "summary": [
+              {
+                "kind": "text",
+                "text": "Open driver identity; use distinct IDs for agents with different native policy guarantees."
+              }
+            ]
+          },
+          "type": {
+            "type": "intrinsic",
+            "name": "string"
+          }
+        },
+        {
+          "id": 65,
+          "name": "maxMessageBytes",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {
+            "isOptional": true,
+            "isReadonly": true
+          },
+          "comment": {
+            "summary": [
+              {
+                "kind": "text",
+                "text": "Maximum incoming protocol frame bytes; default 1 MiB, with a separate process-output limit."
+              }
+            ]
+          },
+          "type": {
+            "type": "intrinsic",
+            "name": "number"
+          }
+        },
+        {
+          "id": 66,
+          "name": "maxOutputBytes",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {
+            "isOptional": true,
+            "isReadonly": true
+          },
+          "comment": {
+            "summary": [
+              {
+                "kind": "text",
+                "text": "Maximum combined process output bytes for one connection; default 4 MiB."
+              }
+            ]
+          },
+          "type": {
+            "type": "intrinsic",
+            "name": "number"
+          }
+        },
+        {
+          "id": 60,
+          "name": "modeIds",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {
+            "isReadonly": true
+          },
+          "comment": {
+            "summary": [
+              {
+                "kind": "text",
+                "text": "Trusted mapping to native read-only/workspace-write modes. Missing modes are unsupported."
+              }
+            ]
+          },
+          "type": {
+            "type": "reference",
+            "target": {
+              "packageName": "typescript",
+              "packagePath": "lib/lib.es5.d.ts",
+              "qualifiedName": "Readonly"
+            },
+            "typeArguments": [
+              {
+                "type": "reference",
+                "target": {
+                  "packageName": "typescript",
+                  "packagePath": "lib/lib.es5.d.ts",
+                  "qualifiedName": "Partial"
+                },
+                "typeArguments": [
+                  {
+                    "type": "reference",
+                    "target": {
+                      "packageName": "typescript",
+                      "packagePath": "lib/lib.es5.d.ts",
+                      "qualifiedName": "Record"
+                    },
+                    "typeArguments": [
+                      {
+                        "type": "union",
+                        "types": [
+                          {
+                            "type": "literal",
+                            "value": "read-only"
+                          },
+                          {
+                            "type": "literal",
+                            "value": "workspace-write"
+                          }
+                        ]
+                      },
+                      {
+                        "type": "intrinsic",
+                        "name": "string"
+                      }
+                    ],
+                    "name": "Record",
+                    "package": "typescript"
+                  }
+                ],
+                "name": "Partial",
+                "package": "typescript"
+              }
+            ],
+            "name": "Readonly",
+            "package": "typescript"
+          }
+        },
+        {
+          "id": 63,
+          "name": "modelConfigId",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {
+            "isOptional": true,
+            "isReadonly": true
+          },
+          "comment": {
+            "summary": [
+              {
+                "kind": "text",
+                "text": "Optional advertised session-config ID controlling the native model."
+              }
+            ]
+          },
+          "type": {
+            "type": "intrinsic",
+            "name": "string"
+          }
+        },
+        {
+          "id": 67,
+          "name": "permission",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {
+            "isOptional": true,
+            "isReadonly": true
+          },
+          "comment": {
+            "summary": [
+              {
+                "kind": "text",
+                "text": "Optional host permission decision. Without it, every tool permission request is denied."
+              }
+            ]
+          },
+          "type": {
+            "type": "reflection",
+            "declaration": {
+              "id": 68,
+              "name": "__type",
+              "variant": "declaration",
+              "kind": 65536,
+              "flags": {},
+              "signatures": [
+                {
+                  "id": 69,
+                  "name": "__type",
+                  "variant": "signature",
+                  "kind": 4096,
+                  "flags": {},
+                  "comment": {
+                    "summary": [],
+                    "blockTags": [
+                      {
+                        "tag": "@returns",
+                        "content": [
+                          {
+                            "kind": "text",
+                            "text": "An offered option ID, or undefined to deny/cancel the request."
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  "parameters": [
+                    {
+                      "id": 70,
+                      "name": "request",
+                      "variant": "param",
+                      "kind": 32768,
+                      "flags": {},
+                      "comment": {
+                        "summary": [
+                          {
+                            "kind": "text",
+                            "text": "Safe current-session decision context."
+                          }
+                        ]
+                      },
+                      "type": {
+                        "type": "reference",
+                        "target": 71,
+                        "name": "IAcpPermissionRequest",
+                        "package": "@pixel-brewery/synapse-provider-acp"
+                      }
+                    }
+                  ],
+                  "type": {
+                    "type": "reference",
+                    "target": {
+                      "packageName": "typescript",
+                      "packagePath": "lib/lib.es5.d.ts",
+                      "qualifiedName": "Promise"
+                    },
+                    "typeArguments": [
+                      {
+                        "type": "union",
+                        "types": [
+                          {
+                            "type": "intrinsic",
+                            "name": "string"
+                          },
+                          {
+                            "type": "intrinsic",
+                            "name": "undefined"
+                          }
+                        ]
+                      }
+                    ],
+                    "name": "Promise",
+                    "package": "typescript"
+                  }
+                }
+              ]
+            }
+          }
+        },
+        {
+          "id": 64,
+          "name": "reasoningConfigId",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {
+            "isOptional": true,
+            "isReadonly": true
+          },
+          "comment": {
+            "summary": [
+              {
+                "kind": "text",
+                "text": "Optional advertised session-config ID controlling native reasoning effort."
+              }
+            ]
+          },
+          "type": {
+            "type": "intrinsic",
+            "name": "string"
+          }
+        },
+        {
+          "id": 62,
+          "name": "resume",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {
+            "isOptional": true,
+            "isReadonly": true
+          },
+          "comment": {
+            "summary": [
+              {
+                "kind": "text",
+                "text": "Whether resume may be negotiated; session/load is still checked during initialize. Default true."
+              }
+            ]
+          },
+          "type": {
+            "type": "intrinsic",
+            "name": "boolean"
+          }
+        }
+      ],
+      "groups": [
+        {
+          "title": "Properties",
+          "children": [
+            59,
+            61,
+            58,
+            65,
+            66,
+            60,
+            63,
+            67,
+            64,
+            62
+          ]
+        }
+      ]
+    },
+    {
+      "id": 77,
+      "name": "IAcpPermissionOption",
+      "variant": "declaration",
+      "kind": 256,
+      "flags": {
+        "isPublic": true
+      },
+      "comment": {
+        "summary": [
+          {
+            "kind": "text",
+            "text": "One native ACP permission decision, without raw tool inputs or credentials."
+          }
+        ]
+      },
+      "children": [
+        {
+          "id": 78,
+          "name": "id",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {
+            "isReadonly": true
+          },
+          "comment": {
+            "summary": [
+              {
+                "kind": "text",
+                "text": "Native opaque option ID that may be returned by the host."
+              }
+            ]
+          },
+          "type": {
+            "type": "intrinsic",
+            "name": "string"
+          }
+        },
+        {
+          "id": 80,
+          "name": "kind",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {
+            "isReadonly": true
+          },
+          "comment": {
+            "summary": [
+              {
+                "kind": "text",
+                "text": "Native permission family, such as allow_once or reject_once."
+              }
+            ]
+          },
+          "type": {
+            "type": "intrinsic",
+            "name": "string"
+          }
+        },
+        {
+          "id": 79,
+          "name": "label",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {
+            "isReadonly": true
+          },
+          "comment": {
+            "summary": [
+              {
+                "kind": "text",
+                "text": "Safe bounded display label."
+              }
+            ]
+          },
+          "type": {
+            "type": "intrinsic",
+            "name": "string"
+          }
+        }
+      ],
+      "groups": [
+        {
+          "title": "Properties",
+          "children": [
+            78,
+            80,
+            79
+          ]
+        }
+      ]
+    },
+    {
+      "id": 71,
+      "name": "IAcpPermissionRequest",
+      "variant": "declaration",
+      "kind": 256,
+      "flags": {
+        "isPublic": true
+      },
+      "comment": {
+        "summary": [
+          {
+            "kind": "text",
+            "text": "Safe host decision context for one tool permission request in the active ACP session."
+          }
+        ]
+      },
+      "children": [
+        {
+          "id": 75,
+          "name": "kind",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {
+            "isOptional": true,
+            "isReadonly": true
+          },
+          "comment": {
+            "summary": [
+              {
+                "kind": "text",
+                "text": "Protocol-reported tool kind, if provided."
+              }
+            ]
+          },
+          "type": {
+            "type": "intrinsic",
+            "name": "string"
+          }
+        },
+        {
+          "id": 76,
+          "name": "options",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {
+            "isReadonly": true
+          },
+          "comment": {
+            "summary": [
+              {
+                "kind": "text",
+                "text": "Actual options offered by the native agent."
+              }
+            ]
+          },
+          "type": {
+            "type": "typeOperator",
+            "operator": "readonly",
+            "target": {
+              "type": "array",
+              "elementType": {
+                "type": "reference",
+                "target": 77,
+                "name": "IAcpPermissionOption",
+                "package": "@pixel-brewery/synapse-provider-acp"
+              }
+            }
+          }
+        },
+        {
+          "id": 72,
+          "name": "sessionId",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {
+            "isReadonly": true
+          },
+          "comment": {
+            "summary": [
+              {
+                "kind": "text",
+                "text": "Bound native session ID."
+              }
+            ]
+          },
+          "type": {
+            "type": "intrinsic",
+            "name": "string"
+          }
+        },
+        {
+          "id": 74,
+          "name": "title",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {
+            "isReadonly": true
+          },
+          "comment": {
+            "summary": [
+              {
+                "kind": "text",
+                "text": "Safe bounded tool label; raw inputs and command output are excluded."
+              }
+            ]
+          },
+          "type": {
+            "type": "intrinsic",
+            "name": "string"
+          }
+        },
+        {
+          "id": 73,
+          "name": "toolCallId",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {
+            "isReadonly": true
+          },
+          "comment": {
+            "summary": [
+              {
+                "kind": "text",
+                "text": "Opaque native tool invocation ID."
+              }
+            ]
+          },
+          "type": {
+            "type": "intrinsic",
+            "name": "string"
+          }
+        }
+      ],
+      "groups": [
+        {
+          "title": "Properties",
+          "children": [
+            75,
+            76,
+            72,
+            74,
+            73
+          ]
+        }
+      ]
+    }
+  ],
+  "groups": [
+    {
+      "title": "Classes",
+      "children": [
+        1
+      ]
+    },
+    {
+      "title": "Interfaces",
+      "children": [
+        57,
+        77,
+        71
+      ]
+    }
+  ],
+  "packageName": "@pixel-brewery/synapse-provider-acp",
+  "symbolIdMap": {
+    "0": {
+      "packageName": "@pixel-brewery/synapse-provider-acp",
+      "packagePath": "src/index.ts",
+      "qualifiedName": ""
+    },
+    "1": {
+      "packageName": "@pixel-brewery/synapse-provider-acp",
+      "packagePath": "src/adapters/AcpDriver.ts",
+      "qualifiedName": "AcpDriver"
+    },
+    "2": {
+      "packageName": "@pixel-brewery/synapse-provider-acp",
+      "packagePath": "src/adapters/AcpDriver.ts",
+      "qualifiedName": "AcpDriver.__constructor"
+    },
+    "3": {
+      "packageName": "@pixel-brewery/synapse-provider-acp",
+      "packagePath": "src/adapters/AcpDriver.ts",
+      "qualifiedName": "AcpDriver"
+    },
+    "4": {
+      "packageName": "@pixel-brewery/synapse-provider-acp",
+      "packagePath": "src/adapters/AcpDriver.ts",
+      "qualifiedName": "_runner"
+    },
+    "5": {
+      "packageName": "@pixel-brewery/synapse-provider-acp",
+      "packagePath": "src/adapters/AcpDriver.ts",
+      "qualifiedName": "_options"
+    },
+    "6": {
+      "packageName": "@pixel-brewery/synapse-provider-acp",
+      "packagePath": "src/adapters/AcpDriver.ts",
+      "qualifiedName": "AcpDriver.id"
+    },
+    "7": {
+      "packageName": "@pixel-brewery/synapse-provider-acp",
+      "packagePath": "src/adapters/AcpDriver.ts",
+      "qualifiedName": "AcpDriver.capabilities"
+    },
+    "8": {
+      "packageName": "@pixel-brewery/synapse-provider-acp",
+      "packagePath": "src/adapters/AcpDriver.ts",
+      "qualifiedName": "AcpDriver.auth"
+    },
+    "12": {
+      "packageName": "@pixel-brewery/synapse-provider-acp",
+      "packagePath": "src/adapters/AcpDriver.ts",
+      "qualifiedName": "AcpDriver.execute"
+    },
+    "13": {
+      "packageName": "@pixel-brewery/synapse-provider-acp",
+      "packagePath": "src/adapters/AcpDriver.ts",
+      "qualifiedName": "AcpDriver.execute"
+    },
+    "14": {
+      "packageName": "@pixel-brewery/synapse-provider-acp",
+      "packagePath": "src/adapters/AcpDriver.ts",
+      "qualifiedName": "context"
+    },
+    "15": {
+      "packageName": "@pixel-brewery/synapse-provider-acp",
+      "packagePath": "src/adapters/AcpDriver.ts",
+      "qualifiedName": "AcpDriver.inspect"
+    },
+    "16": {
+      "packageName": "@pixel-brewery/synapse-provider-acp",
+      "packagePath": "src/adapters/AcpDriver.ts",
+      "qualifiedName": "AcpDriver.inspect"
+    },
+    "17": {
+      "packageName": "@pixel-brewery/synapse-provider-acp",
+      "packagePath": "src/adapters/AcpDriver.ts",
+      "qualifiedName": "instance"
+    },
+    "18": {
+      "packageName": "@pixel-brewery/synapse-provider-acp",
+      "packagePath": "src/adapters/AcpDriver.ts",
+      "qualifiedName": "signal"
+    },
+    "19": {
+      "packageName": "@pixel-brewery/synapse-provider-acp",
+      "packagePath": "src/adapters/AcpDriver.ts",
+      "qualifiedName": "AcpDriver.dispose"
+    },
+    "20": {
+      "packageName": "@pixel-brewery/synapse-provider-acp",
+      "packagePath": "src/adapters/AcpDriver.ts",
+      "qualifiedName": "AcpDriver.dispose"
+    },
+    "57": {
+      "packageName": "@pixel-brewery/synapse-provider-acp",
+      "packagePath": "src/interfaces/IAcpDriverOptions.ts",
+      "qualifiedName": "IAcpDriverOptions"
+    },
+    "58": {
+      "packageName": "@pixel-brewery/synapse-provider-acp",
+      "packagePath": "src/interfaces/IAcpDriverOptions.ts",
+      "qualifiedName": "IAcpDriverOptions.id"
+    },
+    "59": {
+      "packageName": "@pixel-brewery/synapse-provider-acp",
+      "packagePath": "src/interfaces/IAcpDriverOptions.ts",
+      "qualifiedName": "IAcpDriverOptions.args"
+    },
+    "60": {
+      "packageName": "@pixel-brewery/synapse-provider-acp",
+      "packagePath": "src/interfaces/IAcpDriverOptions.ts",
+      "qualifiedName": "IAcpDriverOptions.modeIds"
+    },
+    "61": {
+      "packageName": "@pixel-brewery/synapse-provider-acp",
+      "packagePath": "src/interfaces/IAcpDriverOptions.ts",
+      "qualifiedName": "IAcpDriverOptions.auth"
+    },
+    "62": {
+      "packageName": "@pixel-brewery/synapse-provider-acp",
+      "packagePath": "src/interfaces/IAcpDriverOptions.ts",
+      "qualifiedName": "IAcpDriverOptions.resume"
+    },
+    "63": {
+      "packageName": "@pixel-brewery/synapse-provider-acp",
+      "packagePath": "src/interfaces/IAcpDriverOptions.ts",
+      "qualifiedName": "IAcpDriverOptions.modelConfigId"
+    },
+    "64": {
+      "packageName": "@pixel-brewery/synapse-provider-acp",
+      "packagePath": "src/interfaces/IAcpDriverOptions.ts",
+      "qualifiedName": "IAcpDriverOptions.reasoningConfigId"
+    },
+    "65": {
+      "packageName": "@pixel-brewery/synapse-provider-acp",
+      "packagePath": "src/interfaces/IAcpDriverOptions.ts",
+      "qualifiedName": "IAcpDriverOptions.maxMessageBytes"
+    },
+    "66": {
+      "packageName": "@pixel-brewery/synapse-provider-acp",
+      "packagePath": "src/interfaces/IAcpDriverOptions.ts",
+      "qualifiedName": "IAcpDriverOptions.maxOutputBytes"
+    },
+    "67": {
+      "packageName": "@pixel-brewery/synapse-provider-acp",
+      "packagePath": "src/interfaces/IAcpDriverOptions.ts",
+      "qualifiedName": "IAcpDriverOptions.permission"
+    },
+    "68": {
+      "packageName": "@pixel-brewery/synapse-provider-acp",
+      "packagePath": "src/interfaces/IAcpDriverOptions.ts",
+      "qualifiedName": "__type"
+    },
+    "69": {
+      "packageName": "@pixel-brewery/synapse-provider-acp",
+      "packagePath": "src/interfaces/IAcpDriverOptions.ts",
+      "qualifiedName": "__type"
+    },
+    "70": {
+      "packageName": "@pixel-brewery/synapse-provider-acp",
+      "packagePath": "src/interfaces/IAcpDriverOptions.ts",
+      "qualifiedName": "request"
+    },
+    "71": {
+      "packageName": "@pixel-brewery/synapse-provider-acp",
+      "packagePath": "src/interfaces/IAcpPermissionRequest.ts",
+      "qualifiedName": "IAcpPermissionRequest"
+    },
+    "72": {
+      "packageName": "@pixel-brewery/synapse-provider-acp",
+      "packagePath": "src/interfaces/IAcpPermissionRequest.ts",
+      "qualifiedName": "IAcpPermissionRequest.sessionId"
+    },
+    "73": {
+      "packageName": "@pixel-brewery/synapse-provider-acp",
+      "packagePath": "src/interfaces/IAcpPermissionRequest.ts",
+      "qualifiedName": "IAcpPermissionRequest.toolCallId"
+    },
+    "74": {
+      "packageName": "@pixel-brewery/synapse-provider-acp",
+      "packagePath": "src/interfaces/IAcpPermissionRequest.ts",
+      "qualifiedName": "IAcpPermissionRequest.title"
+    },
+    "75": {
+      "packageName": "@pixel-brewery/synapse-provider-acp",
+      "packagePath": "src/interfaces/IAcpPermissionRequest.ts",
+      "qualifiedName": "IAcpPermissionRequest.kind"
+    },
+    "76": {
+      "packageName": "@pixel-brewery/synapse-provider-acp",
+      "packagePath": "src/interfaces/IAcpPermissionRequest.ts",
+      "qualifiedName": "IAcpPermissionRequest.options"
+    },
+    "77": {
+      "packageName": "@pixel-brewery/synapse-provider-acp",
+      "packagePath": "src/interfaces/IAcpPermissionOption.ts",
+      "qualifiedName": "IAcpPermissionOption"
+    },
+    "78": {
+      "packageName": "@pixel-brewery/synapse-provider-acp",
+      "packagePath": "src/interfaces/IAcpPermissionOption.ts",
+      "qualifiedName": "IAcpPermissionOption.id"
+    },
+    "79": {
+      "packageName": "@pixel-brewery/synapse-provider-acp",
+      "packagePath": "src/interfaces/IAcpPermissionOption.ts",
+      "qualifiedName": "IAcpPermissionOption.label"
+    },
+    "80": {
+      "packageName": "@pixel-brewery/synapse-provider-acp",
+      "packagePath": "src/interfaces/IAcpPermissionOption.ts",
+      "qualifiedName": "IAcpPermissionOption.kind"
+    }
+  },
+  "files": {
+    "entries": {
+      "1": "libs/synapse-provider-acp/src/index.ts"
+    },
+    "reflections": {
+      "1": 0
+    }
+  }
+}

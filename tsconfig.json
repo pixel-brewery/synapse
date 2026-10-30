@@ -1,0 +1,33 @@
+{
+    "extends": "./tsconfig.base.json",
+    "files": [],
+    "references": [
+        {
+            "path": "./libs/synapse-auth"
+        },
+        {
+            "path": "./libs/synapse-core"
+        },
+        {
+            "path": "./libs/synapse-provider-acp"
+        },
+        {
+            "path": "./libs/synapse-provider-claude"
+        },
+        {
+            "path": "./libs/synapse-provider-codex"
+        },
+        {
+            "path": "./libs/synapse-provider-opencode"
+        },
+        {
+            "path": "./libs/synapse-routing"
+        },
+        {
+            "path": "./libs/synapse-runtime"
+        },
+        {
+            "path": "./libs/synapse-testing"
+        }
+    ]
+}

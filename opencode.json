@@ -1,0 +1,28 @@
+{
+  "$schema": "https://opencode.ai/config.json",
+  "instructions": [
+    "AGENTS.md",
+    ".agents/skills/synapse-architect/SKILL.md"
+  ],
+  "mcp": {
+    "nx": {
+      "type": "local",
+      "command": [
+        "yarn",
+        "nx",
+        "mcp"
+      ],
+      "enabled": true
+    },
+    "synapse": {
+      "type": "local",
+      "command": [
+        "yarn",
+        "workspace",
+        "@pixel-brewery/synapse-mcp",
+        "start"
+      ],
+      "enabled": true
+    }
+  }
+}

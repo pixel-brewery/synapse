@@ -1,0 +1,7 @@
+{"type":"thread.started","thread_id":"thread-codex-fixture-1"}
+{"type":"turn.started"}
+{"type":"item.started","item":{"id":"cmd-1","type":"command_execution","command":"API_TOKEN=synthetic-private-value cat meeting.txt","aggregated_output":"synthetic-private-tool-output"}}
+{"type":"item.completed","item":{"id":"reason-1","type":"reasoning","text":"Checking the supplied transcript."}}
+{"type":"item.completed","item":{"id":"file-1","type":"file_change","changes":[{"path":"src/Notes.ts","kind":"update"}]}}
+{"type":"item.completed","item":{"id":"message-1","type":"agent_message","text":"Meeting summary: publish the draft tomorrow."}}
+{"type":"turn.completed","usage":{"input_tokens":20,"cached_input_tokens":4,"output_tokens":8}}

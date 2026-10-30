@@ -1,0 +1,6 @@
+{
+    "stdout": "{\"type\":\"error\",\"timestamp\":1793232000000,\"sessionID\":\"ses_recorded_offline_1\",\"error\":{\"name\":\"UnknownError\",\"data\":{\"message\":\"Unexpected server error. Check server logs for details.\",\"ref\":\"err_recorded_offline_1\"}}}\n",
+    "stderr": "",
+    "exitCode": 1,
+    "signal": null
+}

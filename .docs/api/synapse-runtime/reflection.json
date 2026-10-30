@@ -1,0 +1,5989 @@
+{
+  "schemaVersion": "2.0",
+  "id": 0,
+  "name": "@pixel-brewery/synapse-runtime",
+  "variant": "project",
+  "kind": 1,
+  "flags": {},
+  "comment": {
+    "summary": [
+      {
+        "kind": "text",
+        "text": "Explicit bounded subprocess and profile lifecycle primitives for local AI drivers."
+      }
+    ]
+  },
+  "children": [
+    {
+      "id": 69,
+      "name": "AiRuntime",
+      "variant": "declaration",
+      "kind": 128,
+      "flags": {
+        "isPublic": true
+      },
+      "comment": {
+        "summary": [
+          {
+            "kind": "text",
+            "text": "Explicit provider-neutral execution owner for CLI text jobs and resumable agent turns."
+          }
+        ],
+        "blockTags": [
+          {
+            "tag": "@example",
+            "content": [
+              {
+                "kind": "code",
+                "text": "```ts\nconst handle = runtime.run({ target: { instanceId: 'personal' }, prompt: 'Summarize this text.', policy: { mode: 'read-only' } });\nconst result = await handle.result;\nawait runtime.dispose();\n```"
+              }
+            ]
+          }
+        ]
+      },
+      "children": [
+        {
+          "id": 86,
+          "name": "access",
+          "variant": "declaration",
+          "kind": 262144,
+          "flags": {
+            "isPublic": true
+          },
+          "getSignature": {
+            "id": 87,
+            "name": "access",
+            "variant": "signature",
+            "kind": 524288,
+            "flags": {
+              "isPublic": true
+            },
+            "comment": {
+              "summary": [
+                {
+                  "kind": "text",
+                  "text": "Returns the gate that must also coordinate this runtime's native authentication."
+                }
+              ],
+              "blockTags": [
+                {
+                  "tag": "@returns",
+                  "content": [
+                    {
+                      "kind": "text",
+                      "text": "Shared execution/credential transition owner."
+                    }
+                  ]
+                }
+              ]
+            },
+            "type": {
+              "type": "reference",
+              "target": 227,
+              "name": "ProfileAccessCoordinator",
+              "package": "@pixel-brewery/synapse-runtime"
+            }
+          }
+        },
+        {
+          "id": 93,
+          "name": "configureInstance",
+          "variant": "declaration",
+          "kind": 2048,
+          "flags": {
+            "isPublic": true
+          },
+          "signatures": [
+            {
+              "id": 94,
+              "name": "configureInstance",
+              "variant": "signature",
+              "kind": 4096,
+              "flags": {
+                "isPublic": true
+              },
+              "comment": {
+                "summary": [
+                  {
+                    "kind": "text",
+                    "text": "Adds or updates a host-configured instance while preserving shared runtime state."
+                  }
+                ],
+                "blockTags": [
+                  {
+                    "tag": "@returns",
+                    "content": [
+                      {
+                        "kind": "text",
+                        "text": "Completion after changed profiles drain and the new configuration becomes visible."
+                      }
+                    ]
+                  },
+                  {
+                    "tag": "@throws",
+                    "content": [
+                      {
+                        "kind": "text",
+                        "text": "An AiError for invalid configuration, disposal or failed profile drain."
+                      }
+                    ]
+                  },
+                  {
+                    "tag": "@remarks",
+                    "content": [
+                      {
+                        "kind": "text",
+                        "text": "Updates are serialized and acquire profile gates in stable order; no implicit discovery or login occurs."
+                      }
+                    ]
+                  }
+                ]
+              },
+              "parameters": [
+                {
+                  "id": 95,
+                  "name": "configuration",
+                  "variant": "param",
+                  "kind": 32768,
+                  "flags": {},
+                  "comment": {
+                    "summary": [
+                      {
+                        "kind": "text",
+                        "text": "Explicit driver/profile configuration; identical snapshots do not interrupt work."
+                      }
+                    ]
+                  },
+                  "type": {
+                    "type": "reference",
+                    "target": {
+                      "packageName": "@pixel-brewery/synapse-core",
+                      "packagePath": "src/interfaces/IAiInstance.ts",
+                      "qualifiedName": "IAiInstance"
+                    },
+                    "name": "IAiInstance",
+                    "package": "@pixel-brewery/synapse-core",
+                    "externalUrl": "packages/synapse-core/api/interfaces/IAiInstance.md"
+                  }
+                }
+              ],
+              "type": {
+                "type": "reference",
+                "target": {
+                  "packageName": "typescript",
+                  "packagePath": "lib/lib.es5.d.ts",
+                  "qualifiedName": "Promise"
+                },
+                "typeArguments": [
+                  {
+                    "type": "intrinsic",
+                    "name": "void"
+                  }
+                ],
+                "name": "Promise",
+                "package": "typescript"
+              }
+            }
+          ]
+        },
+        {
+          "id": 70,
+          "name": "constructor",
+          "variant": "declaration",
+          "kind": 512,
+          "flags": {
+            "isPublic": true
+          },
+          "signatures": [
+            {
+              "id": 71,
+              "name": "AiRuntime",
+              "variant": "signature",
+              "kind": 16384,
+              "flags": {
+                "isPublic": true
+              },
+              "comment": {
+                "summary": [
+                  {
+                    "kind": "text",
+                    "text": "Composes drivers and instances without filesystem, login, process or network effects."
+                  }
+                ],
+                "blockTags": [
+                  {
+                    "tag": "@throws",
+                    "content": [
+                      {
+                        "kind": "text",
+                        "text": "An AiError for duplicate IDs, missing drivers or invalid deterministic configuration."
+                      }
+                    ]
+                  }
+                ]
+              },
+              "parameters": [
+                {
+                  "id": 72,
+                  "name": "_options",
+                  "variant": "param",
+                  "kind": 32768,
+                  "flags": {},
+                  "comment": {
+                    "summary": [
+                      {
+                        "kind": "text",
+                        "text": "Explicit drivers, account profiles, shared gate and budgets."
+                      }
+                    ]
+                  },
+                  "type": {
+                    "type": "reference",
+                    "target": 21,
+                    "name": "IAiRuntimeOptions",
+                    "package": "@pixel-brewery/synapse-runtime"
+                  }
+                }
+              ],
+              "type": {
+                "type": "reference",
+                "target": 69,
+                "name": "AiRuntime",
+                "package": "@pixel-brewery/synapse-runtime"
+              }
+            }
+          ]
+        },
+        {
+          "id": 91,
+          "name": "dispose",
+          "variant": "declaration",
+          "kind": 2048,
+          "flags": {
+            "isPublic": true
+          },
+          "signatures": [
+            {
+              "id": 92,
+              "name": "dispose",
+              "variant": "signature",
+              "kind": 4096,
+              "flags": {
+                "isPublic": true
+              },
+              "comment": {
+                "summary": [
+                  {
+                    "kind": "text",
+                    "text": "Stops owned operations, waits for cleanup and disposes explicitly registered drivers."
+                  }
+                ],
+                "blockTags": [
+                  {
+                    "tag": "@returns",
+                    "content": [
+                      {
+                        "kind": "text",
+                        "text": "Completion after run workspaces and process resources have been released."
+                      }
+                    ]
+                  },
+                  {
+                    "tag": "@throws",
+                    "content": [
+                      {
+                        "kind": "text",
+                        "text": "An AiError if driver teardown fails."
+                      }
+                    ]
+                  }
+                ]
+              },
+              "type": {
+                "type": "reference",
+                "target": {
+                  "packageName": "typescript",
+                  "packagePath": "lib/lib.es5.d.ts",
+                  "qualifiedName": "Promise"
+                },
+                "typeArguments": [
+                  {
+                    "type": "intrinsic",
+                    "name": "void"
+                  }
+                ],
+                "name": "Promise",
+                "package": "typescript"
+              }
+            }
+          ]
+        },
+        {
+          "id": 88,
+          "name": "run",
+          "variant": "declaration",
+          "kind": 2048,
+          "flags": {
+            "isPublic": true
+          },
+          "signatures": [
+            {
+              "id": 89,
+              "name": "run",
+              "variant": "signature",
+              "kind": 4096,
+              "flags": {
+                "isPublic": true
+              },
+              "comment": {
+                "summary": [
+                  {
+                    "kind": "text",
+                    "text": "Starts one operation with optional observation and exactly one final result."
+                  }
+                ],
+                "blockTags": [
+                  {
+                    "tag": "@returns",
+                    "content": [
+                      {
+                        "kind": "text",
+                        "text": "Handle whose result completes independently of event consumption."
+                      }
+                    ]
+                  },
+                  {
+                    "tag": "@remarks",
+                    "content": [
+                      {
+                        "kind": "text",
+                        "text": "Failures reject result after cleanup. A critical host callback failure cancels the live attempt and never triggers provider failover.\nFuture deadlines must fit a positive 2147483647-millisecond native timer window; larger values reject before launch."
+                      }
+                    ]
+                  }
+                ]
+              },
+              "parameters": [
+                {
+                  "id": 90,
+                  "name": "request",
+                  "variant": "param",
+                  "kind": 32768,
+                  "flags": {},
+                  "comment": {
+                    "summary": [
+                      {
+                        "kind": "text",
+                        "text": "Host prompt, target, authorization, schema and cancellation."
+                      }
+                    ]
+                  },
+                  "type": {
+                    "type": "reference",
+                    "target": {
+                      "packageName": "@pixel-brewery/synapse-core",
+                      "packagePath": "src/interfaces/IAiRequest.ts",
+                      "qualifiedName": "IAiRequest"
+                    },
+                    "name": "IAiRequest",
+                    "package": "@pixel-brewery/synapse-core",
+                    "externalUrl": "packages/synapse-core/api/interfaces/IAiRequest.md"
+                  }
+                }
+              ],
+              "type": {
+                "type": "reference",
+                "target": {
+                  "packageName": "@pixel-brewery/synapse-core",
+                  "packagePath": "src/interfaces/IAiRunHandle.ts",
+                  "qualifiedName": "IAiRunHandle"
+                },
+                "name": "IAiRunHandle",
+                "package": "@pixel-brewery/synapse-core",
+                "externalUrl": "packages/synapse-core/api/interfaces/IAiRunHandle.md"
+              }
+            }
+          ]
+        }
+      ],
+      "groups": [
+        {
+          "title": "Constructors",
+          "children": [
+            70
+          ]
+        },
+        {
+          "title": "Accessors",
+          "children": [
+            86
+          ]
+        },
+        {
+          "title": "Methods",
+          "children": [
+            93,
+            91,
+            88
+          ]
+        }
+      ]
+    },
+    {
+      "id": 137,
+      "name": "BoundedAsyncQueue",
+      "variant": "declaration",
+      "kind": 128,
+      "flags": {
+        "isPublic": true
+      },
+      "comment": {
+        "summary": [
+          {
+            "kind": "text",
+            "text": "Single-consumer event queue whose producer never waits for optional observation."
+          }
+        ]
+      },
+      "children": [
+        {
+          "id": 166,
+          "name": "[asyncIterator]",
+          "variant": "declaration",
+          "kind": 2048,
+          "flags": {
+            "isPublic": true
+          },
+          "signatures": [
+            {
+              "id": 167,
+              "name": "[asyncIterator]",
+              "variant": "signature",
+              "kind": 4096,
+              "flags": {
+                "isPublic": true
+              },
+              "comment": {
+                "summary": [
+                  {
+                    "kind": "text",
+                    "text": "Claims the queue's single iterator; hosts may multicast its events externally."
+                  }
+                ],
+                "blockTags": [
+                  {
+                    "tag": "@returns",
+                    "content": [
+                      {
+                        "kind": "text",
+                        "text": "Iterator over retained values and optional overflow summaries."
+                      }
+                    ]
+                  },
+                  {
+                    "tag": "@throws",
+                    "content": [
+                      {
+                        "kind": "text",
+                        "text": "An AiError when another consumer already claimed the stream."
+                      }
+                    ]
+                  },
+                  {
+                    "tag": "@remarks",
+                    "content": [
+                      {
+                        "kind": "text",
+                        "text": "Returning from observation does not cancel the separate operation."
+                      }
+                    ]
+                  }
+                ]
+              },
+              "type": {
+                "type": "reference",
+                "target": {
+                  "packageName": "typescript",
+                  "packagePath": "lib/lib.es2018.asynciterable.d.ts",
+                  "qualifiedName": "AsyncIterator"
+                },
+                "typeArguments": [
+                  {
+                    "type": "reference",
+                    "target": 138,
+                    "name": "T",
+                    "package": "@pixel-brewery/synapse-runtime",
+                    "qualifiedName": "BoundedAsyncQueue.T",
+                    "refersToTypeParameter": true
+                  }
+                ],
+                "name": "AsyncIterator",
+                "package": "typescript"
+              },
+              "implementationOf": {
+                "type": "reference",
+                "target": -1,
+                "name": "AsyncIterable.[asyncIterator]",
+                "package": "typescript"
+              }
+            }
+          ],
+          "implementationOf": {
+            "type": "reference",
+            "target": -1,
+            "name": "AsyncIterable.[asyncIterator]",
+            "package": "typescript"
+          }
+        },
+        {
+          "id": 164,
+          "name": "close",
+          "variant": "declaration",
+          "kind": 2048,
+          "flags": {
+            "isPublic": true
+          },
+          "signatures": [
+            {
+              "id": 165,
+              "name": "close",
+              "variant": "signature",
+              "kind": 4096,
+              "flags": {
+                "isPublic": true
+              },
+              "comment": {
+                "summary": [
+                  {
+                    "kind": "text",
+                    "text": "Ends observation after retained values drain, independently of the operation result."
+                  }
+                ]
+              },
+              "type": {
+                "type": "intrinsic",
+                "name": "void"
+              }
+            }
+          ]
+        },
+        {
+          "id": 139,
+          "name": "constructor",
+          "variant": "declaration",
+          "kind": 512,
+          "flags": {
+            "isPublic": true
+          },
+          "signatures": [
+            {
+              "id": 140,
+              "name": "BoundedAsyncQueue",
+              "variant": "signature",
+              "kind": 16384,
+              "flags": {
+                "isPublic": true
+              },
+              "comment": {
+                "summary": [
+                  {
+                    "kind": "text",
+                    "text": "Creates a bounded queue without starting work or timers."
+                  }
+                ],
+                "blockTags": [
+                  {
+                    "tag": "@throws",
+                    "content": [
+                      {
+                        "kind": "text",
+                        "text": "An AiError when capacity is invalid."
+                      }
+                    ]
+                  }
+                ]
+              },
+              "typeParameters": [
+                {
+                  "id": 141,
+                  "name": "T",
+                  "variant": "typeParam",
+                  "kind": 131072,
+                  "flags": {},
+                  "comment": {
+                    "summary": [
+                      {
+                        "kind": "text",
+                        "text": "Event or state snapshot delivered to the consumer."
+                      }
+                    ]
+                  }
+                }
+              ],
+              "parameters": [
+                {
+                  "id": 142,
+                  "name": "_capacity",
+                  "variant": "param",
+                  "kind": 32768,
+                  "flags": {},
+                  "comment": {
+                    "summary": [
+                      {
+                        "kind": "text",
+                        "text": "Maximum retained values; a positive safe integer, default 256."
+                      }
+                    ]
+                  },
+                  "type": {
+                    "type": "intrinsic",
+                    "name": "number"
+                  },
+                  "defaultValue": "256"
+                },
+                {
+                  "id": 143,
+                  "name": "_overflowFactory",
+                  "variant": "param",
+                  "kind": 32768,
+                  "flags": {
+                    "isOptional": true
+                  },
+                  "comment": {
+                    "summary": [
+                      {
+                        "kind": "text",
+                        "text": "Optional summary emitted before retained values after overflow."
+                      }
+                    ]
+                  },
+                  "type": {
+                    "type": "reflection",
+                    "declaration": {
+                      "id": 144,
+                      "name": "__type",
+                      "variant": "declaration",
+                      "kind": 65536,
+                      "flags": {},
+                      "signatures": [
+                        {
+                          "id": 145,
+                          "name": "__type",
+                          "variant": "signature",
+                          "kind": 4096,
+                          "flags": {},
+                          "parameters": [
+                            {
+                              "id": 146,
+                              "name": "dropped",
+                              "variant": "param",
+                              "kind": 32768,
+                              "flags": {},
+                              "type": {
+                                "type": "intrinsic",
+                                "name": "number"
+                              }
+                            }
+                          ],
+                          "type": {
+                            "type": "reference",
+                            "target": 138,
+                            "name": "T",
+                            "package": "@pixel-brewery/synapse-runtime",
+                            "qualifiedName": "BoundedAsyncQueue.T",
+                            "refersToTypeParameter": true
+                          }
+                        }
+                      ]
+                    }
+                  }
+                }
+              ],
+              "type": {
+                "type": "reference",
+                "target": 137,
+                "typeArguments": [
+                  {
+                    "type": "reference",
+                    "target": 138,
+                    "name": "T",
+                    "package": "@pixel-brewery/synapse-runtime",
+                    "qualifiedName": "BoundedAsyncQueue.T",
+                    "refersToTypeParameter": true
+                  }
+                ],
+                "name": "BoundedAsyncQueue",
+                "package": "@pixel-brewery/synapse-runtime"
+              }
+            }
+          ]
+        },
+        {
+          "id": 161,
+          "name": "push",
+          "variant": "declaration",
+          "kind": 2048,
+          "flags": {
+            "isPublic": true
+          },
+          "signatures": [
+            {
+              "id": 162,
+              "name": "push",
+              "variant": "signature",
+              "kind": 4096,
+              "flags": {
+                "isPublic": true
+              },
+              "comment": {
+                "summary": [
+                  {
+                    "kind": "text",
+                    "text": "Publishes a value, dropping the oldest retained value when capacity is exhausted."
+                  }
+                ]
+              },
+              "parameters": [
+                {
+                  "id": 163,
+                  "name": "value",
+                  "variant": "param",
+                  "kind": 32768,
+                  "flags": {},
+                  "comment": {
+                    "summary": [
+                      {
+                        "kind": "text",
+                        "text": "Immutable event/state snapshot; late values after closure are ignored."
+                      }
+                    ]
+                  },
+                  "type": {
+                    "type": "reference",
+                    "target": 138,
+                    "name": "T",
+                    "package": "@pixel-brewery/synapse-runtime",
+                    "qualifiedName": "BoundedAsyncQueue.T",
+                    "refersToTypeParameter": true
+                  }
+                }
+              ],
+              "type": {
+                "type": "intrinsic",
+                "name": "void"
+              }
+            }
+          ]
+        }
+      ],
+      "groups": [
+        {
+          "title": "Constructors",
+          "children": [
+            139
+          ]
+        },
+        {
+          "title": "Methods",
+          "children": [
+            166,
+            164,
+            161
+          ]
+        }
+      ],
+      "typeParameters": [
+        {
+          "id": 138,
+          "name": "T",
+          "variant": "typeParam",
+          "kind": 131072,
+          "flags": {},
+          "comment": {
+            "summary": [
+              {
+                "kind": "text",
+                "text": "Event or state snapshot delivered to the consumer."
+              }
+            ]
+          }
+        }
+      ],
+      "implementedTypes": [
+        {
+          "type": "reference",
+          "target": {
+            "packageName": "typescript",
+            "packagePath": "lib/lib.es2018.asynciterable.d.ts",
+            "qualifiedName": "AsyncIterable"
+          },
+          "typeArguments": [
+            {
+              "type": "reference",
+              "target": 138,
+              "name": "T",
+              "package": "@pixel-brewery/synapse-runtime",
+              "qualifiedName": "BoundedAsyncQueue.T",
+              "refersToTypeParameter": true
+            }
+          ],
+          "name": "AsyncIterable",
+          "package": "typescript"
+        }
+      ]
+    },
+    {
+      "id": 328,
+      "name": "boundedText",
+      "variant": "declaration",
+      "kind": 64,
+      "flags": {
+        "isPublic": true
+      },
+      "signatures": [
+        {
+          "id": 329,
+          "name": "boundedText",
+          "variant": "signature",
+          "kind": 4096,
+          "flags": {
+            "isPublic": true
+          },
+          "comment": {
+            "summary": [
+              {
+                "kind": "text",
+                "text": "Redacts common credential shapes and bounds a normalized progress message."
+              }
+            ],
+            "blockTags": [
+              {
+                "tag": "@returns",
+                "content": [
+                  {
+                    "kind": "text",
+                    "text": "Redacted and bounded text, with a truncation marker if needed."
+                  }
+                ]
+              },
+              {
+                "tag": "@remarks",
+                "content": [
+                  {
+                    "kind": "text",
+                    "text": "This projection supplements explicit safe-field selection; it is not a general secret detector."
+                  }
+                ]
+              }
+            ]
+          },
+          "parameters": [
+            {
+              "id": 330,
+              "name": "value",
+              "variant": "param",
+              "kind": 32768,
+              "flags": {},
+              "comment": {
+                "summary": [
+                  {
+                    "kind": "text",
+                    "text": "Untrusted human-readable progress text, never a raw credentials object."
+                  }
+                ]
+              },
+              "type": {
+                "type": "intrinsic",
+                "name": "string"
+              }
+            },
+            {
+              "id": 331,
+              "name": "maxCharacters",
+              "variant": "param",
+              "kind": 32768,
+              "flags": {},
+              "comment": {
+                "summary": [
+                  {
+                    "kind": "text",
+                    "text": "Maximum retained characters, default 64000."
+                  }
+                ]
+              },
+              "type": {
+                "type": "intrinsic",
+                "name": "number"
+              },
+              "defaultValue": "64_000"
+            }
+          ],
+          "type": {
+            "type": "intrinsic",
+            "name": "string"
+          }
+        }
+      ]
+    },
+    {
+      "id": 332,
+      "name": "createProfileEnvironment",
+      "variant": "declaration",
+      "kind": 64,
+      "flags": {
+        "isPublic": true
+      },
+      "signatures": [
+        {
+          "id": 333,
+          "name": "createProfileEnvironment",
+          "variant": "signature",
+          "kind": 4096,
+          "flags": {
+            "isPublic": true
+          },
+          "comment": {
+            "summary": [
+              {
+                "kind": "text",
+                "text": "Captures an allowlisted host environment and prepares one explicit isolated profile."
+              }
+            ],
+            "blockTags": [
+              {
+                "tag": "@returns",
+                "content": [
+                  {
+                    "kind": "text",
+                    "text": "Environment for this profile; HOME, USERPROFILE and temporary paths remain isolated."
+                  }
+                ]
+              },
+              {
+                "tag": "@throws",
+                "content": [
+                  {
+                    "kind": "text",
+                    "text": "An AiError when profile locations are invalid or cannot be prepared."
+                  }
+                ]
+              },
+              {
+                "tag": "@remarks",
+                "content": [
+                  {
+                    "kind": "text",
+                    "text": "No credentials are discovered or imported from the user's global CLI configuration."
+                  }
+                ]
+              }
+            ]
+          },
+          "parameters": [
+            {
+              "id": 334,
+              "name": "instance",
+              "variant": "param",
+              "kind": 32768,
+              "flags": {},
+              "comment": {
+                "summary": [
+                  {
+                    "kind": "text",
+                    "text": "Selected application/account instance, including explicit optional secrets."
+                  }
+                ]
+              },
+              "type": {
+                "type": "reference",
+                "target": {
+                  "packageName": "@pixel-brewery/synapse-core",
+                  "packagePath": "src/interfaces/IAiInstance.ts",
+                  "qualifiedName": "IAiInstance"
+                },
+                "name": "IAiInstance",
+                "package": "@pixel-brewery/synapse-core",
+                "externalUrl": "packages/synapse-core/api/interfaces/IAiInstance.md"
+              }
+            },
+            {
+              "id": 335,
+              "name": "extras",
+              "variant": "param",
+              "kind": 32768,
+              "flags": {},
+              "comment": {
+                "summary": [
+                  {
+                    "kind": "text",
+                    "text": "Driver-owned environment values such as its native credential/config paths."
+                  }
+                ]
+              },
+              "type": {
+                "type": "reference",
+                "target": {
+                  "packageName": "typescript",
+                  "packagePath": "lib/lib.es5.d.ts",
+                  "qualifiedName": "Readonly"
+                },
+                "typeArguments": [
+                  {
+                    "type": "reference",
+                    "target": {
+                      "packageName": "typescript",
+                      "packagePath": "lib/lib.es5.d.ts",
+                      "qualifiedName": "Record"
+                    },
+                    "typeArguments": [
+                      {
+                        "type": "intrinsic",
+                        "name": "string"
+                      },
+                      {
+                        "type": "intrinsic",
+                        "name": "string"
+                      }
+                    ],
+                    "name": "Record",
+                    "package": "typescript"
+                  }
+                ],
+                "name": "Readonly",
+                "package": "typescript"
+              },
+              "defaultValue": "{}"
+            }
+          ],
+          "type": {
+            "type": "reference",
+            "target": {
+              "packageName": "typescript",
+              "packagePath": "lib/lib.es5.d.ts",
+              "qualifiedName": "Promise"
+            },
+            "typeArguments": [
+              {
+                "type": "reference",
+                "target": {
+                  "packageName": "typescript",
+                  "packagePath": "lib/lib.es5.d.ts",
+                  "qualifiedName": "Readonly"
+                },
+                "typeArguments": [
+                  {
+                    "type": "reference",
+                    "target": {
+                      "packageName": "typescript",
+                      "packagePath": "lib/lib.es5.d.ts",
+                      "qualifiedName": "Record"
+                    },
+                    "typeArguments": [
+                      {
+                        "type": "intrinsic",
+                        "name": "string"
+                      },
+                      {
+                        "type": "intrinsic",
+                        "name": "string"
+                      }
+                    ],
+                    "name": "Record",
+                    "package": "typescript"
+                  }
+                ],
+                "name": "Readonly",
+                "package": "typescript"
+              }
+            ],
+            "name": "Promise",
+            "package": "typescript"
+          }
+        }
+      ]
+    },
+    {
+      "id": 291,
+      "name": "FileProfileSessionStore",
+      "variant": "declaration",
+      "kind": 128,
+      "flags": {
+        "isPublic": true
+      },
+      "comment": {
+        "summary": [
+          {
+            "kind": "text",
+            "text": "Atomic private profile metadata that invalidates native continuations across account or configuration changes and restarts."
+          }
+        ],
+        "blockTags": [
+          {
+            "tag": "@remarks",
+            "content": [
+              {
+                "kind": "text",
+                "text": "Synchronization belongs to the shared profile coordinator; this file is not a cross-process execution lock. Version 1 stores explicit owner identifiers and optional generation/configuration digests, never native credentials or configuration plaintext. Metadata is limited to 8 KiB; canonical configuration hashing accepts at most 1 MiB, 10,000 nodes and 32 levels of JSON data."
+              }
+            ]
+          }
+        ]
+      },
+      "children": [
+        {
+          "id": 306,
+          "name": "advance",
+          "variant": "declaration",
+          "kind": 2048,
+          "flags": {
+            "isPublic": true
+          },
+          "signatures": [
+            {
+              "id": 307,
+              "name": "advance",
+              "variant": "signature",
+              "kind": 4096,
+              "flags": {
+                "isPublic": true
+              },
+              "comment": {
+                "summary": [
+                  {
+                    "kind": "text",
+                    "text": "Persists a fresh generation before native credential mutation and preserves the configuration binding."
+                  }
+                ],
+                "blockTags": [
+                  {
+                    "tag": "@returns",
+                    "content": [
+                      {
+                        "kind": "text",
+                        "text": "The new persisted generation, also readable by a restarted runtime."
+                      }
+                    ]
+                  },
+                  {
+                    "tag": "@throws",
+                    "content": [
+                      {
+                        "kind": "text",
+                        "text": "An AiError for invalid identifiers, unknown state or atomic-write failure."
+                      }
+                    ]
+                  }
+                ]
+              },
+              "parameters": [
+                {
+                  "id": 308,
+                  "name": "profile",
+                  "variant": "param",
+                  "kind": 32768,
+                  "flags": {},
+                  "comment": {
+                    "summary": [
+                      {
+                        "kind": "text",
+                        "text": "Drained profile exclusively owned by the shared coordinator."
+                      }
+                    ]
+                  },
+                  "type": {
+                    "type": "reference",
+                    "target": {
+                      "packageName": "@pixel-brewery/synapse-core",
+                      "packagePath": "src/interfaces/IAiProfile.ts",
+                      "qualifiedName": "IAiProfile"
+                    },
+                    "name": "IAiProfile",
+                    "package": "@pixel-brewery/synapse-core",
+                    "externalUrl": "packages/synapse-core/api/interfaces/IAiProfile.md"
+                  }
+                }
+              ],
+              "type": {
+                "type": "reference",
+                "target": {
+                  "packageName": "typescript",
+                  "packagePath": "lib/lib.es5.d.ts",
+                  "qualifiedName": "Promise"
+                },
+                "typeArguments": [
+                  {
+                    "type": "intrinsic",
+                    "name": "string"
+                  }
+                ],
+                "name": "Promise",
+                "package": "typescript"
+              },
+              "overwrites": {
+                "type": "reference",
+                "target": 19,
+                "name": "ProfileSessionStoreBase.advance"
+              }
+            }
+          ],
+          "overwrites": {
+            "type": "reference",
+            "target": 18,
+            "name": "ProfileSessionStoreBase.advance"
+          }
+        },
+        {
+          "id": 300,
+          "name": "bind",
+          "variant": "declaration",
+          "kind": 2048,
+          "flags": {
+            "isPublic": true
+          },
+          "signatures": [
+            {
+              "id": 301,
+              "name": "bind",
+              "variant": "signature",
+              "kind": 4096,
+              "flags": {
+                "isPublic": true
+              },
+              "comment": {
+                "summary": [
+                  {
+                    "kind": "text",
+                    "text": "Binds the profile to a canonical SHA-256 digest of its current native configuration."
+                  }
+                ],
+                "blockTags": [
+                  {
+                    "tag": "@returns",
+                    "content": [
+                      {
+                        "kind": "text",
+                        "text": "Current generation, including undefined for a first or legacy binding."
+                      }
+                    ]
+                  },
+                  {
+                    "tag": "@throws",
+                    "content": [
+                      {
+                        "kind": "text",
+                        "text": "An AiError for non-JSON/cyclic/oversized configuration, unsupported metadata or persistence failure."
+                      }
+                    ]
+                  },
+                  {
+                    "tag": "@remarks",
+                    "content": [
+                      {
+                        "kind": "text",
+                        "text": "Object keys are sorted. Profile identity and stable paths are included; temporary paths and the instance identifier are excluded. An existing changed digest advances the generation before the new binding is persisted. This method requires the caller's exclusive profile gate."
+                      }
+                    ]
+                  }
+                ]
+              },
+              "parameters": [
+                {
+                  "id": 302,
+                  "name": "instance",
+                  "variant": "param",
+                  "kind": 32768,
+                  "flags": {},
+                  "comment": {
+                    "summary": [
+                      {
+                        "kind": "text",
+                        "text": "Driver, executable, JSON configuration, explicit environment and owned profile."
+                      }
+                    ]
+                  },
+                  "type": {
+                    "type": "reference",
+                    "target": {
+                      "packageName": "@pixel-brewery/synapse-core",
+                      "packagePath": "src/interfaces/IAiInstance.ts",
+                      "qualifiedName": "IAiInstance"
+                    },
+                    "name": "IAiInstance",
+                    "package": "@pixel-brewery/synapse-core",
+                    "externalUrl": "packages/synapse-core/api/interfaces/IAiInstance.md"
+                  }
+                }
+              ],
+              "type": {
+                "type": "reference",
+                "target": {
+                  "packageName": "typescript",
+                  "packagePath": "lib/lib.es5.d.ts",
+                  "qualifiedName": "Promise"
+                },
+                "typeArguments": [
+                  {
+                    "type": "union",
+                    "types": [
+                      {
+                        "type": "intrinsic",
+                        "name": "string"
+                      },
+                      {
+                        "type": "intrinsic",
+                        "name": "undefined"
+                      }
+                    ]
+                  }
+                ],
+                "name": "Promise",
+                "package": "typescript"
+              },
+              "overwrites": {
+                "type": "reference",
+                "target": 13,
+                "name": "ProfileSessionStoreBase.bind"
+              }
+            }
+          ],
+          "overwrites": {
+            "type": "reference",
+            "target": 12,
+            "name": "ProfileSessionStoreBase.bind"
+          }
+        },
+        {
+          "id": 292,
+          "name": "constructor",
+          "variant": "declaration",
+          "kind": 512,
+          "flags": {
+            "isPublic": true
+          },
+          "signatures": [
+            {
+              "id": 293,
+              "name": "FileProfileSessionStore",
+              "variant": "signature",
+              "kind": 16384,
+              "flags": {
+                "isPublic": true
+              },
+              "comment": {
+                "summary": [
+                  {
+                    "kind": "text",
+                    "text": "Captures an identifier source without filesystem access."
+                  }
+                ]
+              },
+              "parameters": [
+                {
+                  "id": 294,
+                  "name": "_createId",
+                  "variant": "param",
+                  "kind": 32768,
+                  "flags": {},
+                  "comment": {
+                    "summary": [
+                      {
+                        "kind": "text",
+                        "text": "Distinct bounded generation identifiers; default cryptographic UUIDs."
+                      }
+                    ]
+                  },
+                  "type": {
+                    "type": "reflection",
+                    "declaration": {
+                      "id": 295,
+                      "name": "__type",
+                      "variant": "declaration",
+                      "kind": 65536,
+                      "flags": {},
+                      "signatures": [
+                        {
+                          "id": 296,
+                          "name": "__type",
+                          "variant": "signature",
+                          "kind": 4096,
+                          "flags": {},
+                          "type": {
+                            "type": "intrinsic",
+                            "name": "string"
+                          }
+                        }
+                      ]
+                    }
+                  },
+                  "defaultValue": "randomUUID"
+                }
+              ],
+              "type": {
+                "type": "reference",
+                "target": 291,
+                "name": "FileProfileSessionStore",
+                "package": "@pixel-brewery/synapse-runtime"
+              },
+              "overwrites": {
+                "type": "reference",
+                "target": 11,
+                "name": "ProfileSessionStoreBase.constructor"
+              }
+            }
+          ],
+          "overwrites": {
+            "type": "reference",
+            "target": 10,
+            "name": "ProfileSessionStoreBase.constructor"
+          }
+        },
+        {
+          "id": 303,
+          "name": "read",
+          "variant": "declaration",
+          "kind": 2048,
+          "flags": {
+            "isPublic": true
+          },
+          "signatures": [
+            {
+              "id": 304,
+              "name": "read",
+              "variant": "signature",
+              "kind": 4096,
+              "flags": {
+                "isPublic": true
+              },
+              "comment": {
+                "summary": [
+                  {
+                    "kind": "text",
+                    "text": "Reads bounded versioned metadata while preserving absent legacy state."
+                  }
+                ],
+                "blockTags": [
+                  {
+                    "tag": "@returns",
+                    "content": [
+                      {
+                        "kind": "text",
+                        "text": "Current generation, or undefined when no credential/configuration change has been recorded."
+                      }
+                    ]
+                  },
+                  {
+                    "tag": "@throws",
+                    "content": [
+                      {
+                        "kind": "text",
+                        "text": "An AiError for malformed, foreign, symlinked or unsupported metadata."
+                      }
+                    ]
+                  }
+                ]
+              },
+              "parameters": [
+                {
+                  "id": 305,
+                  "name": "profile",
+                  "variant": "param",
+                  "kind": 32768,
+                  "flags": {},
+                  "comment": {
+                    "summary": [
+                      {
+                        "kind": "text",
+                        "text": "Explicit owner and absolute storage root."
+                      }
+                    ]
+                  },
+                  "type": {
+                    "type": "reference",
+                    "target": {
+                      "packageName": "@pixel-brewery/synapse-core",
+                      "packagePath": "src/interfaces/IAiProfile.ts",
+                      "qualifiedName": "IAiProfile"
+                    },
+                    "name": "IAiProfile",
+                    "package": "@pixel-brewery/synapse-core",
+                    "externalUrl": "packages/synapse-core/api/interfaces/IAiProfile.md"
+                  }
+                }
+              ],
+              "type": {
+                "type": "reference",
+                "target": {
+                  "packageName": "typescript",
+                  "packagePath": "lib/lib.es5.d.ts",
+                  "qualifiedName": "Promise"
+                },
+                "typeArguments": [
+                  {
+                    "type": "union",
+                    "types": [
+                      {
+                        "type": "intrinsic",
+                        "name": "string"
+                      },
+                      {
+                        "type": "intrinsic",
+                        "name": "undefined"
+                      }
+                    ]
+                  }
+                ],
+                "name": "Promise",
+                "package": "typescript"
+              },
+              "overwrites": {
+                "type": "reference",
+                "target": 16,
+                "name": "ProfileSessionStoreBase.read"
+              }
+            }
+          ],
+          "overwrites": {
+            "type": "reference",
+            "target": 15,
+            "name": "ProfileSessionStoreBase.read"
+          }
+        }
+      ],
+      "groups": [
+        {
+          "title": "Constructors",
+          "children": [
+            292
+          ]
+        },
+        {
+          "title": "Methods",
+          "children": [
+            306,
+            300,
+            303
+          ]
+        }
+      ],
+      "extendedTypes": [
+        {
+          "type": "reference",
+          "target": 9,
+          "name": "ProfileSessionStoreBase",
+          "package": "@pixel-brewery/synapse-runtime"
+        }
+      ]
+    },
+    {
+      "id": 21,
+      "name": "IAiRuntimeOptions",
+      "variant": "declaration",
+      "kind": 256,
+      "flags": {
+        "isPublic": true
+      },
+      "comment": {
+        "summary": [
+          {
+            "kind": "text",
+            "text": "Explicit composition and budgets for one local application runtime."
+          }
+        ]
+      },
+      "children": [
+        {
+          "id": 24,
+          "name": "access",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {
+            "isOptional": true,
+            "isReadonly": true
+          },
+          "comment": {
+            "summary": [
+              {
+                "kind": "text",
+                "text": "Shared gate also passed to the host's authentication manager."
+              }
+            ]
+          },
+          "type": {
+            "type": "reference",
+            "target": 227,
+            "name": "ProfileAccessCoordinator",
+            "package": "@pixel-brewery/synapse-runtime"
+          }
+        },
+        {
+          "id": 28,
+          "name": "defaultTimeoutMs",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {
+            "isOptional": true,
+            "isReadonly": true
+          },
+          "comment": {
+            "summary": [
+              {
+                "kind": "text",
+                "text": "Default elapsed execution deadline in milliseconds, including queue time; default 30 minutes."
+              }
+            ]
+          },
+          "type": {
+            "type": "intrinsic",
+            "name": "number"
+          }
+        },
+        {
+          "id": 22,
+          "name": "drivers",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {
+            "isReadonly": true
+          },
+          "comment": {
+            "summary": [
+              {
+                "kind": "text",
+                "text": "Concrete drivers selected by the consumer; never loaded from a global catalog."
+              }
+            ]
+          },
+          "type": {
+            "type": "typeOperator",
+            "operator": "readonly",
+            "target": {
+              "type": "array",
+              "elementType": {
+                "type": "reference",
+                "target": {
+                  "packageName": "@pixel-brewery/synapse-core",
+                  "packagePath": "src/abstracts/AiDriverBase.ts",
+                  "qualifiedName": "AiDriverBase"
+                },
+                "name": "AiDriverBase",
+                "package": "@pixel-brewery/synapse-core",
+                "externalUrl": "packages/synapse-core/api/classes/AiDriverBase.md"
+              }
+            }
+          }
+        },
+        {
+          "id": 26,
+          "name": "eventCapacity",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {
+            "isOptional": true,
+            "isReadonly": true
+          },
+          "comment": {
+            "summary": [
+              {
+                "kind": "text",
+                "text": "Retained normalized events per run; default 256, with explicit overflow summaries."
+              }
+            ]
+          },
+          "type": {
+            "type": "intrinsic",
+            "name": "number"
+          }
+        },
+        {
+          "id": 23,
+          "name": "instances",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {
+            "isReadonly": true
+          },
+          "comment": {
+            "summary": [
+              {
+                "kind": "text",
+                "text": "Isolated configured account instances, with unique identifiers."
+              }
+            ]
+          },
+          "type": {
+            "type": "typeOperator",
+            "operator": "readonly",
+            "target": {
+              "type": "array",
+              "elementType": {
+                "type": "reference",
+                "target": {
+                  "packageName": "@pixel-brewery/synapse-core",
+                  "packagePath": "src/interfaces/IAiInstance.ts",
+                  "qualifiedName": "IAiInstance"
+                },
+                "name": "IAiInstance",
+                "package": "@pixel-brewery/synapse-core",
+                "externalUrl": "packages/synapse-core/api/interfaces/IAiInstance.md"
+              }
+            }
+          }
+        },
+        {
+          "id": 29,
+          "name": "maximumPromptBytes",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {
+            "isOptional": true,
+            "isReadonly": true
+          },
+          "comment": {
+            "summary": [
+              {
+                "kind": "text",
+                "text": "Maximum input prompt bytes; default 4 MiB."
+              }
+            ]
+          },
+          "type": {
+            "type": "intrinsic",
+            "name": "number"
+          }
+        },
+        {
+          "id": 27,
+          "name": "maximumRuns",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {
+            "isOptional": true,
+            "isReadonly": true
+          },
+          "comment": {
+            "summary": [
+              {
+                "kind": "text",
+                "text": "Maximum active and queued runs in this runtime; default 128."
+              }
+            ]
+          },
+          "type": {
+            "type": "intrinsic",
+            "name": "number"
+          }
+        },
+        {
+          "id": 25,
+          "name": "router",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {
+            "isOptional": true,
+            "isReadonly": true
+          },
+          "comment": {
+            "summary": [
+              {
+                "kind": "text",
+                "text": "Optional provider-neutral route executor."
+              }
+            ]
+          },
+          "type": {
+            "type": "reference",
+            "target": {
+              "packageName": "@pixel-brewery/synapse-core",
+              "packagePath": "src/abstracts/AiRouteExecutorBase.ts",
+              "qualifiedName": "AiRouteExecutorBase"
+            },
+            "name": "AiRouteExecutorBase",
+            "package": "@pixel-brewery/synapse-core",
+            "externalUrl": "packages/synapse-core/api/classes/AiRouteExecutorBase.md"
+          }
+        },
+        {
+          "id": 30,
+          "name": "temporaryDirectory",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {
+            "isOptional": true,
+            "isReadonly": true
+          },
+          "comment": {
+            "summary": [
+              {
+                "kind": "text",
+                "text": "Optional absolute parent directory for owned non-Git text workspaces."
+              }
+            ]
+          },
+          "type": {
+            "type": "intrinsic",
+            "name": "string"
+          }
+        }
+      ],
+      "groups": [
+        {
+          "title": "Properties",
+          "children": [
+            24,
+            28,
+            22,
+            26,
+            23,
+            29,
+            27,
+            25,
+            30
+          ]
+        }
+      ]
+    },
+    {
+      "id": 31,
+      "name": "IInteractiveProcess",
+      "variant": "declaration",
+      "kind": 256,
+      "flags": {
+        "isPublic": true
+      },
+      "comment": {
+        "summary": [
+          {
+            "kind": "text",
+            "text": "Explicit stdin and termination controls for a live native authentication process."
+          }
+        ]
+      },
+      "children": [
+        {
+          "id": 35,
+          "name": "end",
+          "variant": "declaration",
+          "kind": 2048,
+          "flags": {},
+          "signatures": [
+            {
+              "id": 36,
+              "name": "end",
+              "variant": "signature",
+              "kind": 4096,
+              "flags": {},
+              "comment": {
+                "summary": [
+                  {
+                    "kind": "text",
+                    "text": "Closes stdin after the final native procedure input."
+                  }
+                ]
+              },
+              "type": {
+                "type": "intrinsic",
+                "name": "void"
+              }
+            }
+          ]
+        },
+        {
+          "id": 37,
+          "name": "stop",
+          "variant": "declaration",
+          "kind": 2048,
+          "flags": {},
+          "signatures": [
+            {
+              "id": 38,
+              "name": "stop",
+              "variant": "signature",
+              "kind": 4096,
+              "flags": {},
+              "comment": {
+                "summary": [
+                  {
+                    "kind": "text",
+                    "text": "Stops and awaits the owned process tree."
+                  }
+                ],
+                "blockTags": [
+                  {
+                    "tag": "@returns",
+                    "content": [
+                      {
+                        "kind": "text",
+                        "text": "Completion of bounded process-tree cleanup."
+                      }
+                    ]
+                  }
+                ]
+              },
+              "type": {
+                "type": "reference",
+                "target": {
+                  "packageName": "typescript",
+                  "packagePath": "lib/lib.es5.d.ts",
+                  "qualifiedName": "Promise"
+                },
+                "typeArguments": [
+                  {
+                    "type": "intrinsic",
+                    "name": "void"
+                  }
+                ],
+                "name": "Promise",
+                "package": "typescript"
+              }
+            }
+          ]
+        },
+        {
+          "id": 32,
+          "name": "write",
+          "variant": "declaration",
+          "kind": 2048,
+          "flags": {},
+          "signatures": [
+            {
+              "id": 33,
+              "name": "write",
+              "variant": "signature",
+              "kind": 4096,
+              "flags": {},
+              "comment": {
+                "summary": [
+                  {
+                    "kind": "text",
+                    "text": "Writes input to the owned process without logging its contents."
+                  }
+                ]
+              },
+              "parameters": [
+                {
+                  "id": 34,
+                  "name": "value",
+                  "variant": "param",
+                  "kind": 32768,
+                  "flags": {},
+                  "comment": {
+                    "summary": [
+                      {
+                        "kind": "text",
+                        "text": "Native procedure input, possibly a secret."
+                      }
+                    ]
+                  },
+                  "type": {
+                    "type": "intrinsic",
+                    "name": "string"
+                  }
+                }
+              ],
+              "type": {
+                "type": "intrinsic",
+                "name": "void"
+              }
+            }
+          ]
+        }
+      ],
+      "groups": [
+        {
+          "title": "Methods",
+          "children": [
+            35,
+            37,
+            32
+          ]
+        }
+      ]
+    },
+    {
+      "id": 39,
+      "name": "INodeProcessRunnerOptions",
+      "variant": "declaration",
+      "kind": 256,
+      "flags": {
+        "isPublic": true
+      },
+      "comment": {
+        "summary": [
+          {
+            "kind": "text",
+            "text": "Native process ownership budgets, independent of a particular CLI."
+          }
+        ]
+      },
+      "children": [
+        {
+          "id": 41,
+          "name": "maximumProcesses",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {
+            "isOptional": true,
+            "isReadonly": true
+          },
+          "comment": {
+            "summary": [
+              {
+                "kind": "text",
+                "text": "Maximum concurrent owned subprocesses, default 32."
+              }
+            ]
+          },
+          "type": {
+            "type": "intrinsic",
+            "name": "number"
+          }
+        },
+        {
+          "id": 40,
+          "name": "terminationGraceMs",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {
+            "isOptional": true,
+            "isReadonly": true
+          },
+          "comment": {
+            "summary": [
+              {
+                "kind": "text",
+                "text": "Unix graceful termination window before SIGKILL, default 500 milliseconds."
+              }
+            ]
+          },
+          "type": {
+            "type": "intrinsic",
+            "name": "number"
+          }
+        }
+      ],
+      "groups": [
+        {
+          "title": "Properties",
+          "children": [
+            41,
+            40
+          ]
+        }
+      ]
+    },
+    {
+      "id": 42,
+      "name": "IProcessRequest",
+      "variant": "declaration",
+      "kind": 256,
+      "flags": {
+        "isPublic": true
+      },
+      "comment": {
+        "summary": [
+          {
+            "kind": "text",
+            "text": "Explicit subprocess intent; runtime owns launch, bounds, stream decoding and teardown."
+          }
+        ]
+      },
+      "children": [
+        {
+          "id": 44,
+          "name": "args",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {
+            "isReadonly": true
+          },
+          "comment": {
+            "summary": [
+              {
+                "kind": "text",
+                "text": "Native argument vector, never an interpolated shell command."
+              }
+            ]
+          },
+          "type": {
+            "type": "typeOperator",
+            "operator": "readonly",
+            "target": {
+              "type": "array",
+              "elementType": {
+                "type": "intrinsic",
+                "name": "string"
+              }
+            }
+          }
+        },
+        {
+          "id": 46,
+          "name": "environment",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {
+            "isReadonly": true
+          },
+          "comment": {
+            "summary": [
+              {
+                "kind": "text",
+                "text": "Complete allowlisted environment, supplied explicitly by the profile owner."
+              }
+            ]
+          },
+          "type": {
+            "type": "reference",
+            "target": {
+              "packageName": "typescript",
+              "packagePath": "lib/lib.es5.d.ts",
+              "qualifiedName": "Readonly"
+            },
+            "typeArguments": [
+              {
+                "type": "reference",
+                "target": {
+                  "packageName": "typescript",
+                  "packagePath": "lib/lib.es5.d.ts",
+                  "qualifiedName": "Record"
+                },
+                "typeArguments": [
+                  {
+                    "type": "intrinsic",
+                    "name": "string"
+                  },
+                  {
+                    "type": "intrinsic",
+                    "name": "string"
+                  }
+                ],
+                "name": "Record",
+                "package": "typescript"
+              }
+            ],
+            "name": "Readonly",
+            "package": "typescript"
+          }
+        },
+        {
+          "id": 43,
+          "name": "executable",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {
+            "isReadonly": true
+          },
+          "comment": {
+            "summary": [
+              {
+                "kind": "text",
+                "text": "Resolved executable or CLI name to find through this request's environment."
+              }
+            ]
+          },
+          "type": {
+            "type": "intrinsic",
+            "name": "string"
+          }
+        },
+        {
+          "id": 47,
+          "name": "input",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {
+            "isOptional": true,
+            "isReadonly": true
+          },
+          "comment": {
+            "summary": [
+              {
+                "kind": "text",
+                "text": "Initial stdin payload; may contain sensitive prompt or credentials."
+              }
+            ]
+          },
+          "type": {
+            "type": "intrinsic",
+            "name": "string"
+          }
+        },
+        {
+          "id": 48,
+          "name": "keepInputOpen",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {
+            "isOptional": true,
+            "isReadonly": true
+          },
+          "comment": {
+            "summary": [
+              {
+                "kind": "text",
+                "text": "Whether stdin stays open for an interactive authentication procedure; default false."
+              }
+            ]
+          },
+          "type": {
+            "type": "intrinsic",
+            "name": "boolean"
+          }
+        },
+        {
+          "id": 51,
+          "name": "maxOutputBytes",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {
+            "isOptional": true,
+            "isReadonly": true
+          },
+          "comment": {
+            "summary": [
+              {
+                "kind": "text",
+                "text": "Combined stdout/stderr byte budget; default 4 MiB."
+              }
+            ]
+          },
+          "type": {
+            "type": "intrinsic",
+            "name": "number"
+          }
+        },
+        {
+          "id": 60,
+          "name": "onStart",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {
+            "isOptional": true,
+            "isReadonly": true
+          },
+          "comment": {
+            "summary": [
+              {
+                "kind": "text",
+                "text": "Supplies interactive stdin controls immediately after spawn."
+              }
+            ]
+          },
+          "type": {
+            "type": "reflection",
+            "declaration": {
+              "id": 61,
+              "name": "__type",
+              "variant": "declaration",
+              "kind": 65536,
+              "flags": {},
+              "signatures": [
+                {
+                  "id": 62,
+                  "name": "__type",
+                  "variant": "signature",
+                  "kind": 4096,
+                  "flags": {},
+                  "parameters": [
+                    {
+                      "id": 63,
+                      "name": "process",
+                      "variant": "param",
+                      "kind": 32768,
+                      "flags": {},
+                      "comment": {
+                        "summary": [
+                          {
+                            "kind": "text",
+                            "text": "Controls restricted to the owned subprocess."
+                          }
+                        ]
+                      },
+                      "type": {
+                        "type": "reference",
+                        "target": 31,
+                        "name": "IInteractiveProcess",
+                        "package": "@pixel-brewery/synapse-runtime"
+                      }
+                    }
+                  ],
+                  "type": {
+                    "type": "intrinsic",
+                    "name": "void"
+                  }
+                }
+              ]
+            }
+          }
+        },
+        {
+          "id": 56,
+          "name": "onStderr",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {
+            "isOptional": true,
+            "isReadonly": true
+          },
+          "comment": {
+            "summary": [
+              {
+                "kind": "text",
+                "text": "Optional serialized stderr callback, with the same failure semantics."
+              }
+            ]
+          },
+          "type": {
+            "type": "reflection",
+            "declaration": {
+              "id": 57,
+              "name": "__type",
+              "variant": "declaration",
+              "kind": 65536,
+              "flags": {},
+              "signatures": [
+                {
+                  "id": 58,
+                  "name": "__type",
+                  "variant": "signature",
+                  "kind": 4096,
+                  "flags": {},
+                  "comment": {
+                    "summary": [],
+                    "blockTags": [
+                      {
+                        "tag": "@returns",
+                        "content": [
+                          {
+                            "kind": "text",
+                            "text": "Optional asynchronous processing completion."
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  "parameters": [
+                    {
+                      "id": 59,
+                      "name": "chunk",
+                      "variant": "param",
+                      "kind": 32768,
+                      "flags": {},
+                      "comment": {
+                        "summary": [
+                          {
+                            "kind": "text",
+                            "text": "Native stderr text; treat as untrusted and sensitive."
+                          }
+                        ]
+                      },
+                      "type": {
+                        "type": "intrinsic",
+                        "name": "string"
+                      }
+                    }
+                  ],
+                  "type": {
+                    "type": "union",
+                    "types": [
+                      {
+                        "type": "intrinsic",
+                        "name": "void"
+                      },
+                      {
+                        "type": "reference",
+                        "target": {
+                          "packageName": "typescript",
+                          "packagePath": "lib/lib.es5.d.ts",
+                          "qualifiedName": "Promise"
+                        },
+                        "typeArguments": [
+                          {
+                            "type": "intrinsic",
+                            "name": "void"
+                          }
+                        ],
+                        "name": "Promise",
+                        "package": "typescript"
+                      }
+                    ]
+                  }
+                }
+              ]
+            }
+          }
+        },
+        {
+          "id": 52,
+          "name": "onStdout",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {
+            "isOptional": true,
+            "isReadonly": true
+          },
+          "comment": {
+            "summary": [
+              {
+                "kind": "text",
+                "text": "Optional serialized stdout callback; exceptions cancel and drain the process."
+              }
+            ]
+          },
+          "type": {
+            "type": "reflection",
+            "declaration": {
+              "id": 53,
+              "name": "__type",
+              "variant": "declaration",
+              "kind": 65536,
+              "flags": {},
+              "signatures": [
+                {
+                  "id": 54,
+                  "name": "__type",
+                  "variant": "signature",
+                  "kind": 4096,
+                  "flags": {},
+                  "comment": {
+                    "summary": [],
+                    "blockTags": [
+                      {
+                        "tag": "@returns",
+                        "content": [
+                          {
+                            "kind": "text",
+                            "text": "Optional asynchronous processing completion."
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  "parameters": [
+                    {
+                      "id": 55,
+                      "name": "chunk",
+                      "variant": "param",
+                      "kind": 32768,
+                      "flags": {},
+                      "comment": {
+                        "summary": [
+                          {
+                            "kind": "text",
+                            "text": "UTF-8 text decoded across native byte-fragment boundaries."
+                          }
+                        ]
+                      },
+                      "type": {
+                        "type": "intrinsic",
+                        "name": "string"
+                      }
+                    }
+                  ],
+                  "type": {
+                    "type": "union",
+                    "types": [
+                      {
+                        "type": "intrinsic",
+                        "name": "void"
+                      },
+                      {
+                        "type": "reference",
+                        "target": {
+                          "packageName": "typescript",
+                          "packagePath": "lib/lib.es5.d.ts",
+                          "qualifiedName": "Promise"
+                        },
+                        "typeArguments": [
+                          {
+                            "type": "intrinsic",
+                            "name": "void"
+                          }
+                        ],
+                        "name": "Promise",
+                        "package": "typescript"
+                      }
+                    ]
+                  }
+                }
+              ]
+            }
+          }
+        },
+        {
+          "id": 49,
+          "name": "signal",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {
+            "isOptional": true,
+            "isReadonly": true
+          },
+          "comment": {
+            "summary": [
+              {
+                "kind": "text",
+                "text": "Cancellation stops and awaits the process tree."
+              }
+            ]
+          },
+          "type": {
+            "type": "reference",
+            "target": {
+              "packageName": "typescript",
+              "packagePath": "lib/lib.dom.d.ts",
+              "qualifiedName": "AbortSignal"
+            },
+            "name": "AbortSignal",
+            "package": "typescript"
+          }
+        },
+        {
+          "id": 50,
+          "name": "timeoutMs",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {
+            "isOptional": true,
+            "isReadonly": true
+          },
+          "comment": {
+            "summary": [
+              {
+                "kind": "text",
+                "text": "Elapsed timeout in milliseconds; default 5 minutes, at most 2147483647 for the native runner."
+              }
+            ]
+          },
+          "type": {
+            "type": "intrinsic",
+            "name": "number"
+          }
+        },
+        {
+          "id": 45,
+          "name": "workingDirectory",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {
+            "isReadonly": true
+          },
+          "comment": {
+            "summary": [
+              {
+                "kind": "text",
+                "text": "Existing working directory for this process."
+              }
+            ]
+          },
+          "type": {
+            "type": "intrinsic",
+            "name": "string"
+          }
+        }
+      ],
+      "groups": [
+        {
+          "title": "Properties",
+          "children": [
+            44,
+            46,
+            43,
+            47,
+            48,
+            51,
+            60,
+            56,
+            52,
+            49,
+            50,
+            45
+          ]
+        }
+      ]
+    },
+    {
+      "id": 64,
+      "name": "IProcessResult",
+      "variant": "declaration",
+      "kind": 256,
+      "flags": {
+        "isPublic": true
+      },
+      "comment": {
+        "summary": [
+          {
+            "kind": "text",
+            "text": "Bounded captured output and native completion status of one owned subprocess."
+          }
+        ]
+      },
+      "children": [
+        {
+          "id": 67,
+          "name": "exitCode",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {
+            "isReadonly": true
+          },
+          "comment": {
+            "summary": [
+              {
+                "kind": "text",
+                "text": "Native exit status, or null when terminated by a signal."
+              }
+            ]
+          },
+          "type": {
+            "type": "union",
+            "types": [
+              {
+                "type": "intrinsic",
+                "name": "number"
+              },
+              {
+                "type": "literal",
+                "value": null
+              }
+            ]
+          }
+        },
+        {
+          "id": 68,
+          "name": "signal",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {
+            "isReadonly": true
+          },
+          "comment": {
+            "summary": [
+              {
+                "kind": "text",
+                "text": "Native termination signal name, if any."
+              }
+            ]
+          },
+          "type": {
+            "type": "union",
+            "types": [
+              {
+                "type": "intrinsic",
+                "name": "string"
+              },
+              {
+                "type": "literal",
+                "value": null
+              }
+            ]
+          }
+        },
+        {
+          "id": 66,
+          "name": "stderr",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {
+            "isReadonly": true
+          },
+          "comment": {
+            "summary": [
+              {
+                "kind": "text",
+                "text": "Decoded standard error; never expose this raw value in user-facing diagnostics."
+              }
+            ]
+          },
+          "type": {
+            "type": "intrinsic",
+            "name": "string"
+          }
+        },
+        {
+          "id": 65,
+          "name": "stdout",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {
+            "isReadonly": true
+          },
+          "comment": {
+            "summary": [
+              {
+                "kind": "text",
+                "text": "Decoded standard output, bounded by the requested combined output budget."
+              }
+            ]
+          },
+          "type": {
+            "type": "intrinsic",
+            "name": "string"
+          }
+        }
+      ],
+      "groups": [
+        {
+          "title": "Properties",
+          "children": [
+            67,
+            68,
+            66,
+            65
+          ]
+        }
+      ]
+    },
+    {
+      "id": 168,
+      "name": "JsonLineDecoder",
+      "variant": "declaration",
+      "kind": 128,
+      "flags": {
+        "isPublic": true
+      },
+      "comment": {
+        "summary": [
+          {
+            "kind": "text",
+            "text": "Serial fragmented JSON-lines decoder with a bounded pending frame."
+          }
+        ]
+      },
+      "children": [
+        {
+          "id": 169,
+          "name": "constructor",
+          "variant": "declaration",
+          "kind": 512,
+          "flags": {
+            "isPublic": true
+          },
+          "signatures": [
+            {
+              "id": 170,
+              "name": "JsonLineDecoder",
+              "variant": "signature",
+              "kind": 16384,
+              "flags": {
+                "isPublic": true
+              },
+              "comment": {
+                "summary": [
+                  {
+                    "kind": "text",
+                    "text": "Creates a decoder; transports must await each push to preserve callback ordering."
+                  }
+                ],
+                "blockTags": [
+                  {
+                    "tag": "@throws",
+                    "content": [
+                      {
+                        "kind": "text",
+                        "text": "An AiError if the configured frame budget is invalid."
+                      }
+                    ]
+                  }
+                ]
+              },
+              "parameters": [
+                {
+                  "id": 171,
+                  "name": "_onFrame",
+                  "variant": "param",
+                  "kind": 32768,
+                  "flags": {},
+                  "comment": {
+                    "summary": [
+                      {
+                        "kind": "text",
+                        "text": "Receives unknown parsed data for provider-owned runtime validation."
+                      }
+                    ]
+                  },
+                  "type": {
+                    "type": "reflection",
+                    "declaration": {
+                      "id": 172,
+                      "name": "__type",
+                      "variant": "declaration",
+                      "kind": 65536,
+                      "flags": {},
+                      "signatures": [
+                        {
+                          "id": 173,
+                          "name": "__type",
+                          "variant": "signature",
+                          "kind": 4096,
+                          "flags": {},
+                          "parameters": [
+                            {
+                              "id": 174,
+                              "name": "value",
+                              "variant": "param",
+                              "kind": 32768,
+                              "flags": {},
+                              "type": {
+                                "type": "intrinsic",
+                                "name": "unknown"
+                              }
+                            }
+                          ],
+                          "type": {
+                            "type": "reference",
+                            "target": {
+                              "packageName": "typescript",
+                              "packagePath": "lib/lib.es5.d.ts",
+                              "qualifiedName": "Promise"
+                            },
+                            "typeArguments": [
+                              {
+                                "type": "intrinsic",
+                                "name": "void"
+                              }
+                            ],
+                            "name": "Promise",
+                            "package": "typescript"
+                          }
+                        }
+                      ]
+                    }
+                  }
+                },
+                {
+                  "id": 175,
+                  "name": "_maxBytes",
+                  "variant": "param",
+                  "kind": 32768,
+                  "flags": {},
+                  "comment": {
+                    "summary": [
+                      {
+                        "kind": "text",
+                        "text": "Maximum pending frame bytes, default 4 MiB."
+                      }
+                    ]
+                  },
+                  "type": {
+                    "type": "intrinsic",
+                    "name": "number"
+                  },
+                  "defaultValue": "..."
+                }
+              ],
+              "type": {
+                "type": "reference",
+                "target": 168,
+                "name": "JsonLineDecoder",
+                "package": "@pixel-brewery/synapse-runtime"
+              }
+            }
+          ]
+        },
+        {
+          "id": 185,
+          "name": "finish",
+          "variant": "declaration",
+          "kind": 2048,
+          "flags": {
+            "isPublic": true
+          },
+          "signatures": [
+            {
+              "id": 186,
+              "name": "finish",
+              "variant": "signature",
+              "kind": 4096,
+              "flags": {
+                "isPublic": true
+              },
+              "comment": {
+                "summary": [
+                  {
+                    "kind": "text",
+                    "text": "Processes the final optional non-newline-terminated frame."
+                  }
+                ],
+                "blockTags": [
+                  {
+                    "tag": "@returns",
+                    "content": [
+                      {
+                        "kind": "text",
+                        "text": "Completion after the final provider callback."
+                      }
+                    ]
+                  }
+                ]
+              },
+              "type": {
+                "type": "reference",
+                "target": {
+                  "packageName": "typescript",
+                  "packagePath": "lib/lib.es5.d.ts",
+                  "qualifiedName": "Promise"
+                },
+                "typeArguments": [
+                  {
+                    "type": "intrinsic",
+                    "name": "void"
+                  }
+                ],
+                "name": "Promise",
+                "package": "typescript"
+              }
+            }
+          ]
+        },
+        {
+          "id": 182,
+          "name": "push",
+          "variant": "declaration",
+          "kind": 2048,
+          "flags": {
+            "isPublic": true
+          },
+          "signatures": [
+            {
+              "id": 183,
+              "name": "push",
+              "variant": "signature",
+              "kind": 4096,
+              "flags": {
+                "isPublic": true
+              },
+              "comment": {
+                "summary": [
+                  {
+                    "kind": "text",
+                    "text": "Accepts a UTF-8-decoded transport fragment and emits complete frames in order."
+                  }
+                ],
+                "blockTags": [
+                  {
+                    "tag": "@returns",
+                    "content": [
+                      {
+                        "kind": "text",
+                        "text": "Completion after all complete frames and their callbacks finish."
+                      }
+                    ]
+                  },
+                  {
+                    "tag": "@throws",
+                    "content": [
+                      {
+                        "kind": "text",
+                        "text": "An AiError for malformed or oversized frames; callback errors propagate unchanged."
+                      }
+                    ]
+                  }
+                ]
+              },
+              "parameters": [
+                {
+                  "id": 184,
+                  "name": "chunk",
+                  "variant": "param",
+                  "kind": 32768,
+                  "flags": {},
+                  "comment": {
+                    "summary": [
+                      {
+                        "kind": "text",
+                        "text": "Decoded text, possibly split inside a JSON frame."
+                      }
+                    ]
+                  },
+                  "type": {
+                    "type": "intrinsic",
+                    "name": "string"
+                  }
+                }
+              ],
+              "type": {
+                "type": "reference",
+                "target": {
+                  "packageName": "typescript",
+                  "packagePath": "lib/lib.es5.d.ts",
+                  "qualifiedName": "Promise"
+                },
+                "typeArguments": [
+                  {
+                    "type": "intrinsic",
+                    "name": "void"
+                  }
+                ],
+                "name": "Promise",
+                "package": "typescript"
+              }
+            }
+          ]
+        }
+      ],
+      "groups": [
+        {
+          "title": "Constructors",
+          "children": [
+            169
+          ]
+        },
+        {
+          "title": "Methods",
+          "children": [
+            185,
+            182
+          ]
+        }
+      ]
+    },
+    {
+      "id": 190,
+      "name": "NodeProcessRunner",
+      "variant": "declaration",
+      "kind": 128,
+      "flags": {
+        "isPublic": true
+      },
+      "comment": {
+        "summary": [
+          {
+            "kind": "text",
+            "text": "Native executable/shim runner with bounded UTF-8 streams and awaited process-tree cleanup."
+          }
+        ],
+        "blockTags": [
+          {
+            "tag": "@remarks",
+            "content": [
+              {
+                "kind": "text",
+                "text": "Uses cross-spawn's Windows PATH/PATHEXT and command-shim escaping rather than interpolating user shell commands."
+              }
+            ]
+          }
+        ]
+      },
+      "children": [
+        {
+          "id": 191,
+          "name": "constructor",
+          "variant": "declaration",
+          "kind": 512,
+          "flags": {
+            "isPublic": true
+          },
+          "signatures": [
+            {
+              "id": 192,
+              "name": "NodeProcessRunner",
+              "variant": "signature",
+              "kind": 16384,
+              "flags": {
+                "isPublic": true
+              },
+              "comment": {
+                "summary": [
+                  {
+                    "kind": "text",
+                    "text": "Creates an inert runner; executable resolution occurs only during run."
+                  }
+                ],
+                "blockTags": [
+                  {
+                    "tag": "@throws",
+                    "content": [
+                      {
+                        "kind": "text",
+                        "text": "An AiError when a resource budget is invalid."
+                      }
+                    ]
+                  }
+                ]
+              },
+              "parameters": [
+                {
+                  "id": 193,
+                  "name": "options",
+                  "variant": "param",
+                  "kind": 32768,
+                  "flags": {},
+                  "comment": {
+                    "summary": [
+                      {
+                        "kind": "text",
+                        "text": "Process-count and termination budgets."
+                      }
+                    ]
+                  },
+                  "type": {
+                    "type": "reference",
+                    "target": 39,
+                    "name": "INodeProcessRunnerOptions",
+                    "package": "@pixel-brewery/synapse-runtime"
+                  },
+                  "defaultValue": "{}"
+                }
+              ],
+              "type": {
+                "type": "reference",
+                "target": 190,
+                "name": "NodeProcessRunner",
+                "package": "@pixel-brewery/synapse-runtime"
+              },
+              "overwrites": {
+                "type": "reference",
+                "target": 3,
+                "name": "ProcessRunnerBase.constructor"
+              }
+            }
+          ],
+          "overwrites": {
+            "type": "reference",
+            "target": 2,
+            "name": "ProcessRunnerBase.constructor"
+          }
+        },
+        {
+          "id": 202,
+          "name": "dispose",
+          "variant": "declaration",
+          "kind": 2048,
+          "flags": {
+            "isPublic": true
+          },
+          "signatures": [
+            {
+              "id": 203,
+              "name": "dispose",
+              "variant": "signature",
+              "kind": 4096,
+              "flags": {
+                "isPublic": true
+              },
+              "comment": {
+                "summary": [
+                  {
+                    "kind": "text",
+                    "text": "Aborts all owned runs and awaits their process trees and result cleanup."
+                  }
+                ],
+                "blockTags": [
+                  {
+                    "tag": "@returns",
+                    "content": [
+                      {
+                        "kind": "text",
+                        "text": "Completion after every active run reaches its cleanup barrier."
+                      }
+                    ]
+                  },
+                  {
+                    "tag": "@throws",
+                    "content": [
+                      {
+                        "kind": "text",
+                        "text": "An AiError with cleanupIncomplete and an unusable session if a native process tree cannot be terminated; a host must keep credential transitions blocked for the affected profile."
+                      }
+                    ]
+                  },
+                  {
+                    "tag": "@remarks",
+                    "content": [
+                      {
+                        "kind": "text",
+                        "text": "Earlier incomplete cleanup remains latched after its run rejects and is reported by every later disposal. The latch does not reject new run calls before explicit disposal; profile admission is coordinated by the host runtime."
+                      }
+                    ]
+                  }
+                ]
+              },
+              "type": {
+                "type": "reference",
+                "target": {
+                  "packageName": "typescript",
+                  "packagePath": "lib/lib.es5.d.ts",
+                  "qualifiedName": "Promise"
+                },
+                "typeArguments": [
+                  {
+                    "type": "intrinsic",
+                    "name": "void"
+                  }
+                ],
+                "name": "Promise",
+                "package": "typescript"
+              },
+              "overwrites": {
+                "type": "reference",
+                "target": 8,
+                "name": "ProcessRunnerBase.dispose"
+              }
+            }
+          ],
+          "overwrites": {
+            "type": "reference",
+            "target": 7,
+            "name": "ProcessRunnerBase.dispose"
+          }
+        },
+        {
+          "id": 199,
+          "name": "run",
+          "variant": "declaration",
+          "kind": 2048,
+          "flags": {
+            "isPublic": true
+          },
+          "signatures": [
+            {
+              "id": 200,
+              "name": "run",
+              "variant": "signature",
+              "kind": 4096,
+              "flags": {
+                "isPublic": true
+              },
+              "comment": {
+                "summary": [
+                  {
+                    "kind": "text",
+                    "text": "Executes one explicit argument vector and resolves after native output and cleanup finish."
+                  }
+                ],
+                "blockTags": [
+                  {
+                    "tag": "@returns",
+                    "content": [
+                      {
+                        "kind": "text",
+                        "text": "Captured output and native exit status; an intentional control.stop is a normal termination."
+                      }
+                    ]
+                  },
+                  {
+                    "tag": "@throws",
+                    "content": [
+                      {
+                        "kind": "text",
+                        "text": "An AiError for launch, abort, timeout, resource-limit or critical callback failure; cleanupIncomplete remains set when native termination cannot be confirmed."
+                      }
+                    ]
+                  },
+                  {
+                    "tag": "@remarks",
+                    "content": [
+                      {
+                        "kind": "text",
+                        "text": "POSIX cleanup waits for the owned process group to disappear, including descendants with separate output streams. Forced termination has a further one-second confirmation window after the configured graceful window. Native start and root-close acknowledgments use bounded one-second waits. Permission-denied group probes remain unconfirmed until absence is proven; fallback signals target only the owned child handle. Unconfirmed cleanup fails closed."
+                      }
+                    ]
+                  }
+                ]
+              },
+              "parameters": [
+                {
+                  "id": 201,
+                  "name": "request",
+                  "variant": "param",
+                  "kind": 32768,
+                  "flags": {},
+                  "comment": {
+                    "summary": [
+                      {
+                        "kind": "text",
+                        "text": "Executable, complete profile environment, stdin and bounded callbacks."
+                      }
+                    ]
+                  },
+                  "type": {
+                    "type": "reference",
+                    "target": 42,
+                    "name": "IProcessRequest",
+                    "package": "@pixel-brewery/synapse-runtime"
+                  }
+                }
+              ],
+              "type": {
+                "type": "reference",
+                "target": {
+                  "packageName": "typescript",
+                  "packagePath": "lib/lib.es5.d.ts",
+                  "qualifiedName": "Promise"
+                },
+                "typeArguments": [
+                  {
+                    "type": "reference",
+                    "target": 64,
+                    "name": "IProcessResult",
+                    "package": "@pixel-brewery/synapse-runtime"
+                  }
+                ],
+                "name": "Promise",
+                "package": "typescript"
+              },
+              "overwrites": {
+                "type": "reference",
+                "target": 5,
+                "name": "ProcessRunnerBase.run"
+              }
+            }
+          ],
+          "overwrites": {
+            "type": "reference",
+            "target": 4,
+            "name": "ProcessRunnerBase.run"
+          }
+        }
+      ],
+      "groups": [
+        {
+          "title": "Constructors",
+          "children": [
+            191
+          ]
+        },
+        {
+          "title": "Methods",
+          "children": [
+            202,
+            199
+          ]
+        }
+      ],
+      "extendedTypes": [
+        {
+          "type": "reference",
+          "target": 1,
+          "name": "ProcessRunnerBase",
+          "package": "@pixel-brewery/synapse-runtime"
+        }
+      ]
+    },
+    {
+      "id": 1,
+      "name": "ProcessRunnerBase",
+      "variant": "declaration",
+      "kind": 128,
+      "flags": {
+        "isPublic": true,
+        "isAbstract": true
+      },
+      "comment": {
+        "summary": [
+          {
+            "kind": "text",
+            "text": "Replaceable operating-system execution boundary used by drivers and protocol replays."
+          }
+        ]
+      },
+      "children": [
+        {
+          "id": 2,
+          "name": "constructor",
+          "variant": "declaration",
+          "kind": 512,
+          "flags": {},
+          "signatures": [
+            {
+              "id": 3,
+              "name": "ProcessRunnerBase",
+              "variant": "signature",
+              "kind": 16384,
+              "flags": {},
+              "type": {
+                "type": "reference",
+                "target": 1,
+                "name": "ProcessRunnerBase",
+                "package": "@pixel-brewery/synapse-runtime"
+              }
+            }
+          ]
+        },
+        {
+          "id": 7,
+          "name": "dispose",
+          "variant": "declaration",
+          "kind": 2048,
+          "flags": {
+            "isPublic": true,
+            "isAbstract": true
+          },
+          "signatures": [
+            {
+              "id": 8,
+              "name": "dispose",
+              "variant": "signature",
+              "kind": 4096,
+              "flags": {
+                "isPublic": true
+              },
+              "comment": {
+                "summary": [
+                  {
+                    "kind": "text",
+                    "text": "Aborts and awaits all processes owned by this runner."
+                  }
+                ],
+                "blockTags": [
+                  {
+                    "tag": "@returns",
+                    "content": [
+                      {
+                        "kind": "text",
+                        "text": "Completion after all owned process trees have terminated."
+                      }
+                    ]
+                  }
+                ]
+              },
+              "type": {
+                "type": "reference",
+                "target": {
+                  "packageName": "typescript",
+                  "packagePath": "lib/lib.es5.d.ts",
+                  "qualifiedName": "Promise"
+                },
+                "typeArguments": [
+                  {
+                    "type": "intrinsic",
+                    "name": "void"
+                  }
+                ],
+                "name": "Promise",
+                "package": "typescript"
+              }
+            }
+          ]
+        },
+        {
+          "id": 4,
+          "name": "run",
+          "variant": "declaration",
+          "kind": 2048,
+          "flags": {
+            "isPublic": true,
+            "isAbstract": true
+          },
+          "signatures": [
+            {
+              "id": 5,
+              "name": "run",
+              "variant": "signature",
+              "kind": 4096,
+              "flags": {
+                "isPublic": true
+              },
+              "comment": {
+                "summary": [
+                  {
+                    "kind": "text",
+                    "text": "Starts one process and awaits completion plus owned cleanup."
+                  }
+                ],
+                "blockTags": [
+                  {
+                    "tag": "@returns",
+                    "content": [
+                      {
+                        "kind": "text",
+                        "text": "Bounded output and native completion status."
+                      }
+                    ]
+                  },
+                  {
+                    "tag": "@throws",
+                    "content": [
+                      {
+                        "kind": "text",
+                        "text": "An AiError for launch, deadline, abort, output or host callback failure."
+                      }
+                    ]
+                  }
+                ]
+              },
+              "parameters": [
+                {
+                  "id": 6,
+                  "name": "request",
+                  "variant": "param",
+                  "kind": 32768,
+                  "flags": {},
+                  "comment": {
+                    "summary": [
+                      {
+                        "kind": "text",
+                        "text": "Argument vector, profile environment and resource limits."
+                      }
+                    ]
+                  },
+                  "type": {
+                    "type": "reference",
+                    "target": 42,
+                    "name": "IProcessRequest",
+                    "package": "@pixel-brewery/synapse-runtime"
+                  }
+                }
+              ],
+              "type": {
+                "type": "reference",
+                "target": {
+                  "packageName": "typescript",
+                  "packagePath": "lib/lib.es5.d.ts",
+                  "qualifiedName": "Promise"
+                },
+                "typeArguments": [
+                  {
+                    "type": "reference",
+                    "target": 64,
+                    "name": "IProcessResult",
+                    "package": "@pixel-brewery/synapse-runtime"
+                  }
+                ],
+                "name": "Promise",
+                "package": "typescript"
+              }
+            }
+          ]
+        }
+      ],
+      "groups": [
+        {
+          "title": "Constructors",
+          "children": [
+            2
+          ]
+        },
+        {
+          "title": "Methods",
+          "children": [
+            7,
+            4
+          ]
+        }
+      ],
+      "extendedBy": [
+        {
+          "type": "reference",
+          "target": 190,
+          "name": "NodeProcessRunner"
+        }
+      ]
+    },
+    {
+      "id": 227,
+      "name": "ProfileAccessCoordinator",
+      "variant": "declaration",
+      "kind": 128,
+      "flags": {
+        "isPublic": true
+      },
+      "comment": {
+        "summary": [
+          {
+            "kind": "text",
+            "text": "Shared admission/drain owner for execution and native credential transitions."
+          }
+        ],
+        "blockTags": [
+          {
+            "tag": "@remarks",
+            "content": [
+              {
+                "kind": "text",
+                "text": "Unconfirmed native cleanup blocks the affected profile for this coordinator's lifetime. The host must confirm process termination before replacing the coordinator; there is no automatic reset or credential mutation after failed drain."
+              }
+            ]
+          }
+        ]
+      },
+      "children": [
+        {
+          "id": 249,
+          "name": "bindSession",
+          "variant": "declaration",
+          "kind": 2048,
+          "flags": {
+            "isPublic": true
+          },
+          "signatures": [
+            {
+              "id": 250,
+              "name": "bindSession",
+              "variant": "signature",
+              "kind": 4096,
+              "flags": {
+                "isPublic": true
+              },
+              "comment": {
+                "summary": [
+                  {
+                    "kind": "text",
+                    "text": "Binds explicit credential/configuration sources under a drained exclusive transition."
+                  }
+                ],
+                "blockTags": [
+                  {
+                    "tag": "@returns",
+                    "content": [
+                      {
+                        "kind": "text",
+                        "text": "Current generation after invalidating continuations affected by changed configuration."
+                      }
+                    ]
+                  },
+                  {
+                    "tag": "@throws",
+                    "content": [
+                      {
+                        "kind": "text",
+                        "text": "An AiError without changing native credentials when metadata persistence fails or the gate is not held."
+                      }
+                    ]
+                  }
+                ]
+              },
+              "parameters": [
+                {
+                  "id": 251,
+                  "name": "instance",
+                  "variant": "param",
+                  "kind": 32768,
+                  "flags": {},
+                  "comment": {
+                    "summary": [
+                      {
+                        "kind": "text",
+                        "text": "Instance whose stable native configuration is being prepared."
+                      }
+                    ]
+                  },
+                  "type": {
+                    "type": "reference",
+                    "target": {
+                      "packageName": "@pixel-brewery/synapse-core",
+                      "packagePath": "src/interfaces/IAiInstance.ts",
+                      "qualifiedName": "IAiInstance"
+                    },
+                    "name": "IAiInstance",
+                    "package": "@pixel-brewery/synapse-core",
+                    "externalUrl": "packages/synapse-core/api/interfaces/IAiInstance.md"
+                  }
+                }
+              ],
+              "type": {
+                "type": "reference",
+                "target": {
+                  "packageName": "typescript",
+                  "packagePath": "lib/lib.es5.d.ts",
+                  "qualifiedName": "Promise"
+                },
+                "typeArguments": [
+                  {
+                    "type": "union",
+                    "types": [
+                      {
+                        "type": "intrinsic",
+                        "name": "string"
+                      },
+                      {
+                        "type": "intrinsic",
+                        "name": "undefined"
+                      }
+                    ]
+                  }
+                ],
+                "name": "Promise",
+                "package": "typescript"
+              }
+            }
+          ]
+        },
+        {
+          "id": 228,
+          "name": "constructor",
+          "variant": "declaration",
+          "kind": 512,
+          "flags": {
+            "isPublic": true
+          },
+          "signatures": [
+            {
+              "id": 229,
+              "name": "ProfileAccessCoordinator",
+              "variant": "signature",
+              "kind": 16384,
+              "flags": {
+                "isPublic": true
+              },
+              "comment": {
+                "summary": [
+                  {
+                    "kind": "text",
+                    "text": "Creates an inert profile gate, shared by one runtime and its authentication manager."
+                  }
+                ],
+                "blockTags": [
+                  {
+                    "tag": "@throws",
+                    "content": [
+                      {
+                        "kind": "text",
+                        "text": "An AiError for invalid resource budgets."
+                      }
+                    ]
+                  }
+                ]
+              },
+              "parameters": [
+                {
+                  "id": 230,
+                  "name": "_drainTimeoutMs",
+                  "variant": "param",
+                  "kind": 32768,
+                  "flags": {},
+                  "comment": {
+                    "summary": [
+                      {
+                        "kind": "text",
+                        "text": "Maximum wait for active execution cleanup, default 5 seconds."
+                      }
+                    ]
+                  },
+                  "type": {
+                    "type": "intrinsic",
+                    "name": "number"
+                  },
+                  "defaultValue": "5_000"
+                },
+                {
+                  "id": 231,
+                  "name": "_maximumProfiles",
+                  "variant": "param",
+                  "kind": 32768,
+                  "flags": {},
+                  "comment": {
+                    "summary": [
+                      {
+                        "kind": "text",
+                        "text": "Maximum simultaneously active or switching profiles, default 4096."
+                      }
+                    ]
+                  },
+                  "type": {
+                    "type": "intrinsic",
+                    "name": "number"
+                  },
+                  "defaultValue": "4096"
+                },
+                {
+                  "id": 232,
+                  "name": "_sessionStore",
+                  "variant": "param",
+                  "kind": 32768,
+                  "flags": {},
+                  "comment": {
+                    "summary": [
+                      {
+                        "kind": "text",
+                        "text": "Persistent session ownership metadata; accessed only during explicit operations."
+                      }
+                    ]
+                  },
+                  "type": {
+                    "type": "reference",
+                    "target": 9,
+                    "name": "ProfileSessionStoreBase",
+                    "package": "@pixel-brewery/synapse-runtime"
+                  },
+                  "defaultValue": "..."
+                }
+              ],
+              "type": {
+                "type": "reference",
+                "target": 227,
+                "name": "ProfileAccessCoordinator",
+                "package": "@pixel-brewery/synapse-runtime"
+              }
+            }
+          ]
+        },
+        {
+          "id": 255,
+          "name": "credentialChange",
+          "variant": "declaration",
+          "kind": 2048,
+          "flags": {
+            "isPublic": true
+          },
+          "signatures": [
+            {
+              "id": 256,
+              "name": "credentialChange",
+              "variant": "signature",
+              "kind": 4096,
+              "flags": {
+                "isPublic": true
+              },
+              "comment": {
+                "summary": [
+                  {
+                    "kind": "text",
+                    "text": "Drains execution, persists a new generation and only then invokes a native credential change."
+                  }
+                ],
+                "blockTags": [
+                  {
+                    "tag": "@returns",
+                    "content": [
+                      {
+                        "kind": "text",
+                        "text": "The mutation result after releasing the profile gate."
+                      }
+                    ]
+                  },
+                  {
+                    "tag": "@throws",
+                    "content": [
+                      {
+                        "kind": "text",
+                        "text": "An AiError on cancellation, drain or persistence failure; the mutation is not started in those cases."
+                      }
+                    ]
+                  },
+                  {
+                    "tag": "@remarks",
+                    "content": [
+                      {
+                        "kind": "text",
+                        "text": "A failed or cancelled native login still invalidates older sessions once a transition started."
+                      }
+                    ]
+                  }
+                ]
+              },
+              "typeParameters": [
+                {
+                  "id": 257,
+                  "name": "T",
+                  "variant": "typeParam",
+                  "kind": 131072,
+                  "flags": {},
+                  "comment": {
+                    "summary": [
+                      {
+                        "kind": "text",
+                        "text": "Native authentication operation result."
+                      }
+                    ]
+                  }
+                }
+              ],
+              "parameters": [
+                {
+                  "id": 258,
+                  "name": "profile",
+                  "variant": "param",
+                  "kind": 32768,
+                  "flags": {},
+                  "comment": {
+                    "summary": [
+                      {
+                        "kind": "text",
+                        "text": "Isolated account being changed."
+                      }
+                    ]
+                  },
+                  "type": {
+                    "type": "reference",
+                    "target": {
+                      "packageName": "@pixel-brewery/synapse-core",
+                      "packagePath": "src/interfaces/IAiProfile.ts",
+                      "qualifiedName": "IAiProfile"
+                    },
+                    "name": "IAiProfile",
+                    "package": "@pixel-brewery/synapse-core",
+                    "externalUrl": "packages/synapse-core/api/interfaces/IAiProfile.md"
+                  }
+                },
+                {
+                  "id": 259,
+                  "name": "action",
+                  "variant": "param",
+                  "kind": 32768,
+                  "flags": {},
+                  "comment": {
+                    "summary": [
+                      {
+                        "kind": "text",
+                        "text": "Mutation invoked after successful generation persistence."
+                      }
+                    ]
+                  },
+                  "type": {
+                    "type": "reflection",
+                    "declaration": {
+                      "id": 260,
+                      "name": "__type",
+                      "variant": "declaration",
+                      "kind": 65536,
+                      "flags": {},
+                      "signatures": [
+                        {
+                          "id": 261,
+                          "name": "__type",
+                          "variant": "signature",
+                          "kind": 4096,
+                          "flags": {},
+                          "type": {
+                            "type": "reference",
+                            "target": {
+                              "packageName": "typescript",
+                              "packagePath": "lib/lib.es5.d.ts",
+                              "qualifiedName": "Promise"
+                            },
+                            "typeArguments": [
+                              {
+                                "type": "reference",
+                                "target": 257,
+                                "name": "T",
+                                "package": "@pixel-brewery/synapse-runtime",
+                                "refersToTypeParameter": true
+                              }
+                            ],
+                            "name": "Promise",
+                            "package": "typescript"
+                          }
+                        }
+                      ]
+                    }
+                  }
+                },
+                {
+                  "id": 262,
+                  "name": "signal",
+                  "variant": "param",
+                  "kind": 32768,
+                  "flags": {
+                    "isOptional": true
+                  },
+                  "comment": {
+                    "summary": [
+                      {
+                        "kind": "text",
+                        "text": "Optional cancellation checked before persistence and before native mutation."
+                      }
+                    ]
+                  },
+                  "type": {
+                    "type": "reference",
+                    "target": {
+                      "packageName": "typescript",
+                      "packagePath": "lib/lib.dom.d.ts",
+                      "qualifiedName": "AbortSignal"
+                    },
+                    "name": "AbortSignal",
+                    "package": "typescript"
+                  }
+                }
+              ],
+              "type": {
+                "type": "reference",
+                "target": {
+                  "packageName": "typescript",
+                  "packagePath": "lib/lib.es5.d.ts",
+                  "qualifiedName": "Promise"
+                },
+                "typeArguments": [
+                  {
+                    "type": "reference",
+                    "target": 257,
+                    "name": "T",
+                    "package": "@pixel-brewery/synapse-runtime",
+                    "refersToTypeParameter": true
+                  }
+                ],
+                "name": "Promise",
+                "package": "typescript"
+              }
+            }
+          ]
+        },
+        {
+          "id": 237,
+          "name": "enter",
+          "variant": "declaration",
+          "kind": 2048,
+          "flags": {
+            "isPublic": true
+          },
+          "signatures": [
+            {
+              "id": 238,
+              "name": "enter",
+              "variant": "signature",
+              "kind": 4096,
+              "flags": {
+                "isPublic": true
+              },
+              "comment": {
+                "summary": [
+                  {
+                    "kind": "text",
+                    "text": "Acquires an execution lease unless authentication currently owns the profile."
+                  }
+                ],
+                "blockTags": [
+                  {
+                    "tag": "@returns",
+                    "content": [
+                      {
+                        "kind": "text",
+                        "text": "Idempotent release function. Pass a failed cleanup error to block future profile work; omit it only after confirmed process termination."
+                      }
+                    ]
+                  },
+                  {
+                    "tag": "@throws",
+                    "content": [
+                      {
+                        "kind": "text",
+                        "text": "An AiError when the profile is switching or the active-profile budget is exhausted."
+                      }
+                    ]
+                  }
+                ]
+              },
+              "parameters": [
+                {
+                  "id": 239,
+                  "name": "profileId",
+                  "variant": "param",
+                  "kind": 32768,
+                  "flags": {},
+                  "comment": {
+                    "summary": [
+                      {
+                        "kind": "text",
+                        "text": "Stable application/account profile identity."
+                      }
+                    ]
+                  },
+                  "type": {
+                    "type": "intrinsic",
+                    "name": "string"
+                  }
+                },
+                {
+                  "id": 240,
+                  "name": "abort",
+                  "variant": "param",
+                  "kind": 32768,
+                  "flags": {},
+                  "comment": {
+                    "summary": [
+                      {
+                        "kind": "text",
+                        "text": "Synchronous cancellation initiation; the caller releases after awaited cleanup."
+                      }
+                    ]
+                  },
+                  "type": {
+                    "type": "reflection",
+                    "declaration": {
+                      "id": 241,
+                      "name": "__type",
+                      "variant": "declaration",
+                      "kind": 65536,
+                      "flags": {},
+                      "signatures": [
+                        {
+                          "id": 242,
+                          "name": "__type",
+                          "variant": "signature",
+                          "kind": 4096,
+                          "flags": {},
+                          "type": {
+                            "type": "intrinsic",
+                            "name": "void"
+                          }
+                        }
+                      ]
+                    }
+                  }
+                }
+              ],
+              "type": {
+                "type": "reflection",
+                "declaration": {
+                  "id": 243,
+                  "name": "__type",
+                  "variant": "declaration",
+                  "kind": 65536,
+                  "flags": {},
+                  "signatures": [
+                    {
+                      "id": 244,
+                      "name": "__type",
+                      "variant": "signature",
+                      "kind": 4096,
+                      "flags": {},
+                      "parameters": [
+                        {
+                          "id": 245,
+                          "name": "error",
+                          "variant": "param",
+                          "kind": 32768,
+                          "flags": {
+                            "isOptional": true
+                          },
+                          "type": {
+                            "type": "intrinsic",
+                            "name": "unknown"
+                          }
+                        }
+                      ],
+                      "type": {
+                        "type": "intrinsic",
+                        "name": "void"
+                      }
+                    }
+                  ]
+                }
+              }
+            }
+          ]
+        },
+        {
+          "id": 263,
+          "name": "exclusive",
+          "variant": "declaration",
+          "kind": 2048,
+          "flags": {
+            "isPublic": true
+          },
+          "signatures": [
+            {
+              "id": 264,
+              "name": "exclusive",
+              "variant": "signature",
+              "kind": 4096,
+              "flags": {
+                "isPublic": true
+              },
+              "comment": {
+                "summary": [
+                  {
+                    "kind": "text",
+                    "text": "Blocks admission, cancels/drains active leases and serializes credential changes."
+                  }
+                ],
+                "blockTags": [
+                  {
+                    "tag": "@returns",
+                    "content": [
+                      {
+                        "kind": "text",
+                        "text": "Result after the exclusive transition finishes."
+                      }
+                    ]
+                  },
+                  {
+                    "tag": "@throws",
+                    "content": [
+                      {
+                        "kind": "text",
+                        "text": "An AiError when cancellation initiation fails, the transition is cancelled or execution fails to drain within the budget. Unconfirmed cleanup keeps the profile blocked."
+                      }
+                    ]
+                  }
+                ]
+              },
+              "typeParameters": [
+                {
+                  "id": 265,
+                  "name": "T",
+                  "variant": "typeParam",
+                  "kind": 131072,
+                  "flags": {},
+                  "comment": {
+                    "summary": [
+                      {
+                        "kind": "text",
+                        "text": "Native authentication/credential transition outcome."
+                      }
+                    ]
+                  }
+                }
+              ],
+              "parameters": [
+                {
+                  "id": 266,
+                  "name": "profileId",
+                  "variant": "param",
+                  "kind": 32768,
+                  "flags": {},
+                  "comment": {
+                    "summary": [
+                      {
+                        "kind": "text",
+                        "text": "Profile whose credentials are changing."
+                      }
+                    ]
+                  },
+                  "type": {
+                    "type": "intrinsic",
+                    "name": "string"
+                  }
+                },
+                {
+                  "id": 267,
+                  "name": "action",
+                  "variant": "param",
+                  "kind": 32768,
+                  "flags": {},
+                  "comment": {
+                    "summary": [
+                      {
+                        "kind": "text",
+                        "text": "Runs only after prior transitions and active execution have ended."
+                      }
+                    ]
+                  },
+                  "type": {
+                    "type": "reflection",
+                    "declaration": {
+                      "id": 268,
+                      "name": "__type",
+                      "variant": "declaration",
+                      "kind": 65536,
+                      "flags": {},
+                      "signatures": [
+                        {
+                          "id": 269,
+                          "name": "__type",
+                          "variant": "signature",
+                          "kind": 4096,
+                          "flags": {},
+                          "type": {
+                            "type": "reference",
+                            "target": {
+                              "packageName": "typescript",
+                              "packagePath": "lib/lib.es5.d.ts",
+                              "qualifiedName": "Promise"
+                            },
+                            "typeArguments": [
+                              {
+                                "type": "reference",
+                                "target": 265,
+                                "name": "T",
+                                "package": "@pixel-brewery/synapse-runtime",
+                                "refersToTypeParameter": true
+                              }
+                            ],
+                            "name": "Promise",
+                            "package": "typescript"
+                          }
+                        }
+                      ]
+                    }
+                  }
+                },
+                {
+                  "id": 270,
+                  "name": "signal",
+                  "variant": "param",
+                  "kind": 32768,
+                  "flags": {
+                    "isOptional": true
+                  },
+                  "comment": {
+                    "summary": [
+                      {
+                        "kind": "text",
+                        "text": "Optional transition cancellation, checked before any credential mutation."
+                      }
+                    ]
+                  },
+                  "type": {
+                    "type": "reference",
+                    "target": {
+                      "packageName": "typescript",
+                      "packagePath": "lib/lib.dom.d.ts",
+                      "qualifiedName": "AbortSignal"
+                    },
+                    "name": "AbortSignal",
+                    "package": "typescript"
+                  }
+                }
+              ],
+              "type": {
+                "type": "reference",
+                "target": {
+                  "packageName": "typescript",
+                  "packagePath": "lib/lib.es5.d.ts",
+                  "qualifiedName": "Promise"
+                },
+                "typeArguments": [
+                  {
+                    "type": "reference",
+                    "target": 265,
+                    "name": "T",
+                    "package": "@pixel-brewery/synapse-runtime",
+                    "refersToTypeParameter": true
+                  }
+                ],
+                "name": "Promise",
+                "package": "typescript"
+              }
+            }
+          ]
+        },
+        {
+          "id": 252,
+          "name": "invalidateSessions",
+          "variant": "declaration",
+          "kind": 2048,
+          "flags": {
+            "isPublic": true
+          },
+          "signatures": [
+            {
+              "id": 253,
+              "name": "invalidateSessions",
+              "variant": "signature",
+              "kind": 4096,
+              "flags": {
+                "isPublic": true
+              },
+              "comment": {
+                "summary": [
+                  {
+                    "kind": "text",
+                    "text": "Invalidates continuations before a native account or credential mutation."
+                  }
+                ],
+                "blockTags": [
+                  {
+                    "tag": "@returns",
+                    "content": [
+                      {
+                        "kind": "text",
+                        "text": "Fresh persisted generation; existing references retain their previous generation."
+                      }
+                    ]
+                  },
+                  {
+                    "tag": "@throws",
+                    "content": [
+                      {
+                        "kind": "text",
+                        "text": "An AiError on missing exclusivity or persistence failure."
+                      }
+                    ]
+                  }
+                ]
+              },
+              "parameters": [
+                {
+                  "id": 254,
+                  "name": "profile",
+                  "variant": "param",
+                  "kind": 32768,
+                  "flags": {},
+                  "comment": {
+                    "summary": [
+                      {
+                        "kind": "text",
+                        "text": "Profile whose exclusive drained gate is held by the caller."
+                      }
+                    ]
+                  },
+                  "type": {
+                    "type": "reference",
+                    "target": {
+                      "packageName": "@pixel-brewery/synapse-core",
+                      "packagePath": "src/interfaces/IAiProfile.ts",
+                      "qualifiedName": "IAiProfile"
+                    },
+                    "name": "IAiProfile",
+                    "package": "@pixel-brewery/synapse-core",
+                    "externalUrl": "packages/synapse-core/api/interfaces/IAiProfile.md"
+                  }
+                }
+              ],
+              "type": {
+                "type": "reference",
+                "target": {
+                  "packageName": "typescript",
+                  "packagePath": "lib/lib.es5.d.ts",
+                  "qualifiedName": "Promise"
+                },
+                "typeArguments": [
+                  {
+                    "type": "intrinsic",
+                    "name": "string"
+                  }
+                ],
+                "name": "Promise",
+                "package": "typescript"
+              }
+            }
+          ]
+        },
+        {
+          "id": 246,
+          "name": "sessionGeneration",
+          "variant": "declaration",
+          "kind": 2048,
+          "flags": {
+            "isPublic": true
+          },
+          "signatures": [
+            {
+              "id": 247,
+              "name": "sessionGeneration",
+              "variant": "signature",
+              "kind": 4096,
+              "flags": {
+                "isPublic": true
+              },
+              "comment": {
+                "summary": [
+                  {
+                    "kind": "text",
+                    "text": "Reads the authentication generation while the caller holds an execution lease or exclusive transition."
+                  }
+                ],
+                "blockTags": [
+                  {
+                    "tag": "@returns",
+                    "content": [
+                      {
+                        "kind": "text",
+                        "text": "Current generation, or undefined for preserved pre-transition legacy state."
+                      }
+                    ]
+                  },
+                  {
+                    "tag": "@throws",
+                    "content": [
+                      {
+                        "kind": "text",
+                        "text": "An AiError if persisted metadata cannot be trusted."
+                      }
+                    ]
+                  }
+                ]
+              },
+              "parameters": [
+                {
+                  "id": 248,
+                  "name": "profile",
+                  "variant": "param",
+                  "kind": 32768,
+                  "flags": {},
+                  "comment": {
+                    "summary": [
+                      {
+                        "kind": "text",
+                        "text": "Explicit application/account owner."
+                      }
+                    ]
+                  },
+                  "type": {
+                    "type": "reference",
+                    "target": {
+                      "packageName": "@pixel-brewery/synapse-core",
+                      "packagePath": "src/interfaces/IAiProfile.ts",
+                      "qualifiedName": "IAiProfile"
+                    },
+                    "name": "IAiProfile",
+                    "package": "@pixel-brewery/synapse-core",
+                    "externalUrl": "packages/synapse-core/api/interfaces/IAiProfile.md"
+                  }
+                }
+              ],
+              "type": {
+                "type": "reference",
+                "target": {
+                  "packageName": "typescript",
+                  "packagePath": "lib/lib.es5.d.ts",
+                  "qualifiedName": "Promise"
+                },
+                "typeArguments": [
+                  {
+                    "type": "union",
+                    "types": [
+                      {
+                        "type": "intrinsic",
+                        "name": "string"
+                      },
+                      {
+                        "type": "intrinsic",
+                        "name": "undefined"
+                      }
+                    ]
+                  }
+                ],
+                "name": "Promise",
+                "package": "typescript"
+              }
+            }
+          ]
+        }
+      ],
+      "groups": [
+        {
+          "title": "Constructors",
+          "children": [
+            228
+          ]
+        },
+        {
+          "title": "Methods",
+          "children": [
+            249,
+            255,
+            237,
+            263,
+            252,
+            246
+          ]
+        }
+      ]
+    },
+    {
+      "id": 9,
+      "name": "ProfileSessionStoreBase",
+      "variant": "declaration",
+      "kind": 128,
+      "flags": {
+        "isPublic": true,
+        "isAbstract": true
+      },
+      "comment": {
+        "summary": [
+          {
+            "kind": "text",
+            "text": "Persistent authentication-generation boundary, independent of native provider credentials."
+          }
+        ]
+      },
+      "children": [
+        {
+          "id": 18,
+          "name": "advance",
+          "variant": "declaration",
+          "kind": 2048,
+          "flags": {
+            "isPublic": true,
+            "isAbstract": true
+          },
+          "signatures": [
+            {
+              "id": 19,
+              "name": "advance",
+              "variant": "signature",
+              "kind": 4096,
+              "flags": {
+                "isPublic": true
+              },
+              "comment": {
+                "summary": [
+                  {
+                    "kind": "text",
+                    "text": "Advances the generation after execution drains and before credentials change."
+                  }
+                ],
+                "blockTags": [
+                  {
+                    "tag": "@returns",
+                    "content": [
+                      {
+                        "kind": "text",
+                        "text": "Newly persisted generation, distinct from the previous one."
+                      }
+                    ]
+                  },
+                  {
+                    "tag": "@throws",
+                    "content": [
+                      {
+                        "kind": "text",
+                        "text": "An AiError on invalid/unknown state or persistence failure; native mutation must not proceed."
+                      }
+                    ]
+                  }
+                ]
+              },
+              "parameters": [
+                {
+                  "id": 20,
+                  "name": "profile",
+                  "variant": "param",
+                  "kind": 32768,
+                  "flags": {},
+                  "comment": {
+                    "summary": [
+                      {
+                        "kind": "text",
+                        "text": "Explicit profile exclusively owned by the caller."
+                      }
+                    ]
+                  },
+                  "type": {
+                    "type": "reference",
+                    "target": {
+                      "packageName": "@pixel-brewery/synapse-core",
+                      "packagePath": "src/interfaces/IAiProfile.ts",
+                      "qualifiedName": "IAiProfile"
+                    },
+                    "name": "IAiProfile",
+                    "package": "@pixel-brewery/synapse-core",
+                    "externalUrl": "packages/synapse-core/api/interfaces/IAiProfile.md"
+                  }
+                }
+              ],
+              "type": {
+                "type": "reference",
+                "target": {
+                  "packageName": "typescript",
+                  "packagePath": "lib/lib.es5.d.ts",
+                  "qualifiedName": "Promise"
+                },
+                "typeArguments": [
+                  {
+                    "type": "intrinsic",
+                    "name": "string"
+                  }
+                ],
+                "name": "Promise",
+                "package": "typescript"
+              }
+            }
+          ]
+        },
+        {
+          "id": 12,
+          "name": "bind",
+          "variant": "declaration",
+          "kind": 2048,
+          "flags": {
+            "isPublic": true,
+            "isAbstract": true
+          },
+          "signatures": [
+            {
+              "id": 13,
+              "name": "bind",
+              "variant": "signature",
+              "kind": 4096,
+              "flags": {
+                "isPublic": true
+              },
+              "comment": {
+                "summary": [
+                  {
+                    "kind": "text",
+                    "text": "Binds native continuations to the current driver, configuration, environment and stable profile paths."
+                  }
+                ],
+                "blockTags": [
+                  {
+                    "tag": "@returns",
+                    "content": [
+                      {
+                        "kind": "text",
+                        "text": "Current generation; the first binding preserves an absent legacy generation."
+                      }
+                    ]
+                  },
+                  {
+                    "tag": "@throws",
+                    "content": [
+                      {
+                        "kind": "text",
+                        "text": "An AiError on unsupported or oversized configuration, unknown persisted versions or persistence failure."
+                      }
+                    ]
+                  },
+                  {
+                    "tag": "@remarks",
+                    "content": [
+                      {
+                        "kind": "text",
+                        "text": "Changing an existing configuration binding advances the generation before native execution. Implementations must not persist configuration or environment plaintext. Temporary execution directories do not affect this binding."
+                      }
+                    ]
+                  }
+                ]
+              },
+              "parameters": [
+                {
+                  "id": 14,
+                  "name": "instance",
+                  "variant": "param",
+                  "kind": 32768,
+                  "flags": {},
+                  "comment": {
+                    "summary": [
+                      {
+                        "kind": "text",
+                        "text": "Explicit instance whose profile the caller exclusively owns."
+                      }
+                    ]
+                  },
+                  "type": {
+                    "type": "reference",
+                    "target": {
+                      "packageName": "@pixel-brewery/synapse-core",
+                      "packagePath": "src/interfaces/IAiInstance.ts",
+                      "qualifiedName": "IAiInstance"
+                    },
+                    "name": "IAiInstance",
+                    "package": "@pixel-brewery/synapse-core",
+                    "externalUrl": "packages/synapse-core/api/interfaces/IAiInstance.md"
+                  }
+                }
+              ],
+              "type": {
+                "type": "reference",
+                "target": {
+                  "packageName": "typescript",
+                  "packagePath": "lib/lib.es5.d.ts",
+                  "qualifiedName": "Promise"
+                },
+                "typeArguments": [
+                  {
+                    "type": "union",
+                    "types": [
+                      {
+                        "type": "intrinsic",
+                        "name": "string"
+                      },
+                      {
+                        "type": "intrinsic",
+                        "name": "undefined"
+                      }
+                    ]
+                  }
+                ],
+                "name": "Promise",
+                "package": "typescript"
+              }
+            }
+          ]
+        },
+        {
+          "id": 10,
+          "name": "constructor",
+          "variant": "declaration",
+          "kind": 512,
+          "flags": {},
+          "signatures": [
+            {
+              "id": 11,
+              "name": "ProfileSessionStoreBase",
+              "variant": "signature",
+              "kind": 16384,
+              "flags": {},
+              "type": {
+                "type": "reference",
+                "target": 9,
+                "name": "ProfileSessionStoreBase",
+                "package": "@pixel-brewery/synapse-runtime"
+              }
+            }
+          ]
+        },
+        {
+          "id": 15,
+          "name": "read",
+          "variant": "declaration",
+          "kind": 2048,
+          "flags": {
+            "isPublic": true,
+            "isAbstract": true
+          },
+          "signatures": [
+            {
+              "id": 16,
+              "name": "read",
+              "variant": "signature",
+              "kind": 4096,
+              "flags": {
+                "isPublic": true
+              },
+              "comment": {
+                "summary": [
+                  {
+                    "kind": "text",
+                    "text": "Reads the current generation without creating or resetting missing/unknown state."
+                  }
+                ],
+                "blockTags": [
+                  {
+                    "tag": "@returns",
+                    "content": [
+                      {
+                        "kind": "text",
+                        "text": "Persisted generation, or undefined before its first credential or configuration transition."
+                      }
+                    ]
+                  },
+                  {
+                    "tag": "@throws",
+                    "content": [
+                      {
+                        "kind": "text",
+                        "text": "An AiError when existing state is malformed, belongs to another profile or cannot be read."
+                      }
+                    ]
+                  }
+                ]
+              },
+              "parameters": [
+                {
+                  "id": 17,
+                  "name": "profile",
+                  "variant": "param",
+                  "kind": 32768,
+                  "flags": {},
+                  "comment": {
+                    "summary": [
+                      {
+                        "kind": "text",
+                        "text": "Explicit application/account profile."
+                      }
+                    ]
+                  },
+                  "type": {
+                    "type": "reference",
+                    "target": {
+                      "packageName": "@pixel-brewery/synapse-core",
+                      "packagePath": "src/interfaces/IAiProfile.ts",
+                      "qualifiedName": "IAiProfile"
+                    },
+                    "name": "IAiProfile",
+                    "package": "@pixel-brewery/synapse-core",
+                    "externalUrl": "packages/synapse-core/api/interfaces/IAiProfile.md"
+                  }
+                }
+              ],
+              "type": {
+                "type": "reference",
+                "target": {
+                  "packageName": "typescript",
+                  "packagePath": "lib/lib.es5.d.ts",
+                  "qualifiedName": "Promise"
+                },
+                "typeArguments": [
+                  {
+                    "type": "union",
+                    "types": [
+                      {
+                        "type": "intrinsic",
+                        "name": "string"
+                      },
+                      {
+                        "type": "intrinsic",
+                        "name": "undefined"
+                      }
+                    ]
+                  }
+                ],
+                "name": "Promise",
+                "package": "typescript"
+              }
+            }
+          ]
+        }
+      ],
+      "groups": [
+        {
+          "title": "Constructors",
+          "children": [
+            10
+          ]
+        },
+        {
+          "title": "Methods",
+          "children": [
+            18,
+            12,
+            15
+          ]
+        }
+      ],
+      "extendedBy": [
+        {
+          "type": "reference",
+          "target": 291,
+          "name": "FileProfileSessionStore"
+        }
+      ]
+    },
+    {
+      "id": 336,
+      "name": "snapshotAiInstance",
+      "variant": "declaration",
+      "kind": 64,
+      "flags": {
+        "isPublic": true
+      },
+      "signatures": [
+        {
+          "id": 337,
+          "name": "snapshotAiInstance",
+          "variant": "signature",
+          "kind": 4096,
+          "flags": {
+            "isPublic": true
+          },
+          "comment": {
+            "summary": [
+              {
+                "kind": "text",
+                "text": "Detaches an instance's account, paths and configuration from caller-owned mutable objects."
+              }
+            ],
+            "blockTags": [
+              {
+                "tag": "@returns",
+                "content": [
+                  {
+                    "kind": "text",
+                    "text": "A detached snapshot with the same readonly contract; intentional host cancellation signals belong to the operation instead."
+                  }
+                ]
+              },
+              {
+                "tag": "@throws",
+                "content": [
+                  {
+                    "kind": "text",
+                    "text": "An AiError when instance configuration contains values that cannot be cloned."
+                  }
+                ]
+              },
+              {
+                "tag": "@remarks",
+                "content": [
+                  {
+                    "kind": "text",
+                    "text": "Capture one snapshot before selecting a profile gate and pass that same snapshot to the driver. This prevents later host mutations from moving native work to a different account than the one being coordinated."
+                  }
+                ]
+              }
+            ]
+          },
+          "parameters": [
+            {
+              "id": 338,
+              "name": "instance",
+              "variant": "param",
+              "kind": 32768,
+              "flags": {},
+              "comment": {
+                "summary": [
+                  {
+                    "kind": "text",
+                    "text": "Cloneable instance data supplied by the host before an asynchronous operation."
+                  }
+                ]
+              },
+              "type": {
+                "type": "reference",
+                "target": {
+                  "packageName": "@pixel-brewery/synapse-core",
+                  "packagePath": "src/interfaces/IAiInstance.ts",
+                  "qualifiedName": "IAiInstance"
+                },
+                "name": "IAiInstance",
+                "package": "@pixel-brewery/synapse-core",
+                "externalUrl": "packages/synapse-core/api/interfaces/IAiInstance.md"
+              }
+            }
+          ],
+          "type": {
+            "type": "reference",
+            "target": {
+              "packageName": "@pixel-brewery/synapse-core",
+              "packagePath": "src/interfaces/IAiInstance.ts",
+              "qualifiedName": "IAiInstance"
+            },
+            "name": "IAiInstance",
+            "package": "@pixel-brewery/synapse-core",
+            "externalUrl": "packages/synapse-core/api/interfaces/IAiInstance.md"
+          }
+        }
+      ]
+    }
+  ],
+  "groups": [
+    {
+      "title": "Classes",
+      "children": [
+        69,
+        137,
+        291,
+        168,
+        190,
+        1,
+        227,
+        9
+      ]
+    },
+    {
+      "title": "Interfaces",
+      "children": [
+        21,
+        31,
+        39,
+        42,
+        64
+      ]
+    },
+    {
+      "title": "Functions",
+      "children": [
+        328,
+        332,
+        336
+      ]
+    }
+  ],
+  "packageName": "@pixel-brewery/synapse-runtime",
+  "symbolIdMap": {
+    "0": {
+      "packageName": "@pixel-brewery/synapse-runtime",
+      "packagePath": "src/index.ts",
+      "qualifiedName": ""
+    },
+    "1": {
+      "packageName": "@pixel-brewery/synapse-runtime",
+      "packagePath": "src/abstracts/ProcessRunnerBase.ts",
+      "qualifiedName": "ProcessRunnerBase"
+    },
+    "4": {
+      "packageName": "@pixel-brewery/synapse-runtime",
+      "packagePath": "src/abstracts/ProcessRunnerBase.ts",
+      "qualifiedName": "ProcessRunnerBase.run"
+    },
+    "5": {
+      "packageName": "@pixel-brewery/synapse-runtime",
+      "packagePath": "src/abstracts/ProcessRunnerBase.ts",
+      "qualifiedName": "ProcessRunnerBase.run"
+    },
+    "6": {
+      "packageName": "@pixel-brewery/synapse-runtime",
+      "packagePath": "src/abstracts/ProcessRunnerBase.ts",
+      "qualifiedName": "request"
+    },
+    "7": {
+      "packageName": "@pixel-brewery/synapse-runtime",
+      "packagePath": "src/abstracts/ProcessRunnerBase.ts",
+      "qualifiedName": "ProcessRunnerBase.dispose"
+    },
+    "8": {
+      "packageName": "@pixel-brewery/synapse-runtime",
+      "packagePath": "src/abstracts/ProcessRunnerBase.ts",
+      "qualifiedName": "ProcessRunnerBase.dispose"
+    },
+    "9": {
+      "packageName": "@pixel-brewery/synapse-runtime",
+      "packagePath": "src/abstracts/ProfileSessionStoreBase.ts",
+      "qualifiedName": "ProfileSessionStoreBase"
+    },
+    "12": {
+      "packageName": "@pixel-brewery/synapse-runtime",
+      "packagePath": "src/abstracts/ProfileSessionStoreBase.ts",
+      "qualifiedName": "ProfileSessionStoreBase.bind"
+    },
+    "13": {
+      "packageName": "@pixel-brewery/synapse-runtime",
+      "packagePath": "src/abstracts/ProfileSessionStoreBase.ts",
+      "qualifiedName": "ProfileSessionStoreBase.bind"
+    },
+    "14": {
+      "packageName": "@pixel-brewery/synapse-runtime",
+      "packagePath": "src/abstracts/ProfileSessionStoreBase.ts",
+      "qualifiedName": "instance"
+    },
+    "15": {
+      "packageName": "@pixel-brewery/synapse-runtime",
+      "packagePath": "src/abstracts/ProfileSessionStoreBase.ts",
+      "qualifiedName": "ProfileSessionStoreBase.read"
+    },
+    "16": {
+      "packageName": "@pixel-brewery/synapse-runtime",
+      "packagePath": "src/abstracts/ProfileSessionStoreBase.ts",
+      "qualifiedName": "ProfileSessionStoreBase.read"
+    },
+    "17": {
+      "packageName": "@pixel-brewery/synapse-runtime",
+      "packagePath": "src/abstracts/ProfileSessionStoreBase.ts",
+      "qualifiedName": "profile"
+    },
+    "18": {
+      "packageName": "@pixel-brewery/synapse-runtime",
+      "packagePath": "src/abstracts/ProfileSessionStoreBase.ts",
+      "qualifiedName": "ProfileSessionStoreBase.advance"
+    },
+    "19": {
+      "packageName": "@pixel-brewery/synapse-runtime",
+      "packagePath": "src/abstracts/ProfileSessionStoreBase.ts",
+      "qualifiedName": "ProfileSessionStoreBase.advance"
+    },
+    "20": {
+      "packageName": "@pixel-brewery/synapse-runtime",
+      "packagePath": "src/abstracts/ProfileSessionStoreBase.ts",
+      "qualifiedName": "profile"
+    },
+    "21": {
+      "packageName": "@pixel-brewery/synapse-runtime",
+      "packagePath": "src/interfaces/IAiRuntimeOptions.ts",
+      "qualifiedName": "IAiRuntimeOptions"
+    },
+    "22": {
+      "packageName": "@pixel-brewery/synapse-runtime",
+      "packagePath": "src/interfaces/IAiRuntimeOptions.ts",
+      "qualifiedName": "IAiRuntimeOptions.drivers"
+    },
+    "23": {
+      "packageName": "@pixel-brewery/synapse-runtime",
+      "packagePath": "src/interfaces/IAiRuntimeOptions.ts",
+      "qualifiedName": "IAiRuntimeOptions.instances"
+    },
+    "24": {
+      "packageName": "@pixel-brewery/synapse-runtime",
+      "packagePath": "src/interfaces/IAiRuntimeOptions.ts",
+      "qualifiedName": "IAiRuntimeOptions.access"
+    },
+    "25": {
+      "packageName": "@pixel-brewery/synapse-runtime",
+      "packagePath": "src/interfaces/IAiRuntimeOptions.ts",
+      "qualifiedName": "IAiRuntimeOptions.router"
+    },
+    "26": {
+      "packageName": "@pixel-brewery/synapse-runtime",
+      "packagePath": "src/interfaces/IAiRuntimeOptions.ts",
+      "qualifiedName": "IAiRuntimeOptions.eventCapacity"
+    },
+    "27": {
+      "packageName": "@pixel-brewery/synapse-runtime",
+      "packagePath": "src/interfaces/IAiRuntimeOptions.ts",
+      "qualifiedName": "IAiRuntimeOptions.maximumRuns"
+    },
+    "28": {
+      "packageName": "@pixel-brewery/synapse-runtime",
+      "packagePath": "src/interfaces/IAiRuntimeOptions.ts",
+      "qualifiedName": "IAiRuntimeOptions.defaultTimeoutMs"
+    },
+    "29": {
+      "packageName": "@pixel-brewery/synapse-runtime",
+      "packagePath": "src/interfaces/IAiRuntimeOptions.ts",
+      "qualifiedName": "IAiRuntimeOptions.maximumPromptBytes"
+    },
+    "30": {
+      "packageName": "@pixel-brewery/synapse-runtime",
+      "packagePath": "src/interfaces/IAiRuntimeOptions.ts",
+      "qualifiedName": "IAiRuntimeOptions.temporaryDirectory"
+    },
+    "31": {
+      "packageName": "@pixel-brewery/synapse-runtime",
+      "packagePath": "src/interfaces/IInteractiveProcess.ts",
+      "qualifiedName": "IInteractiveProcess"
+    },
+    "32": {
+      "packageName": "@pixel-brewery/synapse-runtime",
+      "packagePath": "src/interfaces/IInteractiveProcess.ts",
+      "qualifiedName": "IInteractiveProcess.write"
+    },
+    "33": {
+      "packageName": "@pixel-brewery/synapse-runtime",
+      "packagePath": "src/interfaces/IInteractiveProcess.ts",
+      "qualifiedName": "IInteractiveProcess.write"
+    },
+    "34": {
+      "packageName": "@pixel-brewery/synapse-runtime",
+      "packagePath": "src/interfaces/IInteractiveProcess.ts",
+      "qualifiedName": "value"
+    },
+    "35": {
+      "packageName": "@pixel-brewery/synapse-runtime",
+      "packagePath": "src/interfaces/IInteractiveProcess.ts",
+      "qualifiedName": "IInteractiveProcess.end"
+    },
+    "36": {
+      "packageName": "@pixel-brewery/synapse-runtime",
+      "packagePath": "src/interfaces/IInteractiveProcess.ts",
+      "qualifiedName": "IInteractiveProcess.end"
+    },
+    "37": {
+      "packageName": "@pixel-brewery/synapse-runtime",
+      "packagePath": "src/interfaces/IInteractiveProcess.ts",
+      "qualifiedName": "IInteractiveProcess.stop"
+    },
+    "38": {
+      "packageName": "@pixel-brewery/synapse-runtime",
+      "packagePath": "src/interfaces/IInteractiveProcess.ts",
+      "qualifiedName": "IInteractiveProcess.stop"
+    },
+    "39": {
+      "packageName": "@pixel-brewery/synapse-runtime",
+      "packagePath": "src/interfaces/INodeProcessRunnerOptions.ts",
+      "qualifiedName": "INodeProcessRunnerOptions"
+    },
+    "40": {
+      "packageName": "@pixel-brewery/synapse-runtime",
+      "packagePath": "src/interfaces/INodeProcessRunnerOptions.ts",
+      "qualifiedName": "INodeProcessRunnerOptions.terminationGraceMs"
+    },
+    "41": {
+      "packageName": "@pixel-brewery/synapse-runtime",
+      "packagePath": "src/interfaces/INodeProcessRunnerOptions.ts",
+      "qualifiedName": "INodeProcessRunnerOptions.maximumProcesses"
+    },
+    "42": {
+      "packageName": "@pixel-brewery/synapse-runtime",
+      "packagePath": "src/interfaces/IProcessRequest.ts",
+      "qualifiedName": "IProcessRequest"
+    },
+    "43": {
+      "packageName": "@pixel-brewery/synapse-runtime",
+      "packagePath": "src/interfaces/IProcessRequest.ts",
+      "qualifiedName": "IProcessRequest.executable"
+    },
+    "44": {
+      "packageName": "@pixel-brewery/synapse-runtime",
+      "packagePath": "src/interfaces/IProcessRequest.ts",
+      "qualifiedName": "IProcessRequest.args"
+    },
+    "45": {
+      "packageName": "@pixel-brewery/synapse-runtime",
+      "packagePath": "src/interfaces/IProcessRequest.ts",
+      "qualifiedName": "IProcessRequest.workingDirectory"
+    },
+    "46": {
+      "packageName": "@pixel-brewery/synapse-runtime",
+      "packagePath": "src/interfaces/IProcessRequest.ts",
+      "qualifiedName": "IProcessRequest.environment"
+    },
+    "47": {
+      "packageName": "@pixel-brewery/synapse-runtime",
+      "packagePath": "src/interfaces/IProcessRequest.ts",
+      "qualifiedName": "IProcessRequest.input"
+    },
+    "48": {
+      "packageName": "@pixel-brewery/synapse-runtime",
+      "packagePath": "src/interfaces/IProcessRequest.ts",
+      "qualifiedName": "IProcessRequest.keepInputOpen"
+    },
+    "49": {
+      "packageName": "@pixel-brewery/synapse-runtime",
+      "packagePath": "src/interfaces/IProcessRequest.ts",
+      "qualifiedName": "IProcessRequest.signal"
+    },
+    "50": {
+      "packageName": "@pixel-brewery/synapse-runtime",
+      "packagePath": "src/interfaces/IProcessRequest.ts",
+      "qualifiedName": "IProcessRequest.timeoutMs"
+    },
+    "51": {
+      "packageName": "@pixel-brewery/synapse-runtime",
+      "packagePath": "src/interfaces/IProcessRequest.ts",
+      "qualifiedName": "IProcessRequest.maxOutputBytes"
+    },
+    "52": {
+      "packageName": "@pixel-brewery/synapse-runtime",
+      "packagePath": "src/interfaces/IProcessRequest.ts",
+      "qualifiedName": "IProcessRequest.onStdout"
+    },
+    "53": {
+      "packageName": "@pixel-brewery/synapse-runtime",
+      "packagePath": "src/interfaces/IProcessRequest.ts",
+      "qualifiedName": "__type"
+    },
+    "54": {
+      "packageName": "@pixel-brewery/synapse-runtime",
+      "packagePath": "src/interfaces/IProcessRequest.ts",
+      "qualifiedName": "__type"
+    },
+    "55": {
+      "packageName": "@pixel-brewery/synapse-runtime",
+      "packagePath": "src/interfaces/IProcessRequest.ts",
+      "qualifiedName": "chunk"
+    },
+    "56": {
+      "packageName": "@pixel-brewery/synapse-runtime",
+      "packagePath": "src/interfaces/IProcessRequest.ts",
+      "qualifiedName": "IProcessRequest.onStderr"
+    },
+    "57": {
+      "packageName": "@pixel-brewery/synapse-runtime",
+      "packagePath": "src/interfaces/IProcessRequest.ts",
+      "qualifiedName": "__type"
+    },
+    "58": {
+      "packageName": "@pixel-brewery/synapse-runtime",
+      "packagePath": "src/interfaces/IProcessRequest.ts",
+      "qualifiedName": "__type"
+    },
+    "59": {
+      "packageName": "@pixel-brewery/synapse-runtime",
+      "packagePath": "src/interfaces/IProcessRequest.ts",
+      "qualifiedName": "chunk"
+    },
+    "60": {
+      "packageName": "@pixel-brewery/synapse-runtime",
+      "packagePath": "src/interfaces/IProcessRequest.ts",
+      "qualifiedName": "IProcessRequest.onStart"
+    },
+    "61": {
+      "packageName": "@pixel-brewery/synapse-runtime",
+      "packagePath": "src/interfaces/IProcessRequest.ts",
+      "qualifiedName": "__type"
+    },
+    "62": {
+      "packageName": "@pixel-brewery/synapse-runtime",
+      "packagePath": "src/interfaces/IProcessRequest.ts",
+      "qualifiedName": "__type"
+    },
+    "63": {
+      "packageName": "@pixel-brewery/synapse-runtime",
+      "packagePath": "src/interfaces/IProcessRequest.ts",
+      "qualifiedName": "process"
+    },
+    "64": {
+      "packageName": "@pixel-brewery/synapse-runtime",
+      "packagePath": "src/interfaces/IProcessResult.ts",
+      "qualifiedName": "IProcessResult"
+    },
+    "65": {
+      "packageName": "@pixel-brewery/synapse-runtime",
+      "packagePath": "src/interfaces/IProcessResult.ts",
+      "qualifiedName": "IProcessResult.stdout"
+    },
+    "66": {
+      "packageName": "@pixel-brewery/synapse-runtime",
+      "packagePath": "src/interfaces/IProcessResult.ts",
+      "qualifiedName": "IProcessResult.stderr"
+    },
+    "67": {
+      "packageName": "@pixel-brewery/synapse-runtime",
+      "packagePath": "src/interfaces/IProcessResult.ts",
+      "qualifiedName": "IProcessResult.exitCode"
+    },
+    "68": {
+      "packageName": "@pixel-brewery/synapse-runtime",
+      "packagePath": "src/interfaces/IProcessResult.ts",
+      "qualifiedName": "IProcessResult.signal"
+    },
+    "69": {
+      "packageName": "@pixel-brewery/synapse-runtime",
+      "packagePath": "src/services/AiRuntime.ts",
+      "qualifiedName": "AiRuntime"
+    },
+    "70": {
+      "packageName": "@pixel-brewery/synapse-runtime",
+      "packagePath": "src/services/AiRuntime.ts",
+      "qualifiedName": "AiRuntime.__constructor"
+    },
+    "71": {
+      "packageName": "@pixel-brewery/synapse-runtime",
+      "packagePath": "src/services/AiRuntime.ts",
+      "qualifiedName": "AiRuntime"
+    },
+    "72": {
+      "packageName": "@pixel-brewery/synapse-runtime",
+      "packagePath": "src/services/AiRuntime.ts",
+      "qualifiedName": "_options"
+    },
+    "86": {
+      "packageName": "@pixel-brewery/synapse-runtime",
+      "packagePath": "src/services/AiRuntime.ts",
+      "qualifiedName": "AiRuntime.access"
+    },
+    "87": {
+      "packageName": "@pixel-brewery/synapse-runtime",
+      "packagePath": "src/services/AiRuntime.ts",
+      "qualifiedName": "AiRuntime.access"
+    },
+    "88": {
+      "packageName": "@pixel-brewery/synapse-runtime",
+      "packagePath": "src/services/AiRuntime.ts",
+      "qualifiedName": "AiRuntime.run"
+    },
+    "89": {
+      "packageName": "@pixel-brewery/synapse-runtime",
+      "packagePath": "src/services/AiRuntime.ts",
+      "qualifiedName": "AiRuntime.run"
+    },
+    "90": {
+      "packageName": "@pixel-brewery/synapse-runtime",
+      "packagePath": "src/services/AiRuntime.ts",
+      "qualifiedName": "request"
+    },
+    "91": {
+      "packageName": "@pixel-brewery/synapse-runtime",
+      "packagePath": "src/services/AiRuntime.ts",
+      "qualifiedName": "AiRuntime.dispose"
+    },
+    "92": {
+      "packageName": "@pixel-brewery/synapse-runtime",
+      "packagePath": "src/services/AiRuntime.ts",
+      "qualifiedName": "AiRuntime.dispose"
+    },
+    "93": {
+      "packageName": "@pixel-brewery/synapse-runtime",
+      "packagePath": "src/services/AiRuntime.ts",
+      "qualifiedName": "AiRuntime.configureInstance"
+    },
+    "94": {
+      "packageName": "@pixel-brewery/synapse-runtime",
+      "packagePath": "src/services/AiRuntime.ts",
+      "qualifiedName": "AiRuntime.configureInstance"
+    },
+    "95": {
+      "packageName": "@pixel-brewery/synapse-runtime",
+      "packagePath": "src/services/AiRuntime.ts",
+      "qualifiedName": "configuration"
+    },
+    "137": {
+      "packageName": "@pixel-brewery/synapse-runtime",
+      "packagePath": "src/services/BoundedAsyncQueue.ts",
+      "qualifiedName": "BoundedAsyncQueue"
+    },
+    "138": {
+      "packageName": "@pixel-brewery/synapse-runtime",
+      "packagePath": "src/services/BoundedAsyncQueue.ts",
+      "qualifiedName": "BoundedAsyncQueue.T"
+    },
+    "139": {
+      "packageName": "@pixel-brewery/synapse-runtime",
+      "packagePath": "src/services/BoundedAsyncQueue.ts",
+      "qualifiedName": "BoundedAsyncQueue.__constructor"
+    },
+    "140": {
+      "packageName": "@pixel-brewery/synapse-runtime",
+      "packagePath": "src/services/BoundedAsyncQueue.ts",
+      "qualifiedName": "BoundedAsyncQueue"
+    },
+    "141": {
+      "packageName": "@pixel-brewery/synapse-runtime",
+      "packagePath": "src/services/BoundedAsyncQueue.ts",
+      "qualifiedName": "BoundedAsyncQueue.T"
+    },
+    "142": {
+      "packageName": "@pixel-brewery/synapse-runtime",
+      "packagePath": "src/services/BoundedAsyncQueue.ts",
+      "qualifiedName": "_capacity"
+    },
+    "143": {
+      "packageName": "@pixel-brewery/synapse-runtime",
+      "packagePath": "src/services/BoundedAsyncQueue.ts",
+      "qualifiedName": "_overflowFactory"
+    },
+    "144": {
+      "packageName": "@pixel-brewery/synapse-runtime",
+      "packagePath": "src/services/BoundedAsyncQueue.ts",
+      "qualifiedName": "__type"
+    },
+    "145": {
+      "packageName": "@pixel-brewery/synapse-runtime",
+      "packagePath": "src/services/BoundedAsyncQueue.ts",
+      "qualifiedName": "__type"
+    },
+    "146": {
+      "packageName": "@pixel-brewery/synapse-runtime",
+      "packagePath": "src/services/BoundedAsyncQueue.ts",
+      "qualifiedName": "dropped"
+    },
+    "161": {
+      "packageName": "@pixel-brewery/synapse-runtime",
+      "packagePath": "src/services/BoundedAsyncQueue.ts",
+      "qualifiedName": "BoundedAsyncQueue.push"
+    },
+    "162": {
+      "packageName": "@pixel-brewery/synapse-runtime",
+      "packagePath": "src/services/BoundedAsyncQueue.ts",
+      "qualifiedName": "BoundedAsyncQueue.push"
+    },
+    "163": {
+      "packageName": "@pixel-brewery/synapse-runtime",
+      "packagePath": "src/services/BoundedAsyncQueue.ts",
+      "qualifiedName": "value"
+    },
+    "164": {
+      "packageName": "@pixel-brewery/synapse-runtime",
+      "packagePath": "src/services/BoundedAsyncQueue.ts",
+      "qualifiedName": "BoundedAsyncQueue.close"
+    },
+    "165": {
+      "packageName": "@pixel-brewery/synapse-runtime",
+      "packagePath": "src/services/BoundedAsyncQueue.ts",
+      "qualifiedName": "BoundedAsyncQueue.close"
+    },
+    "166": {
+      "packageName": "@pixel-brewery/synapse-runtime",
+      "packagePath": "src/services/BoundedAsyncQueue.ts",
+      "qualifiedName": "BoundedAsyncQueue.[asyncIterator]"
+    },
+    "167": {
+      "packageName": "@pixel-brewery/synapse-runtime",
+      "packagePath": "src/services/BoundedAsyncQueue.ts",
+      "qualifiedName": "BoundedAsyncQueue.[asyncIterator]"
+    },
+    "168": {
+      "packageName": "@pixel-brewery/synapse-runtime",
+      "packagePath": "src/services/JsonLineDecoder.ts",
+      "qualifiedName": "JsonLineDecoder"
+    },
+    "169": {
+      "packageName": "@pixel-brewery/synapse-runtime",
+      "packagePath": "src/services/JsonLineDecoder.ts",
+      "qualifiedName": "JsonLineDecoder.__constructor"
+    },
+    "170": {
+      "packageName": "@pixel-brewery/synapse-runtime",
+      "packagePath": "src/services/JsonLineDecoder.ts",
+      "qualifiedName": "JsonLineDecoder"
+    },
+    "171": {
+      "packageName": "@pixel-brewery/synapse-runtime",
+      "packagePath": "src/services/JsonLineDecoder.ts",
+      "qualifiedName": "_onFrame"
+    },
+    "172": {
+      "packageName": "@pixel-brewery/synapse-runtime",
+      "packagePath": "src/services/JsonLineDecoder.ts",
+      "qualifiedName": "__type"
+    },
+    "173": {
+      "packageName": "@pixel-brewery/synapse-runtime",
+      "packagePath": "src/services/JsonLineDecoder.ts",
+      "qualifiedName": "__type"
+    },
+    "174": {
+      "packageName": "@pixel-brewery/synapse-runtime",
+      "packagePath": "src/services/JsonLineDecoder.ts",
+      "qualifiedName": "value"
+    },
+    "175": {
+      "packageName": "@pixel-brewery/synapse-runtime",
+      "packagePath": "src/services/JsonLineDecoder.ts",
+      "qualifiedName": "_maxBytes"
+    },
+    "182": {
+      "packageName": "@pixel-brewery/synapse-runtime",
+      "packagePath": "src/services/JsonLineDecoder.ts",
+      "qualifiedName": "JsonLineDecoder.push"
+    },
+    "183": {
+      "packageName": "@pixel-brewery/synapse-runtime",
+      "packagePath": "src/services/JsonLineDecoder.ts",
+      "qualifiedName": "JsonLineDecoder.push"
+    },
+    "184": {
+      "packageName": "@pixel-brewery/synapse-runtime",
+      "packagePath": "src/services/JsonLineDecoder.ts",
+      "qualifiedName": "chunk"
+    },
+    "185": {
+      "packageName": "@pixel-brewery/synapse-runtime",
+      "packagePath": "src/services/JsonLineDecoder.ts",
+      "qualifiedName": "JsonLineDecoder.finish"
+    },
+    "186": {
+      "packageName": "@pixel-brewery/synapse-runtime",
+      "packagePath": "src/services/JsonLineDecoder.ts",
+      "qualifiedName": "JsonLineDecoder.finish"
+    },
+    "190": {
+      "packageName": "@pixel-brewery/synapse-runtime",
+      "packagePath": "src/services/NodeProcessRunner.ts",
+      "qualifiedName": "NodeProcessRunner"
+    },
+    "191": {
+      "packageName": "@pixel-brewery/synapse-runtime",
+      "packagePath": "src/services/NodeProcessRunner.ts",
+      "qualifiedName": "NodeProcessRunner.__constructor"
+    },
+    "192": {
+      "packageName": "@pixel-brewery/synapse-runtime",
+      "packagePath": "src/services/NodeProcessRunner.ts",
+      "qualifiedName": "NodeProcessRunner"
+    },
+    "193": {
+      "packageName": "@pixel-brewery/synapse-runtime",
+      "packagePath": "src/services/NodeProcessRunner.ts",
+      "qualifiedName": "options"
+    },
+    "199": {
+      "packageName": "@pixel-brewery/synapse-runtime",
+      "packagePath": "src/services/NodeProcessRunner.ts",
+      "qualifiedName": "NodeProcessRunner.run"
+    },
+    "200": {
+      "packageName": "@pixel-brewery/synapse-runtime",
+      "packagePath": "src/services/NodeProcessRunner.ts",
+      "qualifiedName": "NodeProcessRunner.run"
+    },
+    "201": {
+      "packageName": "@pixel-brewery/synapse-runtime",
+      "packagePath": "src/services/NodeProcessRunner.ts",
+      "qualifiedName": "request"
+    },
+    "202": {
+      "packageName": "@pixel-brewery/synapse-runtime",
+      "packagePath": "src/services/NodeProcessRunner.ts",
+      "qualifiedName": "NodeProcessRunner.dispose"
+    },
+    "203": {
+      "packageName": "@pixel-brewery/synapse-runtime",
+      "packagePath": "src/services/NodeProcessRunner.ts",
+      "qualifiedName": "NodeProcessRunner.dispose"
+    },
+    "227": {
+      "packageName": "@pixel-brewery/synapse-runtime",
+      "packagePath": "src/services/ProfileAccessCoordinator.ts",
+      "qualifiedName": "ProfileAccessCoordinator"
+    },
+    "228": {
+      "packageName": "@pixel-brewery/synapse-runtime",
+      "packagePath": "src/services/ProfileAccessCoordinator.ts",
+      "qualifiedName": "ProfileAccessCoordinator.__constructor"
+    },
+    "229": {
+      "packageName": "@pixel-brewery/synapse-runtime",
+      "packagePath": "src/services/ProfileAccessCoordinator.ts",
+      "qualifiedName": "ProfileAccessCoordinator"
+    },
+    "230": {
+      "packageName": "@pixel-brewery/synapse-runtime",
+      "packagePath": "src/services/ProfileAccessCoordinator.ts",
+      "qualifiedName": "_drainTimeoutMs"
+    },
+    "231": {
+      "packageName": "@pixel-brewery/synapse-runtime",
+      "packagePath": "src/services/ProfileAccessCoordinator.ts",
+      "qualifiedName": "_maximumProfiles"
+    },
+    "232": {
+      "packageName": "@pixel-brewery/synapse-runtime",
+      "packagePath": "src/services/ProfileAccessCoordinator.ts",
+      "qualifiedName": "_sessionStore"
+    },
+    "237": {
+      "packageName": "@pixel-brewery/synapse-runtime",
+      "packagePath": "src/services/ProfileAccessCoordinator.ts",
+      "qualifiedName": "ProfileAccessCoordinator.enter"
+    },
+    "238": {
+      "packageName": "@pixel-brewery/synapse-runtime",
+      "packagePath": "src/services/ProfileAccessCoordinator.ts",
+      "qualifiedName": "ProfileAccessCoordinator.enter"
+    },
+    "239": {
+      "packageName": "@pixel-brewery/synapse-runtime",
+      "packagePath": "src/services/ProfileAccessCoordinator.ts",
+      "qualifiedName": "profileId"
+    },
+    "240": {
+      "packageName": "@pixel-brewery/synapse-runtime",
+      "packagePath": "src/services/ProfileAccessCoordinator.ts",
+      "qualifiedName": "abort"
+    },
+    "241": {
+      "packageName": "@pixel-brewery/synapse-runtime",
+      "packagePath": "src/services/ProfileAccessCoordinator.ts",
+      "qualifiedName": "__type"
+    },
+    "242": {
+      "packageName": "@pixel-brewery/synapse-runtime",
+      "packagePath": "src/services/ProfileAccessCoordinator.ts",
+      "qualifiedName": "__type"
+    },
+    "243": {
+      "packageName": "@pixel-brewery/synapse-runtime",
+      "packagePath": "src/services/ProfileAccessCoordinator.ts",
+      "qualifiedName": "__type"
+    },
+    "244": {
+      "packageName": "@pixel-brewery/synapse-runtime",
+      "packagePath": "src/services/ProfileAccessCoordinator.ts",
+      "qualifiedName": "__type"
+    },
+    "245": {
+      "packageName": "@pixel-brewery/synapse-runtime",
+      "packagePath": "src/services/ProfileAccessCoordinator.ts",
+      "qualifiedName": "error"
+    },
+    "246": {
+      "packageName": "@pixel-brewery/synapse-runtime",
+      "packagePath": "src/services/ProfileAccessCoordinator.ts",
+      "qualifiedName": "ProfileAccessCoordinator.sessionGeneration"
+    },
+    "247": {
+      "packageName": "@pixel-brewery/synapse-runtime",
+      "packagePath": "src/services/ProfileAccessCoordinator.ts",
+      "qualifiedName": "ProfileAccessCoordinator.sessionGeneration"
+    },
+    "248": {
+      "packageName": "@pixel-brewery/synapse-runtime",
+      "packagePath": "src/services/ProfileAccessCoordinator.ts",
+      "qualifiedName": "profile"
+    },
+    "249": {
+      "packageName": "@pixel-brewery/synapse-runtime",
+      "packagePath": "src/services/ProfileAccessCoordinator.ts",
+      "qualifiedName": "ProfileAccessCoordinator.bindSession"
+    },
+    "250": {
+      "packageName": "@pixel-brewery/synapse-runtime",
+      "packagePath": "src/services/ProfileAccessCoordinator.ts",
+      "qualifiedName": "ProfileAccessCoordinator.bindSession"
+    },
+    "251": {
+      "packageName": "@pixel-brewery/synapse-runtime",
+      "packagePath": "src/services/ProfileAccessCoordinator.ts",
+      "qualifiedName": "instance"
+    },
+    "252": {
+      "packageName": "@pixel-brewery/synapse-runtime",
+      "packagePath": "src/services/ProfileAccessCoordinator.ts",
+      "qualifiedName": "ProfileAccessCoordinator.invalidateSessions"
+    },
+    "253": {
+      "packageName": "@pixel-brewery/synapse-runtime",
+      "packagePath": "src/services/ProfileAccessCoordinator.ts",
+      "qualifiedName": "ProfileAccessCoordinator.invalidateSessions"
+    },
+    "254": {
+      "packageName": "@pixel-brewery/synapse-runtime",
+      "packagePath": "src/services/ProfileAccessCoordinator.ts",
+      "qualifiedName": "profile"
+    },
+    "255": {
+      "packageName": "@pixel-brewery/synapse-runtime",
+      "packagePath": "src/services/ProfileAccessCoordinator.ts",
+      "qualifiedName": "ProfileAccessCoordinator.credentialChange"
+    },
+    "256": {
+      "packageName": "@pixel-brewery/synapse-runtime",
+      "packagePath": "src/services/ProfileAccessCoordinator.ts",
+      "qualifiedName": "ProfileAccessCoordinator.credentialChange"
+    },
+    "257": {
+      "packageName": "@pixel-brewery/synapse-runtime",
+      "packagePath": "src/services/ProfileAccessCoordinator.ts",
+      "qualifiedName": "T"
+    },
+    "258": {
+      "packageName": "@pixel-brewery/synapse-runtime",
+      "packagePath": "src/services/ProfileAccessCoordinator.ts",
+      "qualifiedName": "profile"
+    },
+    "259": {
+      "packageName": "@pixel-brewery/synapse-runtime",
+      "packagePath": "src/services/ProfileAccessCoordinator.ts",
+      "qualifiedName": "action"
+    },
+    "260": {
+      "packageName": "@pixel-brewery/synapse-runtime",
+      "packagePath": "src/services/ProfileAccessCoordinator.ts",
+      "qualifiedName": "__type"
+    },
+    "261": {
+      "packageName": "@pixel-brewery/synapse-runtime",
+      "packagePath": "src/services/ProfileAccessCoordinator.ts",
+      "qualifiedName": "__type"
+    },
+    "262": {
+      "packageName": "@pixel-brewery/synapse-runtime",
+      "packagePath": "src/services/ProfileAccessCoordinator.ts",
+      "qualifiedName": "signal"
+    },
+    "263": {
+      "packageName": "@pixel-brewery/synapse-runtime",
+      "packagePath": "src/services/ProfileAccessCoordinator.ts",
+      "qualifiedName": "ProfileAccessCoordinator.exclusive"
+    },
+    "264": {
+      "packageName": "@pixel-brewery/synapse-runtime",
+      "packagePath": "src/services/ProfileAccessCoordinator.ts",
+      "qualifiedName": "ProfileAccessCoordinator.exclusive"
+    },
+    "265": {
+      "packageName": "@pixel-brewery/synapse-runtime",
+      "packagePath": "src/services/ProfileAccessCoordinator.ts",
+      "qualifiedName": "T"
+    },
+    "266": {
+      "packageName": "@pixel-brewery/synapse-runtime",
+      "packagePath": "src/services/ProfileAccessCoordinator.ts",
+      "qualifiedName": "profileId"
+    },
+    "267": {
+      "packageName": "@pixel-brewery/synapse-runtime",
+      "packagePath": "src/services/ProfileAccessCoordinator.ts",
+      "qualifiedName": "action"
+    },
+    "268": {
+      "packageName": "@pixel-brewery/synapse-runtime",
+      "packagePath": "src/services/ProfileAccessCoordinator.ts",
+      "qualifiedName": "__type"
+    },
+    "269": {
+      "packageName": "@pixel-brewery/synapse-runtime",
+      "packagePath": "src/services/ProfileAccessCoordinator.ts",
+      "qualifiedName": "__type"
+    },
+    "270": {
+      "packageName": "@pixel-brewery/synapse-runtime",
+      "packagePath": "src/services/ProfileAccessCoordinator.ts",
+      "qualifiedName": "signal"
+    },
+    "291": {
+      "packageName": "@pixel-brewery/synapse-runtime",
+      "packagePath": "src/services/FileProfileSessionStore.ts",
+      "qualifiedName": "FileProfileSessionStore"
+    },
+    "292": {
+      "packageName": "@pixel-brewery/synapse-runtime",
+      "packagePath": "src/services/FileProfileSessionStore.ts",
+      "qualifiedName": "FileProfileSessionStore.__constructor"
+    },
+    "293": {
+      "packageName": "@pixel-brewery/synapse-runtime",
+      "packagePath": "src/services/FileProfileSessionStore.ts",
+      "qualifiedName": "FileProfileSessionStore"
+    },
+    "294": {
+      "packageName": "@pixel-brewery/synapse-runtime",
+      "packagePath": "src/services/FileProfileSessionStore.ts",
+      "qualifiedName": "_createId"
+    },
+    "295": {
+      "packageName": "@pixel-brewery/synapse-runtime",
+      "packagePath": "src/services/FileProfileSessionStore.ts",
+      "qualifiedName": "__type"
+    },
+    "296": {
+      "packageName": "@pixel-brewery/synapse-runtime",
+      "packagePath": "src/services/FileProfileSessionStore.ts",
+      "qualifiedName": "__type"
+    },
+    "300": {
+      "packageName": "@pixel-brewery/synapse-runtime",
+      "packagePath": "src/services/FileProfileSessionStore.ts",
+      "qualifiedName": "FileProfileSessionStore.bind"
+    },
+    "301": {
+      "packageName": "@pixel-brewery/synapse-runtime",
+      "packagePath": "src/services/FileProfileSessionStore.ts",
+      "qualifiedName": "FileProfileSessionStore.bind"
+    },
+    "302": {
+      "packageName": "@pixel-brewery/synapse-runtime",
+      "packagePath": "src/services/FileProfileSessionStore.ts",
+      "qualifiedName": "instance"
+    },
+    "303": {
+      "packageName": "@pixel-brewery/synapse-runtime",
+      "packagePath": "src/services/FileProfileSessionStore.ts",
+      "qualifiedName": "FileProfileSessionStore.read"
+    },
+    "304": {
+      "packageName": "@pixel-brewery/synapse-runtime",
+      "packagePath": "src/services/FileProfileSessionStore.ts",
+      "qualifiedName": "FileProfileSessionStore.read"
+    },
+    "305": {
+      "packageName": "@pixel-brewery/synapse-runtime",
+      "packagePath": "src/services/FileProfileSessionStore.ts",
+      "qualifiedName": "profile"
+    },
+    "306": {
+      "packageName": "@pixel-brewery/synapse-runtime",
+      "packagePath": "src/services/FileProfileSessionStore.ts",
+      "qualifiedName": "FileProfileSessionStore.advance"
+    },
+    "307": {
+      "packageName": "@pixel-brewery/synapse-runtime",
+      "packagePath": "src/services/FileProfileSessionStore.ts",
+      "qualifiedName": "FileProfileSessionStore.advance"
+    },
+    "308": {
+      "packageName": "@pixel-brewery/synapse-runtime",
+      "packagePath": "src/services/FileProfileSessionStore.ts",
+      "qualifiedName": "profile"
+    },
+    "328": {
+      "packageName": "@pixel-brewery/synapse-runtime",
+      "packagePath": "src/boundedText.ts",
+      "qualifiedName": "boundedText"
+    },
+    "329": {
+      "packageName": "@pixel-brewery/synapse-runtime",
+      "packagePath": "src/boundedText.ts",
+      "qualifiedName": "boundedText"
+    },
+    "330": {
+      "packageName": "@pixel-brewery/synapse-runtime",
+      "packagePath": "src/boundedText.ts",
+      "qualifiedName": "value"
+    },
+    "331": {
+      "packageName": "@pixel-brewery/synapse-runtime",
+      "packagePath": "src/boundedText.ts",
+      "qualifiedName": "maxCharacters"
+    },
+    "332": {
+      "packageName": "@pixel-brewery/synapse-runtime",
+      "packagePath": "src/createProfileEnvironment.ts",
+      "qualifiedName": "createProfileEnvironment"
+    },
+    "333": {
+      "packageName": "@pixel-brewery/synapse-runtime",
+      "packagePath": "src/createProfileEnvironment.ts",
+      "qualifiedName": "createProfileEnvironment"
+    },
+    "334": {
+      "packageName": "@pixel-brewery/synapse-runtime",
+      "packagePath": "src/createProfileEnvironment.ts",
+      "qualifiedName": "instance"
+    },
+    "335": {
+      "packageName": "@pixel-brewery/synapse-runtime",
+      "packagePath": "src/createProfileEnvironment.ts",
+      "qualifiedName": "extras"
+    },
+    "336": {
+      "packageName": "@pixel-brewery/synapse-runtime",
+      "packagePath": "src/snapshotAiInstance.ts",
+      "qualifiedName": "snapshotAiInstance"
+    },
+    "337": {
+      "packageName": "@pixel-brewery/synapse-runtime",
+      "packagePath": "src/snapshotAiInstance.ts",
+      "qualifiedName": "snapshotAiInstance"
+    },
+    "338": {
+      "packageName": "@pixel-brewery/synapse-runtime",
+      "packagePath": "src/snapshotAiInstance.ts",
+      "qualifiedName": "instance"
+    }
+  },
+  "files": {
+    "entries": {
+      "1": "libs/synapse-runtime/src/index.ts"
+    },
+    "reflections": {
+      "1": 0
+    }
+  }
+}

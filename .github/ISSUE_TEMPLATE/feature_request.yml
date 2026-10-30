@@ -1,0 +1,22 @@
+name: Feature request
+description: Propose a concrete capability or integration improvement.
+body:
+    - type: textarea
+      id: problem
+      attributes:
+          label: Problem to solve
+          description: Describe the local application use case and the behavior that is currently missing.
+      validations:
+          required: true
+    - type: textarea
+      id: behavior
+      attributes:
+          label: Proposed behavior
+          description: Explain what a consumer should be able to do and which existing package or provider boundary is involved.
+      validations:
+          required: true
+    - type: textarea
+      id: alternatives
+      attributes:
+          label: Alternatives and compatibility
+          description: Describe approaches already tried and any impact on public contracts, CLI versions, profiles, sessions or retry policy.

@@ -1,0 +1,22 @@
+{
+    "repository": "https://github.com/RueDeRennes/archipel",
+    "sourceCommit": "de447fe50270be028da87eb774dd94448820c786",
+    "inspectedOn": "2026-10-29",
+    "skill": "archipel-architect",
+    "common": {
+        "api.md": "947295cf0bf1d2d596081ec66231f07721cf50251deaf86f50bab5a6cc6fc573",
+        "architecture.md": "6fbc3c60239f03d0778a4e54ab92d1276dabab092b5d5063510ecbb6b65165fc",
+        "backend-contracts.md": "7c82b82c75ed26d8278bcd8b304e9cce1e5baf1932bdc15ab7fa271ec2227c48",
+        "backend-safety.md": "9c31f722bcde224750012fbbd26acc7e15745a561dab3d7b13ab194a38775d27",
+        "backend.md": "6b6de204065cbf6cdc5bd905fcbaaf0dff9b822ddc797f8407363b5f7ff35caa",
+        "date-time.md": "86c15715f9379b7d7ff20c6f1122df1ae061b82789852fbe4e04c3a9ca263223",
+        "e2e.md": "f5deb4b5745d95a5b6b748cf3f7f683ef1e49851cde5cf885e57307c32953b9b",
+        "frontend-patterns.md": "52136bec76e466d3c6d07a4e4d8a74882604923a9d057a87ceb07901f8416f9e",
+        "frontend.md": "22ffda245a289f51aaabf6901ea93c15418cc05ab3276c000fbf2b89a8e39e59",
+        "oop.md": "0602a195db844e66cbce8c23e1251a99b77f5774931e35274650e40f1e21dd67",
+        "platform.md": "e213912c302b0287eb0e481c1a43343e8993621204f79787bb9c36c9376468a5",
+        "testing.md": "b7ba7f34bf587871b9360439d7e0cc22ebbbc3dbf8f244530cedf66ea094bfd6",
+        "workflow.md": "9f8020d97eb741e7edaa57b25e58a9afb81df789d40baeae7f4e63a7b8db104e"
+    },
+    "sharedBlockSha256": "db15139626a88b2422b474f9b7958b34e66e8a40370ba26f3f7f0e5f836b7da5"
+}
