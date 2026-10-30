@@ -22,7 +22,7 @@ The TypeDoc API surface remains nine libraries. Regenerate it explicitly with `y
 
 ## First publication and verification
 
-The main workflow and local runner apply the selected `patch`, `minor` or `major` increment. When a fresh source history has no matching release tag, they use Nx's first-release mode and the committed package version on disk as the baseline. Removing Git history must preserve that version baseline and never reset the published version counter. The publisher requires a checkout whose HEAD exactly matches `v<prepared-version>` and has no tracked changes. From that prepared release tag, publish or resume the same family and verify it with:
+The first main workflow run without a stable release tag completes the committed prepared family version, currently `0.0.2`, through Nx's first-release mode. Once stable tags exist, subsequent workflow runs apply the selected `patch`, `minor` or `major` increment. Local increment commands keep their selected SemVer behavior and use the committed disk version as their baseline when tags are absent. Removing Git history must preserve the version baseline and never reset the published version counter. The publisher requires a checkout whose HEAD exactly matches `v<prepared-version>` and has no tracked changes. From that prepared release tag, publish or resume the same family and verify it with:
 
 ```sh
 yarn release:publish
@@ -35,7 +35,7 @@ yarn release:verify
 
 Use the published version only after those registry/version/visibility checks succeed. Record the actual local command or workflow run and candidate revision with the result.
 
-The GitHub release workflow downloads the exact published versions, then creates the GitHub release. The package owner must set public package visibility and run `yarn release:verify` for the complete family; a successful workflow run alone does not establish public package ACLs. The local release runner invokes that verifier itself and fails if the intended visibility is absent.
+The GitHub release workflow downloads the exact published versions and runs `yarn release:verify` before creating the GitHub release. This verifies the entire family's exact versions, latest tags, exposed source metadata and public package ACLs. The package owner must set public visibility when initially creating a package; later versions of the existing public family retain that visibility. The local release runner invokes the same verifier and fails if the intended visibility is absent.
 
 ## Local releases
 
@@ -53,6 +53,8 @@ The increments retain their literal SemVer meaning for `0.x` versions: a minor i
 
 A real run requires a clean `main` checkout containing the current `origin/main`, authenticated Git access and the package-owner credentials described [below](#registry-authentication-and-source-access). Committed local changes may be ahead of `origin/main`; the final atomic push includes them with the release commit, so no preliminary push is needed. The runner uses the fixed Nx release group to update the ten package versions, lockfile and changelog. It then regenerates the versioned API documentation, formats `CHANGELOG.md`, and runs `yarn verify` and `yarn packaging:verify`. After those checks pass, it creates one release commit and version tag, pushes both atomically, publishes through the existing publisher and verifies the exact registry versions and public package visibility.
 
+If the selected version and generated files are already prepared, the runner creates one empty release commit after verification. Its configured `[skip ci]` message prevents the local release push from starting a competing main-branch release. It still checks the current main revision and remote tag before the atomic push.
+
 Use `yarn release:minor:local --dry-run` or `yarn release:major:local --dry-run` to preview another increment. Preview mode may read local Git tags to select first-release behavior, then uses Nx's native version/changelog preview. It does not fetch, look up credentials, generate documentation, build, mutate Git, publish or dispatch Actions.
 
 If publication stops after uploading part of the family, resume with `yarn release:publish` from the same prepared tag, then run `yarn release:verify`. Keep that version and tag; another `:local` release command would request a new version.
@@ -69,6 +71,10 @@ Future releases follow Symphony's release shape:
 - Publication and exact-version/public-ACL verification apply to that same prepared family. An incomplete publication is resumed with `release:publish`, without another bump.
 
 Choose one release entry point: the local runner or the existing main-branch workflow. Both own version preparation, verification, changelog and Git steps for their release. A direct registry command or an independent version edit does not replace those steps. The existing `release`, `release:patch`, `release:minor` and `release:major` commands continue to dispatch the asynchronous workflow.
+
+Dependabot PRs use the [dependency automation](../../CONTRIBUTING.md#automated-dependency-updates): the current canonical `Verify` PR run must finish all three platform jobs successfully before the unchanged PR can be merged. The merge workflow explicitly dispatches the patch release because a merge made with `GITHUB_TOKEN` does not trigger the usual main push workflow. Human merges start the release through their normal push event. The refresh workflow requests a Dependabot rebase after main changes; the release workflow requests another refresh after publishing its version commit and GitHub Release. Updated bot revisions must pass CI again before merging.
+
+Synapse publishes library archives and a GitHub Release for each completed family version. A consuming desktop application owns its own version, Squirrel update assets and GitHub release feed. A Synapse package update becomes available to that application through its dependency update and application release pipeline; this library does not produce desktop installers or Squirrel assets.
 
 Both paths push the release commit directly to `main`. Before enabling rules that require every update to use a pull request, the owner must choose a compatible release strategy, such as a reviewed release pull request or an explicitly authorized bot bypass. The current workflow's default `github.token` does not automatically satisfy required-pull-request rules. Confirm that the selected strategy permits the atomic release push while preserving the intended contribution reviews.
 
@@ -90,11 +96,13 @@ Development verification has run on macOS with Node.js 24.21.0. Node.js 24.15+ i
 
 ## Registry authentication and source access
 
-Public GitHub npm packages still require registry authentication. Consumers can use a personal access token (classic) with `read:packages`. The release workflow supplies `PACKAGES_TOKEN` only to the publication and download steps; `github.token` handles repository Git/release operations separately, and `GH_TOKEN` is supplied only to the GitHub release query/create steps. Follow the [GitHub npm registry documentation](https://docs.github.com/en/packages/working-with-a-github-packages-registry/working-with-the-npm-registry). Keep token values in the environment or credential store, never in tracked configuration or release output.
+Public GitHub npm packages still require registry authentication. Consumers can use a personal access token (classic) with `read:packages`. The release job uses the short-lived `GITHUB_TOKEN` with `packages: write`. For each existing package, grant `pixel-brewery/synapse` the Write role under Package settings → Manage Actions access. This Actions grant is distinct from linking the package's source repository. An existing `PACKAGES_TOKEN` secret remains an optional override; no personal token is required for the normal workflow. See [GitHub's recommended workflow authentication](https://docs.github.com/en/packages/managing-github-packages-using-github-actions-workflows/publishing-and-installing-a-package-with-github-actions).
 
-The release job selects the `release` environment. Its owner must configure main-only deployments, `RueDeRennes` as the release reviewer and the package-owner secret in GitHub settings; the environment name alone enforces none of those rules. If `RueDeRennes` is also the sole approver and starts the release, permit self-approval for that intended workflow or appoint another reviewer before preventing self-review. Contribution verification declares read-only repository permissions, disables persisted checkout credentials and implicit package-manager caching, and uses commit-pinned official Actions.
+`NODE_AUTH_TOKEN` is supplied only to publication, download and published-version verification steps. `GH_TOKEN` is scoped to the GitHub release query/create and Dependabot refresh dispatch steps; the release job's `actions: write` permission allows that final dispatch. Follow the [GitHub npm registry documentation](https://docs.github.com/en/packages/working-with-a-github-packages-registry/working-with-the-npm-registry). Keep token values in the environment or credential store, never in tracked configuration or release output.
 
-The trusted release job retains a repository write credential for the atomic Git push. Its preparation and verification commands therefore run with repository write authority. During the publishing step, `release:publish` and its build dependencies inherit the package credential. Restrict release approval to maintainers who reviewed the selected main revision and its dependency/workflow changes.
+The release job runs unattended after the complete verification matrix and requires `refs/heads/main`. It does not select a GitHub environment: private repositories on GitHub Free cannot use environments, and publication does not require a separate manual approval. If the owner later adds an environment gate, configure its branch and approval rules explicitly and account for the resulting publication pause. Contribution verification declares read-only repository permissions, disables persisted checkout credentials and implicit package-manager caching, and uses commit-pinned official Actions.
+
+The trusted release job retains a repository write credential for the atomic Git push. Its preparation and verification commands therefore run with repository write authority. During the publishing step, `release:publish` and its build dependencies inherit the package credential. Maintainers must review dependency and workflow changes before merging them into the trusted main branch.
 
 Local releases use the existing Git authentication and package-owner credentials consumed by `release:publish` and `release:verify`. Supply existing `NODE_AUTH_TOKEN`, `GH_TOKEN` or `GITHUB_TOKEN` credentials with the required package access, or use the already authenticated GitHub CLI account. The local runner does not initiate login or change credential configuration.
 

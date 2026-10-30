@@ -36,10 +36,10 @@ jobs:
         name: Verify and publish the package family
         needs: verify
         if: github.ref == 'refs/heads/main'
-        # Configure required reviewers and main-only deployment branches in repository settings.
-        environment: release
         permissions:
             contents: write
+            actions: write
+            packages: write
         runs-on: ubuntu-latest
         timeout-minutes: 60
         steps:
@@ -55,16 +55,6 @@ jobs:
                   package-manager-cache: false
 
             - run: corepack enable
-
-            - name: Require package publishing credentials
-              env:
-                  PACKAGES_TOKEN_CONFIGURED: ${{ secrets.PACKAGES_TOKEN != '' }}
-              run: |
-                  set -euo pipefail
-                  if [ "$PACKAGES_TOKEN_CONFIGURED" != 'true' ]; then
-                      echo 'The PACKAGES_TOKEN secret is required to publish the package family.' >&2
-                      exit 1
-                  fi
 
             - name: Install dependencies
               run: yarn install --immutable
@@ -88,8 +78,9 @@ jobs:
                   if git tag --list 'v[0-9]*' | grep -Eq '^v[0-9]+\.[0-9]+\.[0-9]+$'; then
                       yarn release:nx "$RELEASE_SPECIFIER"
                   else
-                      # A history reset preserves manifest versions as the release baseline.
-                      yarn release:nx "$RELEASE_SPECIFIER" --first-release
+                      # Complete the committed prepared family before incrementing tagged releases.
+                      prepared_version="$(node -p "require('./libs/synapse-core/package.json').version")"
+                      yarn release:nx "$prepared_version" --first-release
                   fi
 
                   version="$(node -p "require('./libs/synapse-core/package.json').version")"
@@ -169,12 +160,12 @@ jobs:
             # retried with release:publish at that tag; Nx skips existing versions.
             - name: Publish the ten prepared package manifests
               env:
-                  NODE_AUTH_TOKEN: ${{ secrets.PACKAGES_TOKEN }}
+                  NODE_AUTH_TOKEN: ${{ secrets.PACKAGES_TOKEN || github.token }}
               run: yarn release:publish
 
             - name: Download every published package from GitHub Packages
               env:
-                  NODE_AUTH_TOKEN: ${{ secrets.PACKAGES_TOKEN }}
+                  NODE_AUTH_TOKEN: ${{ secrets.PACKAGES_TOKEN || github.token }}
               run: |
                   set -euo pipefail
                   manifests=(libs/*/package.json tools/mcp/package.json)
@@ -211,8 +202,12 @@ jobs:
                       fi
                   done
 
-            # GitHub creates new packages as private. Their owner must enable
-            # public visibility, then run release:verify for the complete family.
+            - name: Verify the published versions and public package visibility
+              env:
+                  NODE_AUTH_TOKEN: ${{ secrets.PACKAGES_TOKEN || github.token }}
+              run: yarn release:verify
+
+            # A release is announced only after all package versions and ACLs pass.
             - name: Create the GitHub release
               env:
                   GH_TOKEN: ${{ github.token }}
@@ -223,3 +218,8 @@ jobs:
                       --verify-tag \
                       --title "Synapse ${RELEASE_VERSION}" \
                       --generate-notes
+
+            - name: Refresh remaining Dependabot branches
+              env:
+                  GH_TOKEN: ${{ github.token }}
+              run: gh workflow run rebase-dependabot.yml --ref main --repo "$GITHUB_REPOSITORY"

@@ -301,6 +301,69 @@ describe('local release', () => {
         expect(dependencies.calls).toContain('yarn release:publish');
     });
 
+    it.each([
+        { tags: '', ahead: false },
+        { tags: 'v0.1.0', ahead: false },
+        { tags: '', ahead: true },
+        { tags: 'v0.1.0', ahead: true },
+    ])(
+        'creates one CI-skipping release commit and tag after verifying unchanged source: %j',
+        async (options) => {
+            // Arrange
+            const dependencies = controlled({ changed: '', ...options });
+
+            // Act
+            const result = await releaseLocal(['patch'], dependencies);
+
+            // Assert
+            expect(result).toEqual({ version: '0.1.1', dryRun: false });
+            expect(
+                dependencies.calls.filter(
+                    (step) =>
+                        step === 'nx release' ||
+                        step.startsWith('yarn ') ||
+                        /^git (?:add|commit|tag --annotate|push)/u.test(step),
+                ),
+            ).toEqual([
+                'nx release',
+                'yarn docs',
+                'yarn prettier --write CHANGELOG.md',
+                'yarn verify',
+                'yarn packaging:verify',
+                'git commit --allow-empty -m chore(release): publish 0.1.1 [skip ci]',
+                'git tag --annotate v0.1.1 --message v0.1.1',
+                'git push --atomic origin HEAD:refs/heads/main refs/tags/v0.1.1',
+                'yarn release:publish',
+                'yarn release:verify',
+            ]);
+            expect(dependencies.readConfiguration).toHaveBeenCalledTimes(1);
+            expect(dependencies.client.release).toHaveBeenCalledTimes(1);
+        },
+    );
+
+    it('refuses an unchanged local release without a CI-skipping commit message', async () => {
+        // Arrange
+        const dependencies = controlled({ changed: '', ahead: true });
+
+        dependencies.readConfiguration.mockReturnValue({
+            release: { git: { commitMessage: 'chore(release): publish {version}' } },
+        });
+
+        // Act
+        const result = releaseLocal(['patch'], dependencies);
+
+        // Assert
+        await expect(result).rejects.toThrow('[skip ci]');
+        expect(dependencies.calls).toContain('yarn verify');
+        expect(dependencies.calls).toContain('yarn packaging:verify');
+        expect(
+            dependencies.calls.some((step) =>
+                /^git (?:add|commit|tag --annotate|push)/u.test(step),
+            ),
+        ).toBe(false);
+        expect(dependencies.calls).not.toContain('yarn release:publish');
+    });
+
     it.each(['yarn verify', 'yarn packaging:verify'])(
         'does not commit, tag, push or publish after a failed candidate check: %s',
         async (fail) => {
@@ -321,10 +384,32 @@ describe('local release', () => {
         },
     );
 
+    it.each(['yarn verify', 'yarn packaging:verify'])(
+        'does not tag or publish an unchanged release after a failed candidate check: %s',
+        async (fail) => {
+            // Arrange
+            const dependencies = controlled({ changed: '', fail });
+
+            // Act
+            const result = releaseLocal(['patch'], dependencies);
+
+            // Assert
+            await expect(result).rejects.toThrow('Controlled command failure.');
+            expect(
+                dependencies.calls.some((step) =>
+                    /^git (?:add|commit|tag --annotate|push)/u.test(step),
+                ),
+            ).toBe(false);
+            expect(dependencies.calls).not.toContain('yarn release:publish');
+        },
+    );
+
     it.each([
         { changed: 'libs/synapse-core/src/index.ts\0' },
         { untracked: 'personal.txt\0' },
+        { changed: '', untracked: 'personal.txt\0' },
         { existingTag: true },
+        { changed: '', existingTag: true },
     ])(
         'retains unexpected or already prepared state without staging or committing it: %j',
         async (options) => {
@@ -345,22 +430,24 @@ describe('local release', () => {
         },
     );
 
-    it.each([{ remoteMoved: true }, { remoteTag: true }])(
-        'refuses a remote race before pushing or publishing: %j',
-        async (options) => {
-            // Arrange
-            const dependencies = controlled(options);
+    it.each([
+        { remoteMoved: true },
+        { remoteTag: true },
+        { changed: '', remoteMoved: true },
+        { changed: '', remoteTag: true },
+    ])('refuses a remote race before pushing or publishing: %j', async (options) => {
+        // Arrange
+        const dependencies = controlled(options);
 
-            // Act
-            const result = releaseLocal(['patch'], dependencies);
+        // Act
+        const result = releaseLocal(['patch'], dependencies);
 
-            // Assert
-            await expect(result).rejects.toThrow();
-            expect(dependencies.calls.some((step) => step.startsWith('git push'))).toBe(false);
-            expect(dependencies.calls).not.toContain('yarn release:publish');
-            expect(dependencies.client.release).toHaveBeenCalledTimes(1);
-        },
-    );
+        // Assert
+        await expect(result).rejects.toThrow();
+        expect(dependencies.calls.some((step) => step.startsWith('git push'))).toBe(false);
+        expect(dependencies.calls).not.toContain('yarn release:publish');
+        expect(dependencies.client.release).toHaveBeenCalledTimes(1);
+    });
 
     it('stops at a failed atomic push without publishing, changing the version again or rolling back', async () => {
         // Arrange

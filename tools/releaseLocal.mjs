@@ -18,7 +18,7 @@ const stableVersionPattern = /^(?:0|[1-9]\d*)\.(?:0|[1-9]\d*)\.(?:0|[1-9]\d*)$/u
  * @param dependencies - Internal command, client, configuration and output boundaries for account-free tests.
  * @returns The prepared family version and whether the run only inspected local tags and invoked the native Nx preview.
  * @throws An Error on invalid arguments, an unsafe checkout or any incomplete release step.
- * @remarks Real execution requires clean main containing current origin/main; committed local changes may be ahead of it. Without a stable vSemVer tag, Nx performs a first release using the existing manifest version and requested increment. Git changes are committed and tagged once after verification, then pushed atomically before existing publication and verification commands. Failures retain the prepared state for inspection; this runner never rolls back, rebases, retries or changes credentials. Dry runs inspect local tags, invoke Nx's native preview and print the remaining plan without fetching or publishing.
+ * @remarks Real execution requires clean main containing current origin/main; committed local changes may be ahead of it. Without a stable vSemVer tag, Nx performs a first release using the existing manifest version and requested increment. After verification, one release commit is created with the configured [skip ci] message, allowing an empty commit when no release-owned files changed. The commit and tag are pushed atomically before existing publication and verification commands. Failures retain the prepared state for inspection; this runner never rolls back, rebases, retries or changes credentials. Dry runs inspect local tags, invoke Nx's native preview and print the remaining plan without fetching or publishing.
  *
  * @internal
  */
@@ -82,7 +82,7 @@ export async function releaseLocal(arguments_, dependencies = {}) {
         const write = dependencies.write ?? ((text) => process.stdout.write(text));
 
         write(
-            `Dry run only. After preparing ${version}, a real local release would generate API documentation, format CHANGELOG.md, run verify and packaging:verify, commit and tag the verified files, push main and the tag atomically, then run release:publish and release:verify. None of those steps ran.\n`,
+            `Dry run only. After preparing ${version}, a real local release would generate API documentation, format CHANGELOG.md, run verify and packaging:verify, create one release commit and tag, push main and the tag atomically, then run release:publish and release:verify. None of those steps ran.\n`,
         );
 
         return { version, dryRun: true };
@@ -110,7 +110,7 @@ export async function releaseLocal(arguments_, dependencies = {}) {
 
     changed.delete('');
 
-    if (!changed.size || [...changed].some((file) => !releaseFile(file)))
+    if ([...changed].some((file) => !releaseFile(file)))
         throw new Error(
             'Release checks left unexpected files; only release-owned changes may be committed.',
         );
@@ -129,13 +129,19 @@ export async function releaseLocal(arguments_, dependencies = {}) {
             'The configured release commit message must include {version} and [skip ci].',
         );
 
-    git(['add', '--', ...changed]);
-    git(['commit', '-m', template.replaceAll('{version}', version)]);
+    if (changed.size) git(['add', '--', ...changed]);
+
+    git([
+        'commit',
+        ...(changed.size ? [] : ['--allow-empty']),
+        '-m',
+        template.replaceAll('{version}', version),
+    ]);
     git(['tag', '--annotate', tag, '--message', tag]);
 
     if (git(['status', '--porcelain']))
         throw new Error(
-            'The prepared release is not clean after committing; inspect it before pushing.',
+            'The prepared release is not clean after tagging; inspect it before pushing.',
         );
 
     git(['fetch', 'origin', 'main', '--tags']);

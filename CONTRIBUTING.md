@@ -28,6 +28,16 @@ Dependency updates are selected explicitly; adding the command does not upgrade 
 
 To activate the tracked commit checks in your checkout, run `yarn exec husky` once after installation. The pre-commit hook runs lint-staged serially on staged authored files, and the commit-message hook validates Conventional Commits. The `prepare` command remains the explicit format/lint/test shortcut used by Archipel. CI runs the complete quality gates independently of local hooks; Dependabot configuration covers weekly dependency and GitHub Actions updates.
 
+## Automated dependency updates
+
+Dependabot checks npm dependencies and GitHub Actions weekly. TypeScript is excluded and stays a deliberate maintainer update. Other major, minor and patch updates can be merged automatically after the complete `Verify` matrix succeeds on Linux, macOS and Windows, including `yarn verify` and `yarn packaging:verify`.
+
+The merge workflow accepts only current same-repository Dependabot PRs targeting `main`. It checks the canonical CI workflow, its latest attempt, every matrix result and the unchanged PR revision before requesting a squash merge. Failed, skipped or missing jobs leave the PR open. Existing branch rules still apply. The privileged workflow executes only the default-branch helper; it does not execute PR code, install dependencies or consume PR artifacts.
+
+When `main` changes, the refresh workflow asks Dependabot to rebase outdated PRs. Requests are limited to one per PR and main revision. Dependabot recalculates its dependency changes and lockfile, and the updated PR triggers CI again. It retains control of its branch; manually edited bot PRs may require maintainer attention. The workflow does not recreate PRs or discard manual edits.
+
+A successful bot merge explicitly dispatches the normal package release and refresh workflows because pushes made with `GITHUB_TOKEN` do not start ordinary push workflows. Publication finishes with a GitHub Release and another Dependabot refresh for the generated version commit. Human merges to `main` start the same release and refresh paths through their push events. Actions must be enabled and this repository must have write access under each package's Manage Actions access setting. The release uses the short-lived `GITHUB_TOKEN`; an existing `PACKAGES_TOKEN` secret is an optional override. Source configuration alone does not grant package access. See the [release guide](.docs/guides/releases.md).
+
 ## Find the owner and change it
 
 Read [Synapse Architect](.agents/skills/synapse-architect/SKILL.md), including its project, source, testing and documentation references. It is the canonical architecture and engineering contract. The [architecture guide](.docs/architecture/synapse.md) explains package responsibilities and what stays in consuming applications.
