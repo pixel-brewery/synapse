@@ -34,7 +34,9 @@ afterEach(async () => {
         }
 
     await Promise.all(
-        [...owned].map((directory) => rm(directory, { recursive: true, force: true })),
+        [...owned].map((directory) =>
+            rm(directory, { recursive: true, force: true, maxRetries: 5, retryDelay: 100 }),
+        ),
     );
     owned.clear();
     profileRoots.clear();

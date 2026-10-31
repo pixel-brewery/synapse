@@ -1,26 +1,21 @@
 ---
 name: synapse-architect
-description: 'Design, implement, refactor, test, document and review Synapse CLI AI libraries. Apply the complete shared Archipel architecture foundations with Synapse package, abstraction, source, TSDoc, lifecycle and generated API documentation rules.'
+description: 'Design, implement, refactor, test, document and review Synapse CLI AI libraries. Apply the versioned Architecture foundations with Synapse package, abstraction, source, TSDoc, lifecycle and generated API documentation rules.'
+metadata:
+  inherits: architecture
 ---
 
 # Synapse Architect
 
-Mandatory for every Synapse task, including subagents and automations. This is the sole architecture, source, test and documentation rule set for Synapse. Read the shared workflow and local project contract first; route into every applicable foundation below. Do not substitute Symphony, NestJS or another project's architecture skill.
+Mandatory for every Synapse task, including subagents and automations. This is the project-specific architecture, source, test and documentation rule set for Synapse, derived from the shared Architecture base. Read the base and local project contract first; route into every applicable foundation below. Do not substitute Symphony, NestJS or another project's architecture skill.
 
-<!-- architect-core:start -->
+## Inherited architecture foundation
 
-## Select and apply the relevant guidance
+This project skill derives from the versioned [Architecture base](../architecture/SKILL.md) installed from `pixel-brewery/skills`. Read that skill and its [shared workflow](../architecture/references/common/workflow.md) first, together with root `AGENTS.md` and the [local project contract](references/project.md), for every task, including delegated work.
 
-1. Read `AGENTS.md`, [shared workflow](references/common/workflow.md) and [local project contract](references/project.md) at task start, whether or not this skill was mentioned.
-2. Identify the requested action and actual production owners. A test task is classified by both its test kind and the code it exercises.
-3. Own task decomposition, maximum useful subagent parallelism and result integration for every task. Follow [parallel subagent coordination](references/common/workflow.md#parallel-subagent-coordination); use the active Claude Code or ChatGPT/Codex client's native subagents without waiting for another delegation request.
-4. Select all applicable domain rows below; combine domain and testing guidance. Read the common module and its project reference before editing. Do not load every reference by default.
-5. Complete the canonical-owner/reference pass before implementation; inspect installed platform capabilities and actual consumers/generators. Keep the reference map in task context.
-6. Revisit routing and work allocation when another boundary is reached. Specific project rules govern their actual owners; executable configuration resolves stale paths, versions, runners and generation assumptions.
-7. Complete the task-scoped drift/duplication pass, focused verification and local documentation/consequence gates. Preserve the requested mode and output format; ordinary implementation does not imply a full architecture report, scoring rubric, Definition of Done, legal review or release.
+Apply the base's task classification, owner/reference pass, subagent coordination and completion gates. Select every applicable foundation below and combine it with the local project references; do not load unrelated modules. Local rules specialize the shared principles for this project's actual owners and frameworks. A local framework translation does not waive a general architecture invariant or expand the authorized scope.
 
-The common modules and this workflow are synchronized across the Archipel, Mosaik and FLAMOX365 architect skills. Each skill works independently from its own checkout. Keep project-specific paths, policies and compatibility choices in the local references; compare shared changes with `.agents/scripts/sync_architect_core.py --peer <other-checkout> --check` for each peer.
-<!-- architect-core:end -->
+`skills-lock.json` records the immutable upstream commit and content hash. Do not edit the installed `architecture` skill, copy common modules back into this skill, or substitute another project's architect. Restore the pinned dependency if it is missing. Validate skill updates with `python3 .agents/skills/architecture/scripts/check_inheritance.py --root . --derived synapse-architect` and the repository's configured client checks.
 
 ## Synapse applicability and precedence
 
@@ -36,15 +31,15 @@ User instructions and the approved scope govern the task. Within this skill, the
 
 | Boundary | Shared foundation | Synapse application |
 | --- | --- | --- |
-| Every task | [Workflow](references/common/workflow.md) | [Project and layout](references/project.md), [Environment](references/environment.md) |
-| Architecture, package dependencies, extraction or migration | [Architecture](references/common/architecture.md) | [Architecture](references/architecture.md) |
-| TypeScript, filenames, abstractions and composition | [OOP and SOLID](references/common/oop.md) | [Source conventions](references/source.md), [Contracts](references/contracts.md) |
-| Drivers, profiles, auth, processes, sessions and disposal | [Platform](references/common/platform.md), [Integration integrity](references/common/backend-safety.md) | [Runtime and providers](references/platform.md) |
-| Validation, serialization and generated types | [Backend contracts](references/common/backend-contracts.md) | [Contracts](references/contracts.md) |
-| Tests, fixtures, regression and contract evidence | [Testing](references/common/testing.md), plus the production foundation | [Testing](references/testing.md) |
-| TSDoc, public API, docs generation and embedding | [OOP documentation](references/common/oop.md) | [API documentation](references/documentation.md), [Tooling](references/tooling.md) |
+| Every task | [Workflow](../architecture/references/common/workflow.md) | [Project and layout](references/project.md), [Environment](references/environment.md) |
+| Architecture, package dependencies, extraction or migration | [Architecture](../architecture/references/common/architecture.md) | [Architecture](references/architecture.md) |
+| TypeScript, filenames, abstractions and composition | [OOP and SOLID](../architecture/references/common/oop.md) | [Source conventions](references/source.md), [Contracts](references/contracts.md) |
+| Drivers, profiles, auth, processes, sessions and disposal | [Platform](../architecture/references/common/platform.md), [Integration integrity](../architecture/references/common/backend-safety.md) | [Runtime and providers](references/platform.md) |
+| Validation, serialization and generated types | [Backend contracts](../architecture/references/common/backend-contracts.md) | [Contracts](references/contracts.md) |
+| Tests, fixtures, regression and contract evidence | [Testing](../architecture/references/common/testing.md), plus the production foundation | [Testing](references/testing.md) |
+| TSDoc, public API, docs generation and embedding | [OOP documentation](../architecture/references/common/oop.md) | [API documentation](references/documentation.md), [Tooling](references/tooling.md) |
 | Nx generation, linking, ESM packaging and AI client setup | Production foundation | [Tooling](references/tooling.md) |
-| Deadlines, expiry, quota windows and persisted timestamps | [Time semantics](references/common/date-time.md) | [Runtime](references/platform.md), [Contracts](references/contracts.md) |
-| Consumer frontend/API/infrastructure questions | [Frontend](references/common/frontend.md), [Frontend patterns](references/common/frontend-patterns.md), [Backend](references/common/backend.md), [API URLs](references/common/api.md), [Browser E2E](references/common/e2e.md), only as applicable | Keep product implementation in its owning consumer; Synapse does not acquire a frontend, HTTP API or database through these references. |
+| Deadlines, expiry, quota windows and persisted timestamps | [Time semantics](../architecture/references/common/date-time.md) | [Runtime](references/platform.md), [Contracts](references/contracts.md) |
+| Consumer frontend/API/infrastructure questions | [Frontend](../architecture/references/common/frontend.md), [Frontend patterns](../architecture/references/common/frontend-patterns.md), [Backend](../architecture/references/common/backend.md), [API URLs](../architecture/references/common/api.md), [Browser E2E](../architecture/references/common/e2e.md), only as applicable | Keep product implementation in its owning consumer; Synapse does not acquire a frontend, HTTP API or database through these references. |
 
-All common foundation modules are retained from Archipel. [Origin and adaptations](references/origin.md) records the source and deliberate project translations. Client adapters and generated skill mirrors are projections of this canonical tree.
+All shared foundation modules come from the pinned Architecture base. [Origin and adaptations](references/origin.md) records the source and deliberate project translations. Client adapters and generated skill mirrors are projections of this canonical tree.

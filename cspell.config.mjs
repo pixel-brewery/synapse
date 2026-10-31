@@ -25,7 +25,7 @@ export default {
         '/.docs/packages/*/api/**',
         // These sources are byte-preserved upstream foundations or generated projections.
         '/.agents/skills/synapse-architect/SKILL.md',
-        '/.agents/skills/synapse-architect/references/common/**',
+        '/.agents/skills/architecture/**',
         '/.claude/skills/**',
         '/.opencode/skills/**',
         '/CODEX.md',

@@ -1,12 +1,12 @@
 # Architect origin and project translations
 
-The shared foundations and common workflow block originate from `archipel-architect` in [Pixel Brewery Archipel](https://github.com/RueDeRennes/archipel), inspected on 2026-10-29. `.agents/architect-origin.json` records the inspected commit and content hashes. The origin check detects modifications to retained shared skill content independently of the commit ID.
+The shared foundations now come from the [Architecture base](../../architecture/SKILL.md) in [Pixel Brewery Skills](https://github.com/pixel-brewery/skills). The standard root `skills-lock.json` pins its exact commit, path and content hash. `yarn agents:upstream` validates that installed dependency and this skill's explicit derivation; it does not authorize changing the dependency or fetching a floating branch.
 
-All 13 shared modules are retained, including OOP/SOLID, architecture, workflow/delegation, platform, integration safety, contracts, API conventions, time semantics, testing and frontend/browser foundations. No general foundation was dropped. They are unchanged copies; local references define their Synapse application.
+The original extraction came from `archipel-architect` in [Pixel Brewery Archipel](https://github.com/RueDeRennes/archipel), inspected on 2026-10-29 at commit `de447fe50270be028da87eb774dd94448820c786`. `.agents/architect-origin.json` preserves that historical extraction record. Its former hashes do not describe the current versioned dependency and are no longer the active integrity check.
 
-These hashes establish shared-skill equality only. They do not verify root scripts, installed tools, hooks, CI or package/release behavior. Apply the [repository workflow comparison](tooling.md#repository-workflow-parity) when assessing the wider Archipel setup.
+All 13 shared domains remain available from the base, including OOP/SOLID, architecture, workflow/delegation, platform, integration safety, contracts, API conventions, time semantics, testing and frontend/browser foundations. Local references retain their Synapse-specific application. Skill integrity checks do not verify root scripts, installed tools, hooks, CI or package/release behavior; apply the [repository workflow comparison](tooling.md#repository-workflow-parity) when assessing that wider setup.
 
-Archipel's current skill takes precedence over its older instructions where they disagree about tooling, dependency inventories, coverage, blanket tests, whole-file rewrites or upgrades. Synapse follows the current skill interpretation and actual executable configuration.
+The pinned Architecture base and maintained Synapse project references take precedence over older instruction examples where they disagree about tooling, dependency inventories, coverage, blanket tests, whole-file rewrites or upgrades. Follow the current skill interpretation and actual executable configuration.
 
 Deliberate translations:
 
@@ -18,4 +18,4 @@ Deliberate translations:
 - TSDoc and TypeDoc API generation remain mandatory, with embeddable Markdown/JSON outputs and no mandatory documentation frontend.
 - Shared-machine serial verification does not restrict application runtime concurrency.
 
-Keep changes in Synapse's local references unless an upstream foundation change is deliberately coordinated. A future source update must inspect the recorded hashes and preserve the explicit framework-neutral interpretation.
+Keep project changes in Synapse's local references. A reviewed upstream update must preserve the explicit framework-neutral interpretation and pass the lock, inheritance and generated-client checks.

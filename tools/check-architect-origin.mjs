@@ -1,40 +1,25 @@
 // #region Imports
 
-import { createHash } from 'node:crypto';
-import { readFile, readdir } from 'node:fs/promises';
+import { spawnSync } from 'node:child_process';
 import { dirname, join, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 // #endregion
 
 const root = resolve(dirname(fileURLToPath(import.meta.url)), '..');
-const origin = JSON.parse(await readFile(join(root, '.agents/architect-origin.json'), 'utf8'));
-const skill = join(root, '.agents/skills/synapse-architect');
-const digest = (value) => createHash('sha256').update(value).digest('hex');
-const failures = [];
-const common = join(skill, 'references/common');
-const actual = (await readdir(common)).filter((name) => name.endsWith('.md')).sort();
+const result = spawnSync(
+    'python3',
+    [
+        join(root, '.agents/skills/architecture/scripts/check_inheritance.py'),
+        '--root',
+        root,
+        '--derived',
+        'synapse-architect',
+    ],
+    { cwd: root, stdio: 'inherit' },
+);
 
-if (JSON.stringify(actual) !== JSON.stringify(Object.keys(origin.common).sort()))
-    failures.push('Shared foundation file set changed.');
+if (result.error)
+    process.stderr.write(`Cannot validate the Architecture base: ${result.error.message}\n`);
 
-for (const [name, expected] of Object.entries(origin.common)) {
-    if (digest(await readFile(join(common, name))) !== expected)
-        failures.push(`Changed shared foundation: ${name}`);
-}
-
-const entry = await readFile(join(skill, 'SKILL.md'), 'utf8');
-const block = entry.match(/<!-- architect-core:start -->[\s\S]*?<!-- architect-core:end -->/u)?.[0];
-
-if (!block || digest(block) !== origin.sharedBlockSha256)
-    failures.push('Shared architect workflow block changed.');
-
-if (failures.length) {
-    process.stderr.write(
-        `${failures.join('\n')}\nReview upstream changes and intentionally update the origin record.\n`,
-    );
-    process.exitCode = 1;
-} else
-    process.stdout.write(
-        `Archipel foundations retained (${actual.length} modules and shared workflow).\n`,
-    );
+process.exitCode = result.status ?? 1;
