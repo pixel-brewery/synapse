@@ -4,9 +4,9 @@ dist/
 coverage/
 artifacts/
 yarn.lock
-# Byte-preserved upstream foundations and generated client projections.
+# Imported foundations and generated client projections.
 .agents/skills/synapse-architect/SKILL.md
-.agents/skills/synapse-architect/references/common/
+.agents/skills/architecture/
 .claude/skills/
 .opencode/skills/
 CODEX.md

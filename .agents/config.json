@@ -1,5 +1,6 @@
 {
     "skill": "synapse-architect",
+    "baseSkill": "architecture",
     "mcpRegistry": ".vscode/mcp.json",
     "skillMirrors": [".claude/skills", ".opencode/skills"]
 }

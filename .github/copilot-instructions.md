@@ -2,4 +2,4 @@
 
 # Copilot adapter
 
-Read and apply `AGENTS.md` and `.agents/skills/synapse-architect/SKILL.md` before every task, including delegated work. Use only Synapse Architect for architecture, source, testing and API-documentation rules. Follow its reference router.
+Read and apply `AGENTS.md` and `.agents/skills/synapse-architect/SKILL.md` before every task, including delegated work. Synapse Architect derives from the pinned `.agents/skills/architecture/SKILL.md` base; read that base first, then apply the Synapse reference router and local rules.

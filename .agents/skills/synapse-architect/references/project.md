@@ -1,6 +1,6 @@
 # Synapse project contract
 
-Read for every task with root `AGENTS.md` and [shared workflow](common/workflow.md). This contract applies Archipel's full general foundations to Synapse. It takes precedence over NestJS, application database, frontend and transport examples in shared modules.
+Read for every task with root `AGENTS.md` and [shared workflow](../../architecture/references/common/workflow.md). This contract applies Archipel's full general foundations to Synapse. It takes precedence over NestJS, application database, frontend and transport examples in shared modules.
 
 ## Scope and layout
 
@@ -15,7 +15,7 @@ Synapse publishes reusable Node.js 24+ ESM packages as `@pixel-brewery/synapse-*
 - `apps/`: thin executable consumers. The meeting-notes text example must run without Symphony, Electron or Git.
 - `tools/mcp/`: optional `@pixel-brewery/synapse-mcp` documentation CLI, using the official MCP SDK over stdio and its independently bundled local corpus. No provider execution or authentication; no dependency from the nine runtime libraries.
 - `tools/`: repository tooling and artifact verification; `.docs/`: authored guides and generated package API documentation.
-- `.agents/skills/synapse-architect/`: all architecture foundations and local interpretation; `.vscode/mcp.json`: canonical MCP registry.
+- `.agents/skills/synapse-architect/`: local interpretation of the inherited Architecture base; `.vscode/mcp.json`: canonical MCP registry.
 
 Every library owns `package.json`, resolved Nx targets, TypeScript configs, package README and `src/index.ts`. Public declarations live directly under appropriate `src/` owner directories, with `interfaces/`, `abstracts/`, `errors/`, `models/`, `services/` and `adapters/` as needed. Create only useful directories. Do not retain generator `src/lib/` buckets or kebab-case declaration files.
 

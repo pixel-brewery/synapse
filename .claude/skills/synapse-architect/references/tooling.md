@@ -36,14 +36,14 @@ Use the TypeDoc-based pipeline identified in [documentation](documentation.md). 
 
 ## AI provider setup
 
-`.agents/skills/synapse-architect/` is canonical. `AGENTS.md` mandates it for every task. `CODEX.md`, `CLAUDE.md`, `.github/copilot-instructions.md`, OpenCode instructions and generated skill mirrors only route to that owner.
+`.agents/skills/synapse-architect/` is the canonical project specialization; `.agents/skills/architecture/` is its installed, versioned base. `AGENTS.md` mandates it for every task. `CODEX.md`, `CLAUDE.md`, `.github/copilot-instructions.md`, OpenCode instructions and generated skill mirrors only route to that owner.
 
 `.vscode/mcp.json` owns shared MCP servers. `yarn agents:sync` generates Codex, Claude and OpenCode projections without invoking a provider, logging in, installing global tools or changing personal credentials/settings. `yarn agents:check` verifies mirror equality, references, adapters and configuration drift. Never edit generated projections or symlink a mirror to its canonical source.
 
 The canonical `synapse` server uses `yarn workspace @pixel-brewery/synapse-mcp start` from the Synapse workspace root after a local build. The documentation server serves only its packaged knowledge over stdio. It does not use Synapse auth/profile state, run AI providers, expose HTTP or request privileged accounts. Consumer examples use a user-filled absolute built entrypoint or the correct project working directory; never commit real developer paths or advertise unpublished packages as installable from a registry.
 
-Keep shared architect foundation modules intact; origin hashes record the exact Archipel source. Compare upstream foundations through the designated read-only check when updating the architect, then adapt only local Synapse references and inspect the combined result.
+Keep the installed Architecture base intact. The standard `skills-lock.json` records `pixel-brewery/skills`, its immutable commit ref, skill path and content hash. Adapt only Synapse references and inspect the combined result when updating the base.
 
 ## Shared foundation maintenance
 
-The upstream shared block mentions `.agents/scripts/sync_architect_core.py`. Synapse deliberately replaces that Archipel-specific helper with `yarn agents:upstream`, a read-only comparison against `.agents/architect-origin.json`. Do not invoke or recreate the absent upstream helper, mutate peer repositories, or use its `--write` procedure. Review a proposed upstream update, update the recorded hashes intentionally, then run `yarn agents:sync` and `yarn agents:check`. Ordinary task execution needs no peer checkout.
+`yarn agents:upstream` validates the installed base against `skills-lock.json` and verifies Synapse's explicit inheritance through the base's `scripts/check_inheritance.py`. It does not fetch a floating branch, change the lock or require a peer checkout. Update with the Skills CLI using an explicitly reviewed full commit in the GitHub tree URL and the `architecture` skill; run `yarn agents:sync` and `yarn agents:check` afterward. Never edit imported base files or restore a separately maintained local `references/common/` copy. `.agents/architect-origin.json` remains historical evidence for the original Archipel extraction, not the current dependency lock.

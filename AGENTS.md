@@ -2,7 +2,7 @@
 
 Synapse is a framework-neutral TypeScript monorepo for local CLI AI integration.
 
-- For every task, agents, subagents and automations must first read and apply `.agents/skills/synapse-architect/SKILL.md`, its shared workflow and its project contract. This is the sole maintained architecture, coding, testing and API-documentation skill. Follow its routing; no second architecture skill or independent provider-specific rule copy.
+- For every task, agents, subagents and automations must first read and apply `.agents/skills/synapse-architect/SKILL.md`, its shared workflow and its project contract. This is the maintained project architecture, coding, testing and API-documentation skill; it derives from the pinned `.agents/skills/architecture/SKILL.md` base in `pixel-brewery/skills`. Read the base first and then follow the Synapse router and local rules; no independent provider-specific rule copy.
 - Preserve user instructions, existing work and the approved Synapse implementation scope. The skill grants no additional authority for external writes, credential changes, commits, releases or publishing.
 - The lead architect owns decomposition, disjoint subagent ownership and integration. Concurrent source work is allowed; coordinate one heavy verification task at a time.
 - Maintain the native skill under `.agents/skills/`. Keep `CODEX.md`, `CLAUDE.md`, Copilot instructions and OpenCode configuration thin. Edit `.vscode/mcp.json` for shared MCP configuration. No credentials, absolute developer paths or automatic provider installation/login in repository configuration.
