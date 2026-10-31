@@ -1,6 +1,6 @@
 {
     "name": "@pixel-brewery/synapse-routing",
-    "version": "0.0.3",
+    "version": "0.0.4",
     "type": "module",
     "main": "./dist/index.js",
     "module": "./dist/index.js",
@@ -22,7 +22,7 @@
         "name": "synapse-routing"
     },
     "dependencies": {
-        "@pixel-brewery/synapse-core": "^0.0.3"
+        "@pixel-brewery/synapse-core": "^0.0.4"
     },
     "license": "MIT",
     "engines": {

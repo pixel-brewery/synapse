@@ -1,6 +1,6 @@
 {
     "name": "@pixel-brewery/synapse-runtime",
-    "version": "0.0.3",
+    "version": "0.0.4",
     "type": "module",
     "main": "./dist/index.js",
     "module": "./dist/index.js",
@@ -22,7 +22,7 @@
         "name": "synapse-runtime"
     },
     "dependencies": {
-        "@pixel-brewery/synapse-core": "^0.0.3",
+        "@pixel-brewery/synapse-core": "^0.0.4",
         "ajv": "8.20.0",
         "cross-spawn": "7.0.6"
     },

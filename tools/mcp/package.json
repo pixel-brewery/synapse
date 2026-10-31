@@ -1,6 +1,6 @@
 {
     "name": "@pixel-brewery/synapse-mcp",
-    "version": "0.0.3",
+    "version": "0.0.4",
     "description": "Local MCP knowledge server for Synapse documentation, API references and architecture patterns.",
     "license": "MIT",
     "type": "module",

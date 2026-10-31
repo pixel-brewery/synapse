@@ -4,7 +4,7 @@
   "packages": [
     {
       "name": "@pixel-brewery/synapse-auth",
-      "version": "0.0.3",
+      "version": "0.0.4",
       "entryPoints": [
         {
           "importPath": "@pixel-brewery/synapse-auth",
@@ -26,7 +26,7 @@
     },
     {
       "name": "@pixel-brewery/synapse-core",
-      "version": "0.0.3",
+      "version": "0.0.4",
       "entryPoints": [
         {
           "importPath": "@pixel-brewery/synapse-core",
@@ -71,7 +71,7 @@
     },
     {
       "name": "@pixel-brewery/synapse-provider-acp",
-      "version": "0.0.3",
+      "version": "0.0.4",
       "entryPoints": [
         {
           "importPath": "@pixel-brewery/synapse-provider-acp",
@@ -88,7 +88,7 @@
     },
     {
       "name": "@pixel-brewery/synapse-provider-claude",
-      "version": "0.0.3",
+      "version": "0.0.4",
       "entryPoints": [
         {
           "importPath": "@pixel-brewery/synapse-provider-claude",
@@ -103,7 +103,7 @@
     },
     {
       "name": "@pixel-brewery/synapse-provider-codex",
-      "version": "0.0.3",
+      "version": "0.0.4",
       "entryPoints": [
         {
           "importPath": "@pixel-brewery/synapse-provider-codex",
@@ -123,7 +123,7 @@
     },
     {
       "name": "@pixel-brewery/synapse-provider-opencode",
-      "version": "0.0.3",
+      "version": "0.0.4",
       "entryPoints": [
         {
           "importPath": "@pixel-brewery/synapse-provider-opencode",
@@ -141,7 +141,7 @@
     },
     {
       "name": "@pixel-brewery/synapse-routing",
-      "version": "0.0.3",
+      "version": "0.0.4",
       "entryPoints": [
         {
           "importPath": "@pixel-brewery/synapse-routing",
@@ -173,7 +173,7 @@
     },
     {
       "name": "@pixel-brewery/synapse-runtime",
-      "version": "0.0.3",
+      "version": "0.0.4",
       "entryPoints": [
         {
           "importPath": "@pixel-brewery/synapse-runtime",
@@ -202,7 +202,7 @@
     },
     {
       "name": "@pixel-brewery/synapse-testing",
-      "version": "0.0.3",
+      "version": "0.0.4",
       "entryPoints": [
         {
           "importPath": "@pixel-brewery/synapse-testing",
