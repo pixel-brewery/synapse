@@ -30,13 +30,15 @@ To activate the tracked commit checks in your checkout, run `yarn exec husky` on
 
 ## Automated dependency updates
 
-Dependabot checks npm dependencies and GitHub Actions weekly. TypeScript is excluded and stays a deliberate maintainer update. Other major, minor and patch updates can be merged automatically after the complete `Verify` matrix succeeds on Linux, macOS and Windows, including `yarn verify` and `yarn packaging:verify`.
+Dependabot checks npm dependencies and GitHub Actions weekly. TypeScript is excluded and stays a deliberate maintainer update. Other major, minor and patch updates can be merged automatically after the complete `Verify` matrix succeeds on Linux, macOS and Windows, including `yarn verify`, `yarn packaging:verify` and the aggregate `Quality Gate`.
 
-The merge workflow accepts only current same-repository Dependabot PRs targeting `main`. It checks the canonical CI workflow, its latest attempt, every matrix result and the unchanged PR revision before requesting a squash merge. Failed, skipped or missing jobs leave the PR open. Existing branch rules still apply. The privileged workflow executes only the default-branch helper; it does not execute PR code, install dependencies or consume PR artifacts.
+The merge workflow accepts only current same-repository Dependabot PRs targeting `main`. It checks the canonical CI workflow, its latest attempt, every matrix result, the `Quality Gate` result and the unchanged PR revision before requesting a squash merge. Failed, skipped or missing jobs leave the PR open. Existing branch rules still apply. The privileged workflow executes only the default-branch helper; it does not execute PR code, install dependencies or consume PR artifacts.
 
 When `main` changes, the refresh workflow asks Dependabot to rebase outdated PRs. Requests are limited to one per PR and main revision. Dependabot recalculates its dependency changes and lockfile, and the updated PR triggers CI again. It retains control of its branch; manually edited bot PRs may require maintainer attention. The workflow does not recreate PRs or discard manual edits.
 
 A successful bot merge explicitly dispatches the normal package release and refresh workflows because pushes made with `GITHUB_TOKEN` do not start ordinary push workflows. Publication finishes with a GitHub Release and another Dependabot refresh for the generated version commit. Human PR merges to `main` start the same release and refresh paths through their push events. Package operations use the short-lived `GITHUB_TOKEN`; an existing `PACKAGES_TOKEN` secret is an optional override. Only the final atomic release commit/tag push uses installed release App `5547670`. Its main-rule exception, main-only credential environment and package publication have been exercised by a successful Synapse release. Each candidate still needs its own complete checks and registry verification. See the [release guide](.docs/guides/releases.md#main-protection-and-release-app-prerequisites).
+
+The release request runs in a separate job that retains the successful merge revision. Retry a failed request job without rerunning the completed merge. It requires that revision to remain current, binds the dispatch through `source_sha`, and reuses an existing release attempt for the same source instead of creating a duplicate candidate. If a release attempt itself failed, recover its original run. A newer main revision owns the next release.
 
 ## Find the owner and change it
 
@@ -76,7 +78,7 @@ yarn packaging:verify
 
 `yarn verify` checks agent/source conventions, formatting, lint, types, tests, builds and generated API drift. Artifact verification builds and installs real package archives in a separate consumer, checks declarations and inert imports, and exercises esbuild/Rollup provider exclusion and the simulated meeting example. It may fetch ordinary package dependencies; it does not log in to an AI account or run live inference.
 
-The [CI workflow](.github/workflows/ci.yml) configures Node.js 24 on Linux, macOS and native Windows. Report which platforms actually ran and which checks were skipped. A local pass on one operating system does not establish the others. The [release guide](.docs/guides/releases.md) distinguishes candidate evidence from publication readiness.
+The [CI workflow](.github/workflows/ci.yml) configures Node.js 24 on Linux, macOS and native Windows. Its stable `Quality Gate` check runs after the complete matrix and fails when any platform fails, is cancelled or is skipped. Ordinary PRs, merge queues and non-main pushes run this workflow directly; main pushes reuse it through the package-release workflow. Report which platforms actually ran and which checks were skipped. A local pass on one operating system does not establish the others. The [release guide](.docs/guides/releases.md) distinguishes candidate evidence from publication readiness.
 
 ## Submit a focused pull request
 

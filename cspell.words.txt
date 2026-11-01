@@ -6,7 +6,6 @@ cooldowns
 CTYPE
 EPERM
 fileset
-flamox
 Imagegen
 LOCALAPPDATA
 mcpc

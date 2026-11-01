@@ -11,7 +11,12 @@ const repository = 'pixel-brewery/synapse';
 const repositoryPath = `repos/${repository}`;
 const workflowPath = '.github/workflows/ci.yml';
 const workflowName = 'Verify';
-const requiredJobs = ['verify (ubuntu-latest)', 'verify (macos-latest)', 'verify (windows-latest)'];
+const requiredJobs = [
+    'verify (ubuntu-latest)',
+    'verify (macos-latest)',
+    'verify (windows-latest)',
+    'Quality Gate',
+];
 const shaPattern = /^[0-9a-f]{40}$/u;
 const requestFailure =
     'Dependabot merge stopped after a GitHub API request failed; inspect the pull request before retrying.';
