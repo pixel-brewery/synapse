@@ -25,6 +25,7 @@ opencode
 PATHEXT
 pipefail
 pivanov
+resonanz
 ruederennes
 secd
 SECURESTORAGE
