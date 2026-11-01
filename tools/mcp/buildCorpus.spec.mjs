@@ -45,7 +45,7 @@ async function write(file, content) {
     await writeFile(file, content);
 }
 
-async function fixture() {
+async function fixture(names = packageNames) {
     const root = await mkdtemp(join(tmpdir(), 'synapse-mcp-corpus-source-'));
     const packed = await mkdtemp(join(tmpdir(), 'synapse-mcp-corpus-packed-'));
 
@@ -53,7 +53,7 @@ async function fixture() {
 
     const index = { schemaVersion: 1, linkBase: '.docs/', packages: [], entries: [] };
 
-    for (const [number, slug] of packageNames.entries()) {
+    for (const [number, slug] of names.entries()) {
         const name = `@pixel-brewery/${slug}`;
         const api = `packages/${slug}/api/index.md`;
 
@@ -119,6 +119,40 @@ async function fixture() {
 }
 
 describe('documentation corpus builder', () => {
+    it('includes optional public libraries from the checked manifest and API index inventory', async () => {
+        // Arrange
+        const selected = await fixture([...packageNames, 'synapse-auth-providers']);
+
+        // Act
+        const result = await buildCorpus(selected);
+        const corpus = JSON.parse(await readFile(selected.output, 'utf8'));
+
+        // Assert
+        expect(result).toEqual({ packages: 10, guides: 2, patterns: 9 });
+        expect(corpus.packages.find((pkg) => pkg.name === 'synapse-auth-providers')).toMatchObject({
+            packageName: '@pixel-brewery/synapse-auth-providers',
+            version: '0.1.0',
+        });
+    });
+
+    it('rejects an API index that silently omits a public library manifest', async () => {
+        // Arrange
+        const selected = await fixture([...packageNames, 'synapse-auth-providers']);
+
+        selected.index.packages.pop();
+        await writeFile(
+            join(selected.root, '.docs', 'api', 'api-index.json'),
+            JSON.stringify(selected.index),
+        );
+
+        // Act
+        const result = buildCorpus(selected);
+
+        // Assert
+        await expect(result).rejects.toThrow('does not match the current public libraries');
+        await expect(readFile(selected.output)).rejects.toMatchObject({ code: 'ENOENT' });
+    });
+
     it('ships recursive checked API pages and authored documents independently of the checkout', async () => {
         // Arrange
         const selected = await fixture();

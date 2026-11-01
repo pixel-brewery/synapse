@@ -9,11 +9,1414 @@
     "summary": [
       {
         "kind": "text",
-        "text": "Public entry point for @pixel-brewery/synapse-auth.\n\nIsolated CLI profiles and explicit native authentication lifecycle."
+        "text": "Public entry point for @pixel-brewery/synapse-auth.\n\nIsolated account profiles, native authentication and backend-managed API-key connections."
       }
     ]
   },
   "children": [
+    {
+      "id": 122,
+      "name": "ApiKeyAuthDriver",
+      "variant": "declaration",
+      "kind": 128,
+      "flags": {
+        "isPublic": true
+      },
+      "comment": {
+        "summary": [
+          {
+            "kind": "text",
+            "text": "Authenticates backend-owned API-key connections without a CLI or inference driver."
+          }
+        ],
+        "blockTags": [
+          {
+            "tag": "@remarks",
+            "content": [
+              {
+                "kind": "text",
+                "text": "Use through AuthManager so credential changes share its profile gate, expiry and\ncorrelated input lifecycle. The host injects authorized secret storage and a bounded provider\nverifier. Construction and method discovery perform no I/O. Keys never enter instance options,\npublic status, progress or error causes. No provider SDK, HTTP client or model call is included."
+              }
+            ]
+          }
+        ]
+      },
+      "children": [
+        {
+          "id": 123,
+          "name": "constructor",
+          "variant": "declaration",
+          "kind": 512,
+          "flags": {
+            "isPublic": true
+          },
+          "signatures": [
+            {
+              "id": 124,
+              "name": "ApiKeyAuthDriver",
+              "variant": "signature",
+              "kind": 16384,
+              "flags": {
+                "isPublic": true
+              },
+              "comment": {
+                "summary": [
+                  {
+                    "kind": "text",
+                    "text": "Captures explicit backend adapters without reading credentials or contacting a provider."
+                  }
+                ],
+                "blockTags": [
+                  {
+                    "tag": "@throws",
+                    "content": [
+                      {
+                        "kind": "text",
+                        "text": "An AiError when either adapter lacks a required operation."
+                      }
+                    ]
+                  }
+                ]
+              },
+              "parameters": [
+                {
+                  "id": 125,
+                  "name": "_store",
+                  "variant": "param",
+                  "kind": 32768,
+                  "flags": {},
+                  "comment": {
+                    "summary": [
+                      {
+                        "kind": "text",
+                        "text": "Host-owned encrypted storage, isolated by the complete connection scope."
+                      }
+                    ]
+                  },
+                  "type": {
+                    "type": "reference",
+                    "target": 154,
+                    "name": "ApiKeyStoreBase",
+                    "package": "@pixel-brewery/synapse-auth"
+                  }
+                },
+                {
+                  "id": 126,
+                  "name": "_verifier",
+                  "variant": "param",
+                  "kind": 32768,
+                  "flags": {},
+                  "comment": {
+                    "summary": [
+                      {
+                        "kind": "text",
+                        "text": "Host-owned non-inference provider authentication check."
+                      }
+                    ]
+                  },
+                  "type": {
+                    "type": "reference",
+                    "target": 170,
+                    "name": "ApiKeyVerifierBase",
+                    "package": "@pixel-brewery/synapse-auth"
+                  }
+                }
+              ],
+              "type": {
+                "type": "reference",
+                "target": 122,
+                "name": "ApiKeyAuthDriver",
+                "package": "@pixel-brewery/synapse-auth"
+              },
+              "overwrites": {
+                "type": "reference",
+                "target": -1,
+                "name": "AiAuthDriverBase.constructor",
+                "package": "@pixel-brewery/synapse-core",
+                "externalUrl": "packages/synapse-core/api/classes/AiAuthDriverBase.md#constructor"
+              }
+            }
+          ],
+          "overwrites": {
+            "type": "reference",
+            "target": -1,
+            "name": "AiAuthDriverBase.constructor",
+            "package": "@pixel-brewery/synapse-core",
+            "externalUrl": "packages/synapse-core/api/classes/AiAuthDriverBase.md#constructor"
+          }
+        },
+        {
+          "id": 136,
+          "name": "login",
+          "variant": "declaration",
+          "kind": 2048,
+          "flags": {
+            "isPublic": true
+          },
+          "signatures": [
+            {
+              "id": 137,
+              "name": "login",
+              "variant": "signature",
+              "kind": 4096,
+              "flags": {
+                "isPublic": true
+              },
+              "comment": {
+                "summary": [
+                  {
+                    "kind": "text",
+                    "text": "Requests one secret, verifies it and atomically replaces only this connection's stored key."
+                  }
+                ],
+                "blockTags": [
+                  {
+                    "tag": "@returns",
+                    "content": [
+                      {
+                        "kind": "text",
+                        "text": "Completion after verification and the storage commit."
+                      }
+                    ]
+                  },
+                  {
+                    "tag": "@throws",
+                    "content": [
+                      {
+                        "kind": "text",
+                        "text": "An AiError for unsupported methods, invalid input, rejected keys, cancellation or storage failure."
+                      }
+                    ]
+                  },
+                  {
+                    "tag": "@remarks",
+                    "content": [
+                      {
+                        "kind": "text",
+                        "text": "Invalid input, rejected verification and cancellation before storage leave the\nprevious key intact. AuthManager performs a final status check after this method completes.\nInput is trimmed at its edges, limited to 65,536 characters and rejects remaining whitespace\nor ASCII control characters. The credentials interaction expires after five minutes, further\nbounded by AuthManager's operation expiry. Store implementations must honor cancellation at\ntheir atomic commit boundary."
+                      }
+                    ]
+                  }
+                ]
+              },
+              "parameters": [
+                {
+                  "id": 138,
+                  "name": "context",
+                  "variant": "param",
+                  "kind": 32768,
+                  "flags": {},
+                  "comment": {
+                    "summary": [
+                      {
+                        "kind": "text",
+                        "text": "Expiring owner-scoped credentials interaction supplied by AuthManager."
+                      }
+                    ]
+                  },
+                  "type": {
+                    "type": "reference",
+                    "target": {
+                      "packageName": "@pixel-brewery/synapse-core",
+                      "packagePath": "src/interfaces/IAiAuthContext.ts",
+                      "qualifiedName": "IAiAuthContext"
+                    },
+                    "name": "IAiAuthContext",
+                    "package": "@pixel-brewery/synapse-core",
+                    "externalUrl": "packages/synapse-core/api/interfaces/IAiAuthContext.md"
+                  }
+                }
+              ],
+              "type": {
+                "type": "reference",
+                "target": {
+                  "packageName": "typescript",
+                  "packagePath": "lib/lib.es5.d.ts",
+                  "qualifiedName": "Promise"
+                },
+                "typeArguments": [
+                  {
+                    "type": "intrinsic",
+                    "name": "void"
+                  }
+                ],
+                "name": "Promise",
+                "package": "typescript"
+              },
+              "overwrites": {
+                "type": "reference",
+                "target": -1,
+                "name": "AiAuthDriverBase.login"
+              }
+            }
+          ],
+          "overwrites": {
+            "type": "reference",
+            "target": -1,
+            "name": "AiAuthDriverBase.login"
+          }
+        },
+        {
+          "id": 139,
+          "name": "logout",
+          "variant": "declaration",
+          "kind": 2048,
+          "flags": {
+            "isPublic": true
+          },
+          "signatures": [
+            {
+              "id": 140,
+              "name": "logout",
+              "variant": "signature",
+              "kind": 4096,
+              "flags": {
+                "isPublic": true
+              },
+              "comment": {
+                "summary": [
+                  {
+                    "kind": "text",
+                    "text": "Removes only this connection's stored key after AuthManager drains affected work."
+                  }
+                ],
+                "blockTags": [
+                  {
+                    "tag": "@returns",
+                    "content": [
+                      {
+                        "kind": "text",
+                        "text": "Completion after the scoped secret is absent."
+                      }
+                    ]
+                  },
+                  {
+                    "tag": "@throws",
+                    "content": [
+                      {
+                        "kind": "text",
+                        "text": "An AiError for cancellation or storage failure."
+                      }
+                    ]
+                  },
+                  {
+                    "tag": "@remarks",
+                    "content": [
+                      {
+                        "kind": "text",
+                        "text": "This removes local access to the key; it does not revoke the key at its provider."
+                      }
+                    ]
+                  }
+                ]
+              },
+              "parameters": [
+                {
+                  "id": 141,
+                  "name": "instance",
+                  "variant": "param",
+                  "kind": 32768,
+                  "flags": {},
+                  "comment": {
+                    "summary": [
+                      {
+                        "kind": "text",
+                        "text": "Authorized connection whose complete identity selects the stored secret."
+                      }
+                    ]
+                  },
+                  "type": {
+                    "type": "reference",
+                    "target": {
+                      "packageName": "@pixel-brewery/synapse-core",
+                      "packagePath": "src/interfaces/IAiInstance.ts",
+                      "qualifiedName": "IAiInstance"
+                    },
+                    "name": "IAiInstance",
+                    "package": "@pixel-brewery/synapse-core",
+                    "externalUrl": "packages/synapse-core/api/interfaces/IAiInstance.md"
+                  }
+                },
+                {
+                  "id": 142,
+                  "name": "signal",
+                  "variant": "param",
+                  "kind": 32768,
+                  "flags": {},
+                  "comment": {
+                    "summary": [
+                      {
+                        "kind": "text",
+                        "text": "Bounded cancellation checked before the host storage commit."
+                      }
+                    ]
+                  },
+                  "type": {
+                    "type": "reference",
+                    "target": {
+                      "packageName": "typescript",
+                      "packagePath": "lib/lib.dom.d.ts",
+                      "qualifiedName": "AbortSignal"
+                    },
+                    "name": "AbortSignal",
+                    "package": "typescript"
+                  }
+                }
+              ],
+              "type": {
+                "type": "reference",
+                "target": {
+                  "packageName": "typescript",
+                  "packagePath": "lib/lib.es5.d.ts",
+                  "qualifiedName": "Promise"
+                },
+                "typeArguments": [
+                  {
+                    "type": "intrinsic",
+                    "name": "void"
+                  }
+                ],
+                "name": "Promise",
+                "package": "typescript"
+              },
+              "overwrites": {
+                "type": "reference",
+                "target": -1,
+                "name": "AiAuthDriverBase.logout"
+              }
+            }
+          ],
+          "overwrites": {
+            "type": "reference",
+            "target": -1,
+            "name": "AiAuthDriverBase.logout"
+          }
+        },
+        {
+          "id": 129,
+          "name": "methods",
+          "variant": "declaration",
+          "kind": 2048,
+          "flags": {
+            "isPublic": true
+          },
+          "signatures": [
+            {
+              "id": 130,
+              "name": "methods",
+              "variant": "signature",
+              "kind": 4096,
+              "flags": {
+                "isPublic": true
+              },
+              "comment": {
+                "summary": [
+                  {
+                    "kind": "text",
+                    "text": "Advertises explicit secret input for one authorized backend connection."
+                  }
+                ],
+                "blockTags": [
+                  {
+                    "tag": "@returns",
+                    "content": [
+                      {
+                        "kind": "text",
+                        "text": "The API-key credentials procedure with method ID api-key."
+                      }
+                    ]
+                  },
+                  {
+                    "tag": "@throws",
+                    "content": [
+                      {
+                        "kind": "text",
+                        "text": "An AiError when the connection identity is invalid."
+                      }
+                    ]
+                  }
+                ]
+              },
+              "parameters": [
+                {
+                  "id": 131,
+                  "name": "instance",
+                  "variant": "param",
+                  "kind": 32768,
+                  "flags": {},
+                  "comment": {
+                    "summary": [
+                      {
+                        "kind": "text",
+                        "text": "Connection identity; no credential or provider state is inspected."
+                      }
+                    ]
+                  },
+                  "type": {
+                    "type": "reference",
+                    "target": {
+                      "packageName": "@pixel-brewery/synapse-core",
+                      "packagePath": "src/interfaces/IAiInstance.ts",
+                      "qualifiedName": "IAiInstance"
+                    },
+                    "name": "IAiInstance",
+                    "package": "@pixel-brewery/synapse-core",
+                    "externalUrl": "packages/synapse-core/api/interfaces/IAiInstance.md"
+                  }
+                }
+              ],
+              "type": {
+                "type": "typeOperator",
+                "operator": "readonly",
+                "target": {
+                  "type": "array",
+                  "elementType": {
+                    "type": "reference",
+                    "target": {
+                      "packageName": "@pixel-brewery/synapse-core",
+                      "packagePath": "src/interfaces/IAiAuthMethod.ts",
+                      "qualifiedName": "IAiAuthMethod"
+                    },
+                    "name": "IAiAuthMethod",
+                    "package": "@pixel-brewery/synapse-core",
+                    "externalUrl": "packages/synapse-core/api/interfaces/IAiAuthMethod.md"
+                  }
+                }
+              },
+              "overwrites": {
+                "type": "reference",
+                "target": -1,
+                "name": "AiAuthDriverBase.methods",
+                "package": "@pixel-brewery/synapse-core",
+                "externalUrl": "packages/synapse-core/api/classes/AiAuthDriverBase.md#methods"
+              }
+            }
+          ],
+          "overwrites": {
+            "type": "reference",
+            "target": -1,
+            "name": "AiAuthDriverBase.methods",
+            "package": "@pixel-brewery/synapse-core",
+            "externalUrl": "packages/synapse-core/api/classes/AiAuthDriverBase.md#methods"
+          }
+        },
+        {
+          "id": 132,
+          "name": "status",
+          "variant": "declaration",
+          "kind": 2048,
+          "flags": {
+            "isPublic": true
+          },
+          "signatures": [
+            {
+              "id": 133,
+              "name": "status",
+              "variant": "signature",
+              "kind": 4096,
+              "flags": {
+                "isPublic": true
+              },
+              "comment": {
+                "summary": [
+                  {
+                    "kind": "text",
+                    "text": "Rechecks the stored key with the injected provider verifier without invoking a model."
+                  }
+                ],
+                "blockTags": [
+                  {
+                    "tag": "@returns",
+                    "content": [
+                      {
+                        "kind": "text",
+                        "text": "Safe verified account metadata, or authenticated false when absent or rejected."
+                      }
+                    ]
+                  },
+                  {
+                    "tag": "@throws",
+                    "content": [
+                      {
+                        "kind": "text",
+                        "text": "An AiError for cancellation, storage failure or malformed/provider verification."
+                      }
+                    ]
+                  },
+                  {
+                    "tag": "@remarks",
+                    "content": [
+                      {
+                        "kind": "text",
+                        "text": "A stored key alone is never reported as verified authentication."
+                      }
+                    ]
+                  }
+                ]
+              },
+              "parameters": [
+                {
+                  "id": 134,
+                  "name": "instance",
+                  "variant": "param",
+                  "kind": 32768,
+                  "flags": {},
+                  "comment": {
+                    "summary": [
+                      {
+                        "kind": "text",
+                        "text": "Authorized connection whose complete identity selects the secret."
+                      }
+                    ]
+                  },
+                  "type": {
+                    "type": "reference",
+                    "target": {
+                      "packageName": "@pixel-brewery/synapse-core",
+                      "packagePath": "src/interfaces/IAiInstance.ts",
+                      "qualifiedName": "IAiInstance"
+                    },
+                    "name": "IAiInstance",
+                    "package": "@pixel-brewery/synapse-core",
+                    "externalUrl": "packages/synapse-core/api/interfaces/IAiInstance.md"
+                  }
+                },
+                {
+                  "id": 135,
+                  "name": "signal",
+                  "variant": "param",
+                  "kind": 32768,
+                  "flags": {},
+                  "comment": {
+                    "summary": [
+                      {
+                        "kind": "text",
+                        "text": "Bounded caller cancellation supplied by AuthManager."
+                      }
+                    ]
+                  },
+                  "type": {
+                    "type": "reference",
+                    "target": {
+                      "packageName": "typescript",
+                      "packagePath": "lib/lib.dom.d.ts",
+                      "qualifiedName": "AbortSignal"
+                    },
+                    "name": "AbortSignal",
+                    "package": "typescript"
+                  }
+                }
+              ],
+              "type": {
+                "type": "reference",
+                "target": {
+                  "packageName": "typescript",
+                  "packagePath": "lib/lib.es5.d.ts",
+                  "qualifiedName": "Promise"
+                },
+                "typeArguments": [
+                  {
+                    "type": "reference",
+                    "target": {
+                      "packageName": "@pixel-brewery/synapse-core",
+                      "packagePath": "src/interfaces/IAiAuthStatus.ts",
+                      "qualifiedName": "IAiAuthStatus"
+                    },
+                    "name": "IAiAuthStatus",
+                    "package": "@pixel-brewery/synapse-core",
+                    "externalUrl": "packages/synapse-core/api/interfaces/IAiAuthStatus.md"
+                  }
+                ],
+                "name": "Promise",
+                "package": "typescript"
+              },
+              "overwrites": {
+                "type": "reference",
+                "target": -1,
+                "name": "AiAuthDriverBase.status"
+              }
+            }
+          ],
+          "overwrites": {
+            "type": "reference",
+            "target": -1,
+            "name": "AiAuthDriverBase.status"
+          }
+        }
+      ],
+      "groups": [
+        {
+          "title": "Constructors",
+          "children": [
+            123
+          ]
+        },
+        {
+          "title": "Methods",
+          "children": [
+            136,
+            139,
+            129,
+            132
+          ]
+        }
+      ],
+      "extendedTypes": [
+        {
+          "type": "reference",
+          "target": {
+            "packageName": "@pixel-brewery/synapse-core",
+            "packagePath": "src/abstracts/AiAuthDriverBase.ts",
+            "qualifiedName": "AiAuthDriverBase"
+          },
+          "name": "AiAuthDriverBase",
+          "package": "@pixel-brewery/synapse-core",
+          "externalUrl": "packages/synapse-core/api/classes/AiAuthDriverBase.md"
+        }
+      ]
+    },
+    {
+      "id": 178,
+      "name": "apiKeyCredentialScope",
+      "variant": "declaration",
+      "kind": 64,
+      "flags": {
+        "isPublic": true
+      },
+      "signatures": [
+        {
+          "id": 179,
+          "name": "apiKeyCredentialScope",
+          "variant": "signature",
+          "kind": 4096,
+          "flags": {
+            "isPublic": true
+          },
+          "comment": {
+            "summary": [
+              {
+                "kind": "text",
+                "text": "Captures the canonical storage identity for one authorized API-key connection."
+              }
+            ],
+            "blockTags": [
+              {
+                "tag": "@returns",
+                "content": [
+                  {
+                    "kind": "text",
+                    "text": "A detached, frozen scope shared by authentication and backend secret resolution."
+                  }
+                ]
+              },
+              {
+                "tag": "@throws",
+                "content": [
+                  {
+                    "kind": "text",
+                    "text": "An AiError when any identity is empty, contains controls or exceeds 512 characters."
+                  }
+                ]
+              },
+              {
+                "tag": "@remarks",
+                "content": [
+                  {
+                    "kind": "text",
+                    "text": "This function performs no credential read or authorization. The backend first resolves\nthe authorized instance, then uses this same scope with ApiKeyStoreBase when configuring its\nVercel AI SDK provider. No native paths, instance environment or credential values are copied."
+                  }
+                ]
+              }
+            ]
+          },
+          "parameters": [
+            {
+              "id": 180,
+              "name": "instance",
+              "variant": "param",
+              "kind": 32768,
+              "flags": {},
+              "comment": {
+                "summary": [
+                  {
+                    "kind": "text",
+                    "text": "Backend-selected application/account/provider connection; never browser authority."
+                  }
+                ]
+              },
+              "type": {
+                "type": "reference",
+                "target": {
+                  "packageName": "@pixel-brewery/synapse-core",
+                  "packagePath": "src/interfaces/IAiInstance.ts",
+                  "qualifiedName": "IAiInstance"
+                },
+                "name": "IAiInstance",
+                "package": "@pixel-brewery/synapse-core",
+                "externalUrl": "packages/synapse-core/api/interfaces/IAiInstance.md"
+              }
+            }
+          ],
+          "type": {
+            "type": "reference",
+            "target": 181,
+            "name": "IApiKeyCredentialScope",
+            "package": "@pixel-brewery/synapse-auth"
+          }
+        }
+      ]
+    },
+    {
+      "id": 154,
+      "name": "ApiKeyStoreBase",
+      "variant": "declaration",
+      "kind": 128,
+      "flags": {
+        "isPublic": true,
+        "isAbstract": true
+      },
+      "comment": {
+        "summary": [
+          {
+            "kind": "text",
+            "text": "Backend secret-storage boundary for API-key connections."
+          }
+        ],
+        "blockTags": [
+          {
+            "tag": "@remarks",
+            "content": [
+              {
+                "kind": "text",
+                "text": "The host supplies durable encrypted storage and authorization. No default storage,\nencryption key, filesystem path or cloud service is selected by Synapse. Implementations must\nscope every operation by the complete identity tuple, honor cancellation before mutation,\natomically replace a key, and preserve the previous key when replacement fails before commit.\nThe profile coordinator serializes one process; hosts coordinate concurrent backend replicas\nthrough their storage/connection owner. Returned keys are backend-only secrets."
+              }
+            ]
+          }
+        ]
+      },
+      "children": [
+        {
+          "id": 155,
+          "name": "constructor",
+          "variant": "declaration",
+          "kind": 512,
+          "flags": {},
+          "signatures": [
+            {
+              "id": 156,
+              "name": "ApiKeyStoreBase",
+              "variant": "signature",
+              "kind": 16384,
+              "flags": {},
+              "type": {
+                "type": "reference",
+                "target": 154,
+                "name": "ApiKeyStoreBase",
+                "package": "@pixel-brewery/synapse-auth"
+              }
+            }
+          ]
+        },
+        {
+          "id": 157,
+          "name": "read",
+          "variant": "declaration",
+          "kind": 2048,
+          "flags": {
+            "isPublic": true,
+            "isAbstract": true
+          },
+          "signatures": [
+            {
+              "id": 158,
+              "name": "read",
+              "variant": "signature",
+              "kind": 4096,
+              "flags": {
+                "isPublic": true
+              },
+              "comment": {
+                "summary": [
+                  {
+                    "kind": "text",
+                    "text": "Resolves one connection's secret without changing persistent state."
+                  }
+                ],
+                "blockTags": [
+                  {
+                    "tag": "@returns",
+                    "content": [
+                      {
+                        "kind": "text",
+                        "text": "The secret key, or undefined when this connection has no stored key."
+                      }
+                    ]
+                  },
+                  {
+                    "tag": "@throws",
+                    "content": [
+                      {
+                        "kind": "text",
+                        "text": "An error for storage failure; raw diagnostics must not be sent to a client."
+                      }
+                    ]
+                  }
+                ]
+              },
+              "parameters": [
+                {
+                  "id": 159,
+                  "name": "scope",
+                  "variant": "param",
+                  "kind": 32768,
+                  "flags": {},
+                  "comment": {
+                    "summary": [
+                      {
+                        "kind": "text",
+                        "text": "Complete application/account/provider/instance/profile identity."
+                      }
+                    ]
+                  },
+                  "type": {
+                    "type": "reference",
+                    "target": 181,
+                    "name": "IApiKeyCredentialScope",
+                    "package": "@pixel-brewery/synapse-auth"
+                  }
+                },
+                {
+                  "id": 160,
+                  "name": "signal",
+                  "variant": "param",
+                  "kind": 32768,
+                  "flags": {},
+                  "comment": {
+                    "summary": [
+                      {
+                        "kind": "text",
+                        "text": "Bounded caller cancellation."
+                      }
+                    ]
+                  },
+                  "type": {
+                    "type": "reference",
+                    "target": {
+                      "packageName": "typescript",
+                      "packagePath": "lib/lib.dom.d.ts",
+                      "qualifiedName": "AbortSignal"
+                    },
+                    "name": "AbortSignal",
+                    "package": "typescript"
+                  }
+                }
+              ],
+              "type": {
+                "type": "reference",
+                "target": {
+                  "packageName": "typescript",
+                  "packagePath": "lib/lib.es5.d.ts",
+                  "qualifiedName": "Promise"
+                },
+                "typeArguments": [
+                  {
+                    "type": "union",
+                    "types": [
+                      {
+                        "type": "intrinsic",
+                        "name": "string"
+                      },
+                      {
+                        "type": "intrinsic",
+                        "name": "undefined"
+                      }
+                    ]
+                  }
+                ],
+                "name": "Promise",
+                "package": "typescript"
+              }
+            }
+          ]
+        },
+        {
+          "id": 166,
+          "name": "remove",
+          "variant": "declaration",
+          "kind": 2048,
+          "flags": {
+            "isPublic": true,
+            "isAbstract": true
+          },
+          "signatures": [
+            {
+              "id": 167,
+              "name": "remove",
+              "variant": "signature",
+              "kind": 4096,
+              "flags": {
+                "isPublic": true
+              },
+              "comment": {
+                "summary": [
+                  {
+                    "kind": "text",
+                    "text": "Idempotently removes this connection's locally managed secret reference."
+                  }
+                ],
+                "blockTags": [
+                  {
+                    "tag": "@returns",
+                    "content": [
+                      {
+                        "kind": "text",
+                        "text": "Completion after this connection's key is absent."
+                      }
+                    ]
+                  },
+                  {
+                    "tag": "@throws",
+                    "content": [
+                      {
+                        "kind": "text",
+                        "text": "An error when removal cannot commit."
+                      }
+                    ]
+                  },
+                  {
+                    "tag": "@remarks",
+                    "content": [
+                      {
+                        "kind": "text",
+                        "text": "Removing a stored key does not revoke the original key at the provider."
+                      }
+                    ]
+                  }
+                ]
+              },
+              "parameters": [
+                {
+                  "id": 168,
+                  "name": "scope",
+                  "variant": "param",
+                  "kind": 32768,
+                  "flags": {},
+                  "comment": {
+                    "summary": [
+                      {
+                        "kind": "text",
+                        "text": "Complete authorized connection identity."
+                      }
+                    ]
+                  },
+                  "type": {
+                    "type": "reference",
+                    "target": 181,
+                    "name": "IApiKeyCredentialScope",
+                    "package": "@pixel-brewery/synapse-auth"
+                  }
+                },
+                {
+                  "id": 169,
+                  "name": "signal",
+                  "variant": "param",
+                  "kind": 32768,
+                  "flags": {},
+                  "comment": {
+                    "summary": [
+                      {
+                        "kind": "text",
+                        "text": "Cancellation that must be checked before the storage commit."
+                      }
+                    ]
+                  },
+                  "type": {
+                    "type": "reference",
+                    "target": {
+                      "packageName": "typescript",
+                      "packagePath": "lib/lib.dom.d.ts",
+                      "qualifiedName": "AbortSignal"
+                    },
+                    "name": "AbortSignal",
+                    "package": "typescript"
+                  }
+                }
+              ],
+              "type": {
+                "type": "reference",
+                "target": {
+                  "packageName": "typescript",
+                  "packagePath": "lib/lib.es5.d.ts",
+                  "qualifiedName": "Promise"
+                },
+                "typeArguments": [
+                  {
+                    "type": "intrinsic",
+                    "name": "void"
+                  }
+                ],
+                "name": "Promise",
+                "package": "typescript"
+              }
+            }
+          ]
+        },
+        {
+          "id": 161,
+          "name": "write",
+          "variant": "declaration",
+          "kind": 2048,
+          "flags": {
+            "isPublic": true,
+            "isAbstract": true
+          },
+          "signatures": [
+            {
+              "id": 162,
+              "name": "write",
+              "variant": "signature",
+              "kind": 4096,
+              "flags": {
+                "isPublic": true
+              },
+              "comment": {
+                "summary": [
+                  {
+                    "kind": "text",
+                    "text": "Atomically stores a verified key for exactly one connection."
+                  }
+                ],
+                "blockTags": [
+                  {
+                    "tag": "@returns",
+                    "content": [
+                      {
+                        "kind": "text",
+                        "text": "Completion after the replacement has committed."
+                      }
+                    ]
+                  },
+                  {
+                    "tag": "@throws",
+                    "content": [
+                      {
+                        "kind": "text",
+                        "text": "An error when replacement cannot commit; preserve the previous secret."
+                      }
+                    ]
+                  }
+                ]
+              },
+              "parameters": [
+                {
+                  "id": 163,
+                  "name": "scope",
+                  "variant": "param",
+                  "kind": 32768,
+                  "flags": {},
+                  "comment": {
+                    "summary": [
+                      {
+                        "kind": "text",
+                        "text": "Complete authorized connection identity."
+                      }
+                    ]
+                  },
+                  "type": {
+                    "type": "reference",
+                    "target": 181,
+                    "name": "IApiKeyCredentialScope",
+                    "package": "@pixel-brewery/synapse-auth"
+                  }
+                },
+                {
+                  "id": 164,
+                  "name": "apiKey",
+                  "variant": "param",
+                  "kind": 32768,
+                  "flags": {},
+                  "comment": {
+                    "summary": [
+                      {
+                        "kind": "text",
+                        "text": "Secret verified by the selected backend verifier; never log it."
+                      }
+                    ]
+                  },
+                  "type": {
+                    "type": "intrinsic",
+                    "name": "string"
+                  }
+                },
+                {
+                  "id": 165,
+                  "name": "signal",
+                  "variant": "param",
+                  "kind": 32768,
+                  "flags": {},
+                  "comment": {
+                    "summary": [
+                      {
+                        "kind": "text",
+                        "text": "Cancellation that must be checked before the storage commit."
+                      }
+                    ]
+                  },
+                  "type": {
+                    "type": "reference",
+                    "target": {
+                      "packageName": "typescript",
+                      "packagePath": "lib/lib.dom.d.ts",
+                      "qualifiedName": "AbortSignal"
+                    },
+                    "name": "AbortSignal",
+                    "package": "typescript"
+                  }
+                }
+              ],
+              "type": {
+                "type": "reference",
+                "target": {
+                  "packageName": "typescript",
+                  "packagePath": "lib/lib.es5.d.ts",
+                  "qualifiedName": "Promise"
+                },
+                "typeArguments": [
+                  {
+                    "type": "intrinsic",
+                    "name": "void"
+                  }
+                ],
+                "name": "Promise",
+                "package": "typescript"
+              }
+            }
+          ]
+        }
+      ],
+      "groups": [
+        {
+          "title": "Constructors",
+          "children": [
+            155
+          ]
+        },
+        {
+          "title": "Methods",
+          "children": [
+            157,
+            166,
+            161
+          ]
+        }
+      ]
+    },
+    {
+      "id": 170,
+      "name": "ApiKeyVerifierBase",
+      "variant": "declaration",
+      "kind": 128,
+      "flags": {
+        "isPublic": true,
+        "isAbstract": true
+      },
+      "comment": {
+        "summary": [
+          {
+            "kind": "text",
+            "text": "Backend adapter that verifies an API key using the host's selected provider client."
+          }
+        ],
+        "blockTags": [
+          {
+            "tag": "@remarks",
+            "content": [
+              {
+                "kind": "text",
+                "text": "A stored string or a matching key prefix is not verified authentication. Implementations\nmust perform a bounded, non-inference authentication check, honor cancellation and return only\nsafe account metadata. Provider endpoints, HTTP policy, SDK dependencies and authorization\nremain with the injected adapter. Verification does not prove access to every model or budget.\nNo model invocation, streaming implementation or provider SDK is supplied by this contract."
+              }
+            ]
+          }
+        ]
+      },
+      "children": [
+        {
+          "id": 171,
+          "name": "constructor",
+          "variant": "declaration",
+          "kind": 512,
+          "flags": {},
+          "signatures": [
+            {
+              "id": 172,
+              "name": "ApiKeyVerifierBase",
+              "variant": "signature",
+              "kind": 16384,
+              "flags": {},
+              "type": {
+                "type": "reference",
+                "target": 170,
+                "name": "ApiKeyVerifierBase",
+                "package": "@pixel-brewery/synapse-auth"
+              }
+            }
+          ]
+        },
+        {
+          "id": 173,
+          "name": "verify",
+          "variant": "declaration",
+          "kind": 2048,
+          "flags": {
+            "isPublic": true,
+            "isAbstract": true
+          },
+          "signatures": [
+            {
+              "id": 174,
+              "name": "verify",
+              "variant": "signature",
+              "kind": 4096,
+              "flags": {
+                "isPublic": true
+              },
+              "comment": {
+                "summary": [
+                  {
+                    "kind": "text",
+                    "text": "Checks this connection's candidate secret without storing it or invoking a model."
+                  }
+                ],
+                "blockTags": [
+                  {
+                    "tag": "@returns",
+                    "content": [
+                      {
+                        "kind": "text",
+                        "text": "Safe status for the selected authentication check. Authenticated false means that\naccess could not be verified; a restricted key is not necessarily an invalid key."
+                      }
+                    ]
+                  },
+                  {
+                    "tag": "@throws",
+                    "content": [
+                      {
+                        "kind": "text",
+                        "text": "An error for cancellation, provider or transport failure."
+                      }
+                    ]
+                  }
+                ]
+              },
+              "parameters": [
+                {
+                  "id": 175,
+                  "name": "scope",
+                  "variant": "param",
+                  "kind": 32768,
+                  "flags": {},
+                  "comment": {
+                    "summary": [
+                      {
+                        "kind": "text",
+                        "text": "Complete authorized connection identity used to select provider policy."
+                      }
+                    ]
+                  },
+                  "type": {
+                    "type": "reference",
+                    "target": 181,
+                    "name": "IApiKeyCredentialScope",
+                    "package": "@pixel-brewery/synapse-auth"
+                  }
+                },
+                {
+                  "id": 176,
+                  "name": "apiKey",
+                  "variant": "param",
+                  "kind": 32768,
+                  "flags": {},
+                  "comment": {
+                    "summary": [
+                      {
+                        "kind": "text",
+                        "text": "Backend-only candidate key; never return or log it."
+                      }
+                    ]
+                  },
+                  "type": {
+                    "type": "intrinsic",
+                    "name": "string"
+                  }
+                },
+                {
+                  "id": 177,
+                  "name": "signal",
+                  "variant": "param",
+                  "kind": 32768,
+                  "flags": {},
+                  "comment": {
+                    "summary": [
+                      {
+                        "kind": "text",
+                        "text": "Bounded cancellation supplied by the authentication lifecycle."
+                      }
+                    ]
+                  },
+                  "type": {
+                    "type": "reference",
+                    "target": {
+                      "packageName": "typescript",
+                      "packagePath": "lib/lib.dom.d.ts",
+                      "qualifiedName": "AbortSignal"
+                    },
+                    "name": "AbortSignal",
+                    "package": "typescript"
+                  }
+                }
+              ],
+              "type": {
+                "type": "reference",
+                "target": {
+                  "packageName": "typescript",
+                  "packagePath": "lib/lib.es5.d.ts",
+                  "qualifiedName": "Promise"
+                },
+                "typeArguments": [
+                  {
+                    "type": "reference",
+                    "target": {
+                      "packageName": "@pixel-brewery/synapse-core",
+                      "packagePath": "src/interfaces/IAiAuthStatus.ts",
+                      "qualifiedName": "IAiAuthStatus"
+                    },
+                    "name": "IAiAuthStatus",
+                    "package": "@pixel-brewery/synapse-core",
+                    "externalUrl": "packages/synapse-core/api/interfaces/IAiAuthStatus.md"
+                  }
+                ],
+                "name": "Promise",
+                "package": "typescript"
+              }
+            }
+          ]
+        }
+      ],
+      "groups": [
+        {
+          "title": "Constructors",
+          "children": [
+            171
+          ]
+        },
+        {
+          "title": "Methods",
+          "children": [
+            173
+          ]
+        }
+      ]
+    },
     {
       "id": 59,
       "name": "AuthManager",
@@ -26,7 +1429,7 @@
         "summary": [
           {
             "kind": "text",
-            "text": "Coordinates native account changes with the same profile gate used by execution."
+            "text": "Coordinates account authentication changes with the same profile gate used by execution."
           }
         ],
         "blockTags": [
@@ -63,7 +1466,7 @@
                 "summary": [
                   {
                     "kind": "text",
-                    "text": "Captures lifecycle policy without accessing files, credentials or native CLIs."
+                    "text": "Captures lifecycle policy without accessing files, credentials or providers."
                   }
                 ],
                 "blockTags": [
@@ -121,7 +1524,7 @@
                   },
                   "type": {
                     "type": "reference",
-                    "target": 140,
+                    "target": 205,
                     "name": "IAuthManagerOptions",
                     "package": "@pixel-brewery/synapse-auth"
                   },
@@ -158,7 +1561,7 @@
                 "summary": [
                   {
                     "kind": "text",
-                    "text": "Cancels all login/status/logout work and awaits owned native cleanup."
+                    "text": "Cancels all login/status/logout work and awaits owned authentication cleanup."
                   }
                 ],
                 "blockTags": [
@@ -222,7 +1625,7 @@
                 "summary": [
                   {
                     "kind": "text",
-                    "text": "Cancels/drains a profile's login and executions before removing its native credentials."
+                    "text": "Cancels/drains a profile's login and executions before removing its configured credentials."
                   }
                 ],
                 "blockTags": [
@@ -231,7 +1634,7 @@
                     "content": [
                       {
                         "kind": "text",
-                        "text": "Completion after native logout and verification that the account is signed out."
+                        "text": "Completion after logout and verification that the account is signed out."
                       }
                     ]
                   },
@@ -283,7 +1686,7 @@
                     "summary": [
                       {
                         "kind": "text",
-                        "text": "Native logout/status implementation."
+                        "text": "Logout/status implementation."
                       }
                     ]
                   },
@@ -311,7 +1714,7 @@
                     "summary": [
                       {
                         "kind": "text",
-                        "text": "Optional caller cancellation, still awaited through native cleanup."
+                        "text": "Optional caller cancellation, still awaited through owned cleanup."
                       }
                     ]
                   },
@@ -394,7 +1797,7 @@
                     "content": [
                       {
                         "kind": "text",
-                        "text": "Profile admission is blocked synchronously. A new login waits for prior native teardown."
+                        "text": "Profile admission is blocked synchronously. A new login waits for prior authentication teardown."
                       }
                     ]
                   }
@@ -437,7 +1840,7 @@
                     "summary": [
                       {
                         "kind": "text",
-                        "text": "Native authentication implementation selected by the host."
+                        "text": "Authentication implementation selected by the host."
                       }
                     ]
                   },
@@ -469,7 +1872,7 @@
                   },
                   "type": {
                     "type": "reference",
-                    "target": 151,
+                    "target": 216,
                     "name": "IAuthStartOptions",
                     "package": "@pixel-brewery/synapse-auth"
                   }
@@ -477,7 +1880,7 @@
               ],
               "type": {
                 "type": "reference",
-                "target": 131,
+                "target": 196,
                 "name": "IAuthHandle",
                 "package": "@pixel-brewery/synapse-auth"
               }
@@ -505,7 +1908,7 @@
                 "summary": [
                   {
                     "kind": "text",
-                    "text": "Performs a bounded native status check without initiating login, hooks or inference."
+                    "text": "Performs a bounded authentication status check without initiating login or inference."
                   }
                 ],
                 "blockTags": [
@@ -514,7 +1917,7 @@
                     "content": [
                       {
                         "kind": "text",
-                        "text": "Validated safe account metadata, without raw CLI messages."
+                        "text": "Validated safe account metadata, without raw provider messages."
                       }
                     ]
                   },
@@ -566,7 +1969,7 @@
                     "summary": [
                       {
                         "kind": "text",
-                        "text": "Read-only native authentication inspector."
+                        "text": "Read-only authentication inspector."
                       }
                     ]
                   },
@@ -656,7 +2059,7 @@
       ]
     },
     {
-      "id": 164,
+      "id": 229,
       "name": "AuthState",
       "variant": "declaration",
       "kind": 2097152,
@@ -676,7 +2079,7 @@
         "types": [
           {
             "type": "reference",
-            "target": 156,
+            "target": 221,
             "name": "IAuthOperationIdentity",
             "package": "@pixel-brewery/synapse-auth"
           },
@@ -686,14 +2089,14 @@
               {
                 "type": "reflection",
                 "declaration": {
-                  "id": 165,
+                  "id": 230,
                   "name": "__type",
                   "variant": "declaration",
                   "kind": 65536,
                   "flags": {},
                   "children": [
                     {
-                      "id": 166,
+                      "id": 231,
                       "name": "state",
                       "variant": "declaration",
                       "kind": 1024,
@@ -718,7 +2121,7 @@
                     {
                       "title": "Properties",
                       "children": [
-                        166
+                        231
                       ]
                     }
                   ]
@@ -727,14 +2130,14 @@
               {
                 "type": "reflection",
                 "declaration": {
-                  "id": 167,
+                  "id": 232,
                   "name": "__type",
                   "variant": "declaration",
                   "kind": 65536,
                   "flags": {},
                   "children": [
                     {
-                      "id": 169,
+                      "id": 234,
                       "name": "interaction",
                       "variant": "declaration",
                       "kind": 1024,
@@ -762,7 +2165,7 @@
                       }
                     },
                     {
-                      "id": 168,
+                      "id": 233,
                       "name": "state",
                       "variant": "declaration",
                       "kind": 1024,
@@ -787,8 +2190,8 @@
                     {
                       "title": "Properties",
                       "children": [
-                        169,
-                        168
+                        234,
+                        233
                       ]
                     }
                   ]
@@ -797,14 +2200,14 @@
               {
                 "type": "reflection",
                 "declaration": {
-                  "id": 170,
+                  "id": 235,
                   "name": "__type",
                   "variant": "declaration",
                   "kind": 65536,
                   "flags": {},
                   "children": [
                     {
-                      "id": 171,
+                      "id": 236,
                       "name": "state",
                       "variant": "declaration",
                       "kind": 1024,
@@ -829,7 +2232,7 @@
                     {
                       "title": "Properties",
                       "children": [
-                        171
+                        236
                       ]
                     }
                   ]
@@ -838,14 +2241,14 @@
               {
                 "type": "reflection",
                 "declaration": {
-                  "id": 172,
+                  "id": 237,
                   "name": "__type",
                   "variant": "declaration",
                   "kind": 65536,
                   "flags": {},
                   "children": [
                     {
-                      "id": 173,
+                      "id": 238,
                       "name": "state",
                       "variant": "declaration",
                       "kind": 1024,
@@ -866,7 +2269,7 @@
                       }
                     },
                     {
-                      "id": 174,
+                      "id": 239,
                       "name": "status",
                       "variant": "declaration",
                       "kind": 1024,
@@ -898,8 +2301,8 @@
                     {
                       "title": "Properties",
                       "children": [
-                        173,
-                        174
+                        238,
+                        239
                       ]
                     }
                   ]
@@ -908,14 +2311,14 @@
               {
                 "type": "reflection",
                 "declaration": {
-                  "id": 175,
+                  "id": 240,
                   "name": "__type",
                   "variant": "declaration",
                   "kind": 65536,
                   "flags": {},
                   "children": [
                     {
-                      "id": 177,
+                      "id": 242,
                       "name": "error",
                       "variant": "declaration",
                       "kind": 1024,
@@ -933,14 +2336,14 @@
                       "type": {
                         "type": "reflection",
                         "declaration": {
-                          "id": 178,
+                          "id": 243,
                           "name": "__type",
                           "variant": "declaration",
                           "kind": 65536,
                           "flags": {},
                           "children": [
                             {
-                              "id": 179,
+                              "id": 244,
                               "name": "code",
                               "variant": "declaration",
                               "kind": 1024,
@@ -968,7 +2371,7 @@
                               }
                             },
                             {
-                              "id": 180,
+                              "id": 245,
                               "name": "message",
                               "variant": "declaration",
                               "kind": 1024,
@@ -993,8 +2396,8 @@
                             {
                               "title": "Properties",
                               "children": [
-                                179,
-                                180
+                                244,
+                                245
                               ]
                             }
                           ]
@@ -1002,7 +2405,7 @@
                       }
                     },
                     {
-                      "id": 176,
+                      "id": 241,
                       "name": "state",
                       "variant": "declaration",
                       "kind": 1024,
@@ -1027,8 +2430,8 @@
                     {
                       "title": "Properties",
                       "children": [
-                        177,
-                        176
+                        242,
+                        241
                       ]
                     }
                   ]
@@ -1037,14 +2440,14 @@
               {
                 "type": "reflection",
                 "declaration": {
-                  "id": 181,
+                  "id": 246,
                   "name": "__type",
                   "variant": "declaration",
                   "kind": 65536,
                   "flags": {},
                   "children": [
                     {
-                      "id": 183,
+                      "id": 248,
                       "name": "reason",
                       "variant": "declaration",
                       "kind": 1024,
@@ -1074,7 +2477,7 @@
                       }
                     },
                     {
-                      "id": 182,
+                      "id": 247,
                       "name": "state",
                       "variant": "declaration",
                       "kind": 1024,
@@ -1099,8 +2502,8 @@
                     {
                       "title": "Properties",
                       "children": [
-                        183,
-                        182
+                        248,
+                        247
                       ]
                     }
                   ]
@@ -1112,7 +2515,154 @@
       }
     },
     {
-      "id": 131,
+      "id": 181,
+      "name": "IApiKeyCredentialScope",
+      "variant": "declaration",
+      "kind": 256,
+      "flags": {
+        "isPublic": true
+      },
+      "comment": {
+        "summary": [
+          {
+            "kind": "text",
+            "text": "Detached identity of one backend-owned API-key connection, without a secret or native path."
+          }
+        ],
+        "blockTags": [
+          {
+            "tag": "@remarks",
+            "content": [
+              {
+                "kind": "text",
+                "text": "The host derives these values from an authorized connection. Secret stores must use\nthe complete tuple for isolation; identifiers supplied by a browser are not authorization."
+              }
+            ]
+          }
+        ]
+      },
+      "children": [
+        {
+          "id": 183,
+          "name": "accountId",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {
+            "isReadonly": true
+          },
+          "comment": {
+            "summary": [
+              {
+                "kind": "text",
+                "text": "Host-defined account identity within the application."
+              }
+            ]
+          },
+          "type": {
+            "type": "intrinsic",
+            "name": "string"
+          }
+        },
+        {
+          "id": 182,
+          "name": "applicationId",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {
+            "isReadonly": true
+          },
+          "comment": {
+            "summary": [
+              {
+                "kind": "text",
+                "text": "Application that owns the connection."
+              }
+            ]
+          },
+          "type": {
+            "type": "intrinsic",
+            "name": "string"
+          }
+        },
+        {
+          "id": 184,
+          "name": "driverId",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {
+            "isReadonly": true
+          },
+          "comment": {
+            "summary": [
+              {
+                "kind": "text",
+                "text": "Open provider/authentication adapter identity selected by the host."
+              }
+            ]
+          },
+          "type": {
+            "type": "intrinsic",
+            "name": "string"
+          }
+        },
+        {
+          "id": 185,
+          "name": "instanceId",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {
+            "isReadonly": true
+          },
+          "comment": {
+            "summary": [
+              {
+                "kind": "text",
+                "text": "Configured connection identity within the host runtime."
+              }
+            ]
+          },
+          "type": {
+            "type": "intrinsic",
+            "name": "string"
+          }
+        },
+        {
+          "id": 186,
+          "name": "profileId",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {
+            "isReadonly": true
+          },
+          "comment": {
+            "summary": [
+              {
+                "kind": "text",
+                "text": "Profile identity used by the shared credential-change coordinator."
+              }
+            ]
+          },
+          "type": {
+            "type": "intrinsic",
+            "name": "string"
+          }
+        }
+      ],
+      "groups": [
+        {
+          "title": "Properties",
+          "children": [
+            183,
+            182,
+            184,
+            185,
+            186
+          ]
+        }
+      ]
+    },
+    {
+      "id": 196,
       "name": "IAuthHandle",
       "variant": "declaration",
       "kind": 256,
@@ -1129,14 +2679,14 @@
       },
       "children": [
         {
-          "id": 138,
+          "id": 203,
           "name": "cancel",
           "variant": "declaration",
           "kind": 2048,
           "flags": {},
           "signatures": [
             {
-              "id": 139,
+              "id": 204,
               "name": "cancel",
               "variant": "signature",
               "kind": 4096,
@@ -1189,7 +2739,7 @@
           ]
         },
         {
-          "id": 133,
+          "id": 198,
           "name": "events",
           "variant": "declaration",
           "kind": 1024,
@@ -1214,7 +2764,7 @@
             "typeArguments": [
               {
                 "type": "reference",
-                "target": 164,
+                "target": 229,
                 "name": "AuthState",
                 "package": "@pixel-brewery/synapse-auth"
               }
@@ -1224,14 +2774,14 @@
           }
         },
         {
-          "id": 135,
+          "id": 200,
           "name": "respond",
           "variant": "declaration",
           "kind": 2048,
           "flags": {},
           "signatures": [
             {
-              "id": 136,
+              "id": 201,
               "name": "respond",
               "variant": "signature",
               "kind": 4096,
@@ -1257,7 +2807,7 @@
               },
               "parameters": [
                 {
-                  "id": 137,
+                  "id": 202,
                   "name": "response",
                   "variant": "param",
                   "kind": 32768,
@@ -1291,7 +2841,7 @@
           ]
         },
         {
-          "id": 134,
+          "id": 199,
           "name": "result",
           "variant": "declaration",
           "kind": 1024,
@@ -1331,7 +2881,7 @@
           }
         },
         {
-          "id": 132,
+          "id": 197,
           "name": "state",
           "variant": "declaration",
           "kind": 1024,
@@ -1348,7 +2898,7 @@
           },
           "type": {
             "type": "reference",
-            "target": 164,
+            "target": 229,
             "name": "AuthState",
             "package": "@pixel-brewery/synapse-auth"
           }
@@ -1358,22 +2908,22 @@
         {
           "title": "Properties",
           "children": [
-            133,
-            134,
-            132
+            198,
+            199,
+            197
           ]
         },
         {
           "title": "Methods",
           "children": [
-            138,
-            135
+            203,
+            200
           ]
         }
       ]
     },
     {
-      "id": 140,
+      "id": 205,
       "name": "IAuthManagerOptions",
       "variant": "declaration",
       "kind": 256,
@@ -1390,7 +2940,7 @@
       },
       "children": [
         {
-          "id": 144,
+          "id": 209,
           "name": "createId",
           "variant": "declaration",
           "kind": 1024,
@@ -1409,14 +2959,14 @@
           "type": {
             "type": "reflection",
             "declaration": {
-              "id": 145,
+              "id": 210,
               "name": "__type",
               "variant": "declaration",
               "kind": 65536,
               "flags": {},
               "signatures": [
                 {
-                  "id": 146,
+                  "id": 211,
                   "name": "__type",
                   "variant": "signature",
                   "kind": 4096,
@@ -1445,7 +2995,7 @@
           }
         },
         {
-          "id": 147,
+          "id": 212,
           "name": "defaultTimeoutMs",
           "variant": "declaration",
           "kind": 1024,
@@ -1467,7 +3017,7 @@
           }
         },
         {
-          "id": 149,
+          "id": 214,
           "name": "eventCapacity",
           "variant": "declaration",
           "kind": 1024,
@@ -1489,7 +3039,7 @@
           }
         },
         {
-          "id": 150,
+          "id": 215,
           "name": "maxPendingOperations",
           "variant": "declaration",
           "kind": 1024,
@@ -1511,7 +3061,7 @@
           }
         },
         {
-          "id": 141,
+          "id": 206,
           "name": "now",
           "variant": "declaration",
           "kind": 1024,
@@ -1530,14 +3080,14 @@
           "type": {
             "type": "reflection",
             "declaration": {
-              "id": 142,
+              "id": 207,
               "name": "__type",
               "variant": "declaration",
               "kind": 65536,
               "flags": {},
               "signatures": [
                 {
-                  "id": 143,
+                  "id": 208,
                   "name": "__type",
                   "variant": "signature",
                   "kind": 4096,
@@ -1566,7 +3116,7 @@
           }
         },
         {
-          "id": 148,
+          "id": 213,
           "name": "statusTimeoutMs",
           "variant": "declaration",
           "kind": 1024,
@@ -1592,18 +3142,18 @@
         {
           "title": "Properties",
           "children": [
-            144,
-            147,
-            149,
-            150,
-            141,
-            148
+            209,
+            212,
+            214,
+            215,
+            206,
+            213
           ]
         }
       ]
     },
     {
-      "id": 156,
+      "id": 221,
       "name": "IAuthOperationIdentity",
       "variant": "declaration",
       "kind": 256,
@@ -1620,7 +3170,7 @@
       },
       "children": [
         {
-          "id": 161,
+          "id": 226,
           "name": "driverId",
           "variant": "declaration",
           "kind": 1024,
@@ -1641,7 +3191,7 @@
           }
         },
         {
-          "id": 163,
+          "id": 228,
           "name": "expiresAt",
           "variant": "declaration",
           "kind": 1024,
@@ -1662,7 +3212,7 @@
           }
         },
         {
-          "id": 159,
+          "id": 224,
           "name": "instanceId",
           "variant": "declaration",
           "kind": 1024,
@@ -1683,7 +3233,7 @@
           }
         },
         {
-          "id": 157,
+          "id": 222,
           "name": "operationId",
           "variant": "declaration",
           "kind": 1024,
@@ -1704,7 +3254,7 @@
           }
         },
         {
-          "id": 158,
+          "id": 223,
           "name": "ownerId",
           "variant": "declaration",
           "kind": 1024,
@@ -1725,7 +3275,7 @@
           }
         },
         {
-          "id": 160,
+          "id": 225,
           "name": "profileId",
           "variant": "declaration",
           "kind": 1024,
@@ -1746,7 +3296,7 @@
           }
         },
         {
-          "id": 162,
+          "id": 227,
           "name": "startedAt",
           "variant": "declaration",
           "kind": 1024,
@@ -1771,19 +3321,19 @@
         {
           "title": "Properties",
           "children": [
-            161,
-            163,
-            159,
-            157,
-            158,
-            160,
-            162
+            226,
+            228,
+            224,
+            222,
+            223,
+            225,
+            227
           ]
         }
       ]
     },
     {
-      "id": 151,
+      "id": 216,
       "name": "IAuthStartOptions",
       "variant": "declaration",
       "kind": 256,
@@ -1800,7 +3350,7 @@
       },
       "children": [
         {
-          "id": 153,
+          "id": 218,
           "name": "methodId",
           "variant": "declaration",
           "kind": 1024,
@@ -1821,7 +3371,7 @@
           }
         },
         {
-          "id": 152,
+          "id": 217,
           "name": "ownerId",
           "variant": "declaration",
           "kind": 1024,
@@ -1842,7 +3392,7 @@
           }
         },
         {
-          "id": 155,
+          "id": 220,
           "name": "signal",
           "variant": "declaration",
           "kind": 1024,
@@ -1870,7 +3420,7 @@
           }
         },
         {
-          "id": 154,
+          "id": 219,
           "name": "timeoutMs",
           "variant": "declaration",
           "kind": 1024,
@@ -1896,16 +3446,16 @@
         {
           "title": "Properties",
           "children": [
-            153,
-            152,
-            155,
-            154
+            218,
+            217,
+            220,
+            219
           ]
         }
       ]
     },
     {
-      "id": 122,
+      "id": 187,
       "name": "IProfileManagerOptions",
       "variant": "declaration",
       "kind": 256,
@@ -1922,7 +3472,7 @@
       },
       "children": [
         {
-          "id": 124,
+          "id": 189,
           "name": "maxProfiles",
           "variant": "declaration",
           "kind": 1024,
@@ -1944,7 +3494,7 @@
           }
         },
         {
-          "id": 123,
+          "id": 188,
           "name": "rootDirectory",
           "variant": "declaration",
           "kind": 1024,
@@ -1969,14 +3519,14 @@
         {
           "title": "Properties",
           "children": [
-            124,
-            123
+            189,
+            188
           ]
         }
       ]
     },
     {
-      "id": 125,
+      "id": 190,
       "name": "IProfileRequest",
       "variant": "declaration",
       "kind": 256,
@@ -1993,7 +3543,7 @@
       },
       "children": [
         {
-          "id": 127,
+          "id": 192,
           "name": "accountId",
           "variant": "declaration",
           "kind": 1024,
@@ -2014,7 +3564,7 @@
           }
         },
         {
-          "id": 126,
+          "id": 191,
           "name": "applicationId",
           "variant": "declaration",
           "kind": 1024,
@@ -2035,7 +3585,7 @@
           }
         },
         {
-          "id": 128,
+          "id": 193,
           "name": "driverId",
           "variant": "declaration",
           "kind": 1024,
@@ -2056,7 +3606,7 @@
           }
         },
         {
-          "id": 129,
+          "id": 194,
           "name": "id",
           "variant": "declaration",
           "kind": 1024,
@@ -2078,7 +3628,7 @@
           }
         },
         {
-          "id": 130,
+          "id": 195,
           "name": "paths",
           "variant": "declaration",
           "kind": 1024,
@@ -2123,11 +3673,11 @@
         {
           "title": "Properties",
           "children": [
-            127,
-            126,
-            128,
-            129,
-            130
+            192,
+            191,
+            193,
+            194,
+            195
           ]
         }
       ]
@@ -2213,7 +3763,7 @@
                   },
                   "type": {
                     "type": "reference",
-                    "target": 122,
+                    "target": 187,
                     "name": "IProfileManagerOptions",
                     "package": "@pixel-brewery/synapse-auth"
                   }
@@ -2299,7 +3849,7 @@
                   },
                   "type": {
                     "type": "reference",
-                    "target": 125,
+                    "target": 190,
                     "name": "IProfileRequest",
                     "package": "@pixel-brewery/synapse-auth"
                   }
@@ -2352,6 +3902,9 @@
     {
       "title": "Classes",
       "children": [
+        122,
+        154,
+        170,
         59,
         1
       ]
@@ -2359,18 +3912,25 @@
     {
       "title": "Interfaces",
       "children": [
-        131,
-        140,
-        156,
-        151,
-        122,
-        125
+        181,
+        196,
+        205,
+        221,
+        216,
+        187,
+        190
       ]
     },
     {
       "title": "Type Aliases",
       "children": [
-        164
+        229
+      ]
+    },
+    {
+      "title": "Functions",
+      "children": [
+        178
       ]
     }
   ],
@@ -2528,310 +4088,550 @@
     },
     "122": {
       "packageName": "@pixel-brewery/synapse-auth",
+      "packagePath": "src/services/ApiKeyAuthDriver.ts",
+      "qualifiedName": "ApiKeyAuthDriver"
+    },
+    "123": {
+      "packageName": "@pixel-brewery/synapse-auth",
+      "packagePath": "src/services/ApiKeyAuthDriver.ts",
+      "qualifiedName": "ApiKeyAuthDriver.__constructor"
+    },
+    "124": {
+      "packageName": "@pixel-brewery/synapse-auth",
+      "packagePath": "src/services/ApiKeyAuthDriver.ts",
+      "qualifiedName": "ApiKeyAuthDriver"
+    },
+    "125": {
+      "packageName": "@pixel-brewery/synapse-auth",
+      "packagePath": "src/services/ApiKeyAuthDriver.ts",
+      "qualifiedName": "_store"
+    },
+    "126": {
+      "packageName": "@pixel-brewery/synapse-auth",
+      "packagePath": "src/services/ApiKeyAuthDriver.ts",
+      "qualifiedName": "_verifier"
+    },
+    "129": {
+      "packageName": "@pixel-brewery/synapse-auth",
+      "packagePath": "src/services/ApiKeyAuthDriver.ts",
+      "qualifiedName": "ApiKeyAuthDriver.methods"
+    },
+    "130": {
+      "packageName": "@pixel-brewery/synapse-auth",
+      "packagePath": "src/services/ApiKeyAuthDriver.ts",
+      "qualifiedName": "ApiKeyAuthDriver.methods"
+    },
+    "131": {
+      "packageName": "@pixel-brewery/synapse-auth",
+      "packagePath": "src/services/ApiKeyAuthDriver.ts",
+      "qualifiedName": "instance"
+    },
+    "132": {
+      "packageName": "@pixel-brewery/synapse-auth",
+      "packagePath": "src/services/ApiKeyAuthDriver.ts",
+      "qualifiedName": "ApiKeyAuthDriver.status"
+    },
+    "133": {
+      "packageName": "@pixel-brewery/synapse-auth",
+      "packagePath": "src/services/ApiKeyAuthDriver.ts",
+      "qualifiedName": "ApiKeyAuthDriver.status"
+    },
+    "134": {
+      "packageName": "@pixel-brewery/synapse-auth",
+      "packagePath": "src/services/ApiKeyAuthDriver.ts",
+      "qualifiedName": "instance"
+    },
+    "135": {
+      "packageName": "@pixel-brewery/synapse-auth",
+      "packagePath": "src/services/ApiKeyAuthDriver.ts",
+      "qualifiedName": "signal"
+    },
+    "136": {
+      "packageName": "@pixel-brewery/synapse-auth",
+      "packagePath": "src/services/ApiKeyAuthDriver.ts",
+      "qualifiedName": "ApiKeyAuthDriver.login"
+    },
+    "137": {
+      "packageName": "@pixel-brewery/synapse-auth",
+      "packagePath": "src/services/ApiKeyAuthDriver.ts",
+      "qualifiedName": "ApiKeyAuthDriver.login"
+    },
+    "138": {
+      "packageName": "@pixel-brewery/synapse-auth",
+      "packagePath": "src/services/ApiKeyAuthDriver.ts",
+      "qualifiedName": "context"
+    },
+    "139": {
+      "packageName": "@pixel-brewery/synapse-auth",
+      "packagePath": "src/services/ApiKeyAuthDriver.ts",
+      "qualifiedName": "ApiKeyAuthDriver.logout"
+    },
+    "140": {
+      "packageName": "@pixel-brewery/synapse-auth",
+      "packagePath": "src/services/ApiKeyAuthDriver.ts",
+      "qualifiedName": "ApiKeyAuthDriver.logout"
+    },
+    "141": {
+      "packageName": "@pixel-brewery/synapse-auth",
+      "packagePath": "src/services/ApiKeyAuthDriver.ts",
+      "qualifiedName": "instance"
+    },
+    "142": {
+      "packageName": "@pixel-brewery/synapse-auth",
+      "packagePath": "src/services/ApiKeyAuthDriver.ts",
+      "qualifiedName": "signal"
+    },
+    "154": {
+      "packageName": "@pixel-brewery/synapse-auth",
+      "packagePath": "src/abstracts/ApiKeyStoreBase.ts",
+      "qualifiedName": "ApiKeyStoreBase"
+    },
+    "157": {
+      "packageName": "@pixel-brewery/synapse-auth",
+      "packagePath": "src/abstracts/ApiKeyStoreBase.ts",
+      "qualifiedName": "ApiKeyStoreBase.read"
+    },
+    "158": {
+      "packageName": "@pixel-brewery/synapse-auth",
+      "packagePath": "src/abstracts/ApiKeyStoreBase.ts",
+      "qualifiedName": "ApiKeyStoreBase.read"
+    },
+    "159": {
+      "packageName": "@pixel-brewery/synapse-auth",
+      "packagePath": "src/abstracts/ApiKeyStoreBase.ts",
+      "qualifiedName": "scope"
+    },
+    "160": {
+      "packageName": "@pixel-brewery/synapse-auth",
+      "packagePath": "src/abstracts/ApiKeyStoreBase.ts",
+      "qualifiedName": "signal"
+    },
+    "161": {
+      "packageName": "@pixel-brewery/synapse-auth",
+      "packagePath": "src/abstracts/ApiKeyStoreBase.ts",
+      "qualifiedName": "ApiKeyStoreBase.write"
+    },
+    "162": {
+      "packageName": "@pixel-brewery/synapse-auth",
+      "packagePath": "src/abstracts/ApiKeyStoreBase.ts",
+      "qualifiedName": "ApiKeyStoreBase.write"
+    },
+    "163": {
+      "packageName": "@pixel-brewery/synapse-auth",
+      "packagePath": "src/abstracts/ApiKeyStoreBase.ts",
+      "qualifiedName": "scope"
+    },
+    "164": {
+      "packageName": "@pixel-brewery/synapse-auth",
+      "packagePath": "src/abstracts/ApiKeyStoreBase.ts",
+      "qualifiedName": "apiKey"
+    },
+    "165": {
+      "packageName": "@pixel-brewery/synapse-auth",
+      "packagePath": "src/abstracts/ApiKeyStoreBase.ts",
+      "qualifiedName": "signal"
+    },
+    "166": {
+      "packageName": "@pixel-brewery/synapse-auth",
+      "packagePath": "src/abstracts/ApiKeyStoreBase.ts",
+      "qualifiedName": "ApiKeyStoreBase.remove"
+    },
+    "167": {
+      "packageName": "@pixel-brewery/synapse-auth",
+      "packagePath": "src/abstracts/ApiKeyStoreBase.ts",
+      "qualifiedName": "ApiKeyStoreBase.remove"
+    },
+    "168": {
+      "packageName": "@pixel-brewery/synapse-auth",
+      "packagePath": "src/abstracts/ApiKeyStoreBase.ts",
+      "qualifiedName": "scope"
+    },
+    "169": {
+      "packageName": "@pixel-brewery/synapse-auth",
+      "packagePath": "src/abstracts/ApiKeyStoreBase.ts",
+      "qualifiedName": "signal"
+    },
+    "170": {
+      "packageName": "@pixel-brewery/synapse-auth",
+      "packagePath": "src/abstracts/ApiKeyVerifierBase.ts",
+      "qualifiedName": "ApiKeyVerifierBase"
+    },
+    "173": {
+      "packageName": "@pixel-brewery/synapse-auth",
+      "packagePath": "src/abstracts/ApiKeyVerifierBase.ts",
+      "qualifiedName": "ApiKeyVerifierBase.verify"
+    },
+    "174": {
+      "packageName": "@pixel-brewery/synapse-auth",
+      "packagePath": "src/abstracts/ApiKeyVerifierBase.ts",
+      "qualifiedName": "ApiKeyVerifierBase.verify"
+    },
+    "175": {
+      "packageName": "@pixel-brewery/synapse-auth",
+      "packagePath": "src/abstracts/ApiKeyVerifierBase.ts",
+      "qualifiedName": "scope"
+    },
+    "176": {
+      "packageName": "@pixel-brewery/synapse-auth",
+      "packagePath": "src/abstracts/ApiKeyVerifierBase.ts",
+      "qualifiedName": "apiKey"
+    },
+    "177": {
+      "packageName": "@pixel-brewery/synapse-auth",
+      "packagePath": "src/abstracts/ApiKeyVerifierBase.ts",
+      "qualifiedName": "signal"
+    },
+    "178": {
+      "packageName": "@pixel-brewery/synapse-auth",
+      "packagePath": "src/apiKeyCredentialScope.ts",
+      "qualifiedName": "apiKeyCredentialScope"
+    },
+    "179": {
+      "packageName": "@pixel-brewery/synapse-auth",
+      "packagePath": "src/apiKeyCredentialScope.ts",
+      "qualifiedName": "apiKeyCredentialScope"
+    },
+    "180": {
+      "packageName": "@pixel-brewery/synapse-auth",
+      "packagePath": "src/apiKeyCredentialScope.ts",
+      "qualifiedName": "instance"
+    },
+    "181": {
+      "packageName": "@pixel-brewery/synapse-auth",
+      "packagePath": "src/interfaces/IApiKeyCredentialScope.ts",
+      "qualifiedName": "IApiKeyCredentialScope"
+    },
+    "182": {
+      "packageName": "@pixel-brewery/synapse-auth",
+      "packagePath": "src/interfaces/IApiKeyCredentialScope.ts",
+      "qualifiedName": "IApiKeyCredentialScope.applicationId"
+    },
+    "183": {
+      "packageName": "@pixel-brewery/synapse-auth",
+      "packagePath": "src/interfaces/IApiKeyCredentialScope.ts",
+      "qualifiedName": "IApiKeyCredentialScope.accountId"
+    },
+    "184": {
+      "packageName": "@pixel-brewery/synapse-auth",
+      "packagePath": "src/interfaces/IApiKeyCredentialScope.ts",
+      "qualifiedName": "IApiKeyCredentialScope.driverId"
+    },
+    "185": {
+      "packageName": "@pixel-brewery/synapse-auth",
+      "packagePath": "src/interfaces/IApiKeyCredentialScope.ts",
+      "qualifiedName": "IApiKeyCredentialScope.instanceId"
+    },
+    "186": {
+      "packageName": "@pixel-brewery/synapse-auth",
+      "packagePath": "src/interfaces/IApiKeyCredentialScope.ts",
+      "qualifiedName": "IApiKeyCredentialScope.profileId"
+    },
+    "187": {
+      "packageName": "@pixel-brewery/synapse-auth",
       "packagePath": "src/interfaces/IProfileManagerOptions.ts",
       "qualifiedName": "IProfileManagerOptions"
     },
-    "123": {
+    "188": {
       "packageName": "@pixel-brewery/synapse-auth",
       "packagePath": "src/interfaces/IProfileManagerOptions.ts",
       "qualifiedName": "IProfileManagerOptions.rootDirectory"
     },
-    "124": {
+    "189": {
       "packageName": "@pixel-brewery/synapse-auth",
       "packagePath": "src/interfaces/IProfileManagerOptions.ts",
       "qualifiedName": "IProfileManagerOptions.maxProfiles"
     },
-    "125": {
+    "190": {
       "packageName": "@pixel-brewery/synapse-auth",
       "packagePath": "src/interfaces/IProfileRequest.ts",
       "qualifiedName": "IProfileRequest"
     },
-    "126": {
+    "191": {
       "packageName": "@pixel-brewery/synapse-auth",
       "packagePath": "src/interfaces/IProfileRequest.ts",
       "qualifiedName": "IProfileRequest.applicationId"
     },
-    "127": {
+    "192": {
       "packageName": "@pixel-brewery/synapse-auth",
       "packagePath": "src/interfaces/IProfileRequest.ts",
       "qualifiedName": "IProfileRequest.accountId"
     },
-    "128": {
+    "193": {
       "packageName": "@pixel-brewery/synapse-auth",
       "packagePath": "src/interfaces/IProfileRequest.ts",
       "qualifiedName": "IProfileRequest.driverId"
     },
-    "129": {
+    "194": {
       "packageName": "@pixel-brewery/synapse-auth",
       "packagePath": "src/interfaces/IProfileRequest.ts",
       "qualifiedName": "IProfileRequest.id"
     },
-    "130": {
+    "195": {
       "packageName": "@pixel-brewery/synapse-auth",
       "packagePath": "src/interfaces/IProfileRequest.ts",
       "qualifiedName": "IProfileRequest.paths"
     },
-    "131": {
+    "196": {
       "packageName": "@pixel-brewery/synapse-auth",
       "packagePath": "src/interfaces/IAuthHandle.ts",
       "qualifiedName": "IAuthHandle"
     },
-    "132": {
+    "197": {
       "packageName": "@pixel-brewery/synapse-auth",
       "packagePath": "src/interfaces/IAuthHandle.ts",
       "qualifiedName": "IAuthHandle.state"
     },
-    "133": {
+    "198": {
       "packageName": "@pixel-brewery/synapse-auth",
       "packagePath": "src/interfaces/IAuthHandle.ts",
       "qualifiedName": "IAuthHandle.events"
     },
-    "134": {
+    "199": {
       "packageName": "@pixel-brewery/synapse-auth",
       "packagePath": "src/interfaces/IAuthHandle.ts",
       "qualifiedName": "IAuthHandle.result"
     },
-    "135": {
+    "200": {
       "packageName": "@pixel-brewery/synapse-auth",
       "packagePath": "src/interfaces/IAuthHandle.ts",
       "qualifiedName": "IAuthHandle.respond"
     },
-    "136": {
+    "201": {
       "packageName": "@pixel-brewery/synapse-auth",
       "packagePath": "src/interfaces/IAuthHandle.ts",
       "qualifiedName": "IAuthHandle.respond"
     },
-    "137": {
+    "202": {
       "packageName": "@pixel-brewery/synapse-auth",
       "packagePath": "src/interfaces/IAuthHandle.ts",
       "qualifiedName": "response"
     },
-    "138": {
+    "203": {
       "packageName": "@pixel-brewery/synapse-auth",
       "packagePath": "src/interfaces/IAuthHandle.ts",
       "qualifiedName": "IAuthHandle.cancel"
     },
-    "139": {
+    "204": {
       "packageName": "@pixel-brewery/synapse-auth",
       "packagePath": "src/interfaces/IAuthHandle.ts",
       "qualifiedName": "IAuthHandle.cancel"
     },
-    "140": {
+    "205": {
       "packageName": "@pixel-brewery/synapse-auth",
       "packagePath": "src/interfaces/IAuthManagerOptions.ts",
       "qualifiedName": "IAuthManagerOptions"
     },
-    "141": {
+    "206": {
       "packageName": "@pixel-brewery/synapse-auth",
       "packagePath": "src/interfaces/IAuthManagerOptions.ts",
       "qualifiedName": "IAuthManagerOptions.now"
     },
-    "142": {
+    "207": {
       "packageName": "@pixel-brewery/synapse-auth",
       "packagePath": "src/interfaces/IAuthManagerOptions.ts",
       "qualifiedName": "__type"
     },
-    "143": {
+    "208": {
       "packageName": "@pixel-brewery/synapse-auth",
       "packagePath": "src/interfaces/IAuthManagerOptions.ts",
       "qualifiedName": "__type"
     },
-    "144": {
+    "209": {
       "packageName": "@pixel-brewery/synapse-auth",
       "packagePath": "src/interfaces/IAuthManagerOptions.ts",
       "qualifiedName": "IAuthManagerOptions.createId"
     },
-    "145": {
+    "210": {
       "packageName": "@pixel-brewery/synapse-auth",
       "packagePath": "src/interfaces/IAuthManagerOptions.ts",
       "qualifiedName": "__type"
     },
-    "146": {
+    "211": {
       "packageName": "@pixel-brewery/synapse-auth",
       "packagePath": "src/interfaces/IAuthManagerOptions.ts",
       "qualifiedName": "__type"
     },
-    "147": {
+    "212": {
       "packageName": "@pixel-brewery/synapse-auth",
       "packagePath": "src/interfaces/IAuthManagerOptions.ts",
       "qualifiedName": "IAuthManagerOptions.defaultTimeoutMs"
     },
-    "148": {
+    "213": {
       "packageName": "@pixel-brewery/synapse-auth",
       "packagePath": "src/interfaces/IAuthManagerOptions.ts",
       "qualifiedName": "IAuthManagerOptions.statusTimeoutMs"
     },
-    "149": {
+    "214": {
       "packageName": "@pixel-brewery/synapse-auth",
       "packagePath": "src/interfaces/IAuthManagerOptions.ts",
       "qualifiedName": "IAuthManagerOptions.eventCapacity"
     },
-    "150": {
+    "215": {
       "packageName": "@pixel-brewery/synapse-auth",
       "packagePath": "src/interfaces/IAuthManagerOptions.ts",
       "qualifiedName": "IAuthManagerOptions.maxPendingOperations"
     },
-    "151": {
+    "216": {
       "packageName": "@pixel-brewery/synapse-auth",
       "packagePath": "src/interfaces/IAuthStartOptions.ts",
       "qualifiedName": "IAuthStartOptions"
     },
-    "152": {
+    "217": {
       "packageName": "@pixel-brewery/synapse-auth",
       "packagePath": "src/interfaces/IAuthStartOptions.ts",
       "qualifiedName": "IAuthStartOptions.ownerId"
     },
-    "153": {
+    "218": {
       "packageName": "@pixel-brewery/synapse-auth",
       "packagePath": "src/interfaces/IAuthStartOptions.ts",
       "qualifiedName": "IAuthStartOptions.methodId"
     },
-    "154": {
+    "219": {
       "packageName": "@pixel-brewery/synapse-auth",
       "packagePath": "src/interfaces/IAuthStartOptions.ts",
       "qualifiedName": "IAuthStartOptions.timeoutMs"
     },
-    "155": {
+    "220": {
       "packageName": "@pixel-brewery/synapse-auth",
       "packagePath": "src/interfaces/IAuthStartOptions.ts",
       "qualifiedName": "IAuthStartOptions.signal"
     },
-    "156": {
+    "221": {
       "packageName": "@pixel-brewery/synapse-auth",
       "packagePath": "src/interfaces/IAuthOperationIdentity.ts",
       "qualifiedName": "IAuthOperationIdentity"
     },
-    "157": {
+    "222": {
       "packageName": "@pixel-brewery/synapse-auth",
       "packagePath": "src/interfaces/IAuthOperationIdentity.ts",
       "qualifiedName": "IAuthOperationIdentity.operationId"
     },
-    "158": {
+    "223": {
       "packageName": "@pixel-brewery/synapse-auth",
       "packagePath": "src/interfaces/IAuthOperationIdentity.ts",
       "qualifiedName": "IAuthOperationIdentity.ownerId"
     },
-    "159": {
+    "224": {
       "packageName": "@pixel-brewery/synapse-auth",
       "packagePath": "src/interfaces/IAuthOperationIdentity.ts",
       "qualifiedName": "IAuthOperationIdentity.instanceId"
     },
-    "160": {
+    "225": {
       "packageName": "@pixel-brewery/synapse-auth",
       "packagePath": "src/interfaces/IAuthOperationIdentity.ts",
       "qualifiedName": "IAuthOperationIdentity.profileId"
     },
-    "161": {
+    "226": {
       "packageName": "@pixel-brewery/synapse-auth",
       "packagePath": "src/interfaces/IAuthOperationIdentity.ts",
       "qualifiedName": "IAuthOperationIdentity.driverId"
     },
-    "162": {
+    "227": {
       "packageName": "@pixel-brewery/synapse-auth",
       "packagePath": "src/interfaces/IAuthOperationIdentity.ts",
       "qualifiedName": "IAuthOperationIdentity.startedAt"
     },
-    "163": {
+    "228": {
       "packageName": "@pixel-brewery/synapse-auth",
       "packagePath": "src/interfaces/IAuthOperationIdentity.ts",
       "qualifiedName": "IAuthOperationIdentity.expiresAt"
     },
-    "164": {
+    "229": {
       "packageName": "@pixel-brewery/synapse-auth",
       "packagePath": "src/models/AuthState.ts",
       "qualifiedName": "AuthState"
     },
-    "165": {
+    "230": {
       "packageName": "@pixel-brewery/synapse-auth",
       "packagePath": "src/models/AuthState.ts",
       "qualifiedName": "__type"
     },
-    "166": {
+    "231": {
       "packageName": "@pixel-brewery/synapse-auth",
       "packagePath": "src/models/AuthState.ts",
       "qualifiedName": "__type.state"
     },
-    "167": {
+    "232": {
       "packageName": "@pixel-brewery/synapse-auth",
       "packagePath": "src/models/AuthState.ts",
       "qualifiedName": "__type"
     },
-    "168": {
+    "233": {
       "packageName": "@pixel-brewery/synapse-auth",
       "packagePath": "src/models/AuthState.ts",
       "qualifiedName": "__type.state"
     },
-    "169": {
+    "234": {
       "packageName": "@pixel-brewery/synapse-auth",
       "packagePath": "src/models/AuthState.ts",
       "qualifiedName": "__type.interaction"
     },
-    "170": {
+    "235": {
       "packageName": "@pixel-brewery/synapse-auth",
       "packagePath": "src/models/AuthState.ts",
       "qualifiedName": "__type"
     },
-    "171": {
+    "236": {
       "packageName": "@pixel-brewery/synapse-auth",
       "packagePath": "src/models/AuthState.ts",
       "qualifiedName": "__type.state"
     },
-    "172": {
+    "237": {
       "packageName": "@pixel-brewery/synapse-auth",
       "packagePath": "src/models/AuthState.ts",
       "qualifiedName": "__type"
     },
-    "173": {
+    "238": {
       "packageName": "@pixel-brewery/synapse-auth",
       "packagePath": "src/models/AuthState.ts",
       "qualifiedName": "__type.state"
     },
-    "174": {
+    "239": {
       "packageName": "@pixel-brewery/synapse-auth",
       "packagePath": "src/models/AuthState.ts",
       "qualifiedName": "__type.status"
     },
-    "175": {
+    "240": {
       "packageName": "@pixel-brewery/synapse-auth",
       "packagePath": "src/models/AuthState.ts",
       "qualifiedName": "__type"
     },
-    "176": {
+    "241": {
       "packageName": "@pixel-brewery/synapse-auth",
       "packagePath": "src/models/AuthState.ts",
       "qualifiedName": "__type.state"
     },
-    "177": {
+    "242": {
       "packageName": "@pixel-brewery/synapse-auth",
       "packagePath": "src/models/AuthState.ts",
       "qualifiedName": "__type.error"
     },
-    "178": {
+    "243": {
       "packageName": "@pixel-brewery/synapse-auth",
       "packagePath": "src/models/AuthState.ts",
       "qualifiedName": "__type"
     },
-    "179": {
+    "244": {
       "packageName": "@pixel-brewery/synapse-auth",
       "packagePath": "src/models/AuthState.ts",
       "qualifiedName": "__type.code"
     },
-    "180": {
+    "245": {
       "packageName": "@pixel-brewery/synapse-auth",
       "packagePath": "src/models/AuthState.ts",
       "qualifiedName": "__type.message"
     },
-    "181": {
+    "246": {
       "packageName": "@pixel-brewery/synapse-auth",
       "packagePath": "src/models/AuthState.ts",
       "qualifiedName": "__type"
     },
-    "182": {
+    "247": {
       "packageName": "@pixel-brewery/synapse-auth",
       "packagePath": "src/models/AuthState.ts",
       "qualifiedName": "__type.state"
     },
-    "183": {
+    "248": {
       "packageName": "@pixel-brewery/synapse-auth",
       "packagePath": "src/models/AuthState.ts",
       "qualifiedName": "__type.reason"

@@ -15,7 +15,7 @@ export interface IAiAuthMethod {
     readonly label: string;
 
     /**
-     * Required native interaction family.
+     * Required authentication interaction family.
      */
     readonly kind: 'browser' | 'device-code' | 'terminal' | 'credentials';
 }

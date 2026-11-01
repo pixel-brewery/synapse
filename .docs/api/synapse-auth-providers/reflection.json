@@ -1,0 +1,877 @@
+{
+  "schemaVersion": "2.0",
+  "id": 0,
+  "name": "@pixel-brewery/synapse-auth-providers",
+  "variant": "project",
+  "kind": 1,
+  "flags": {},
+  "comment": {
+    "summary": [
+      {
+        "kind": "text",
+        "text": "Shared HTTP boundary for optional provider API-key authentication checks.\n\nImport concrete verifiers from the openai, anthropic, gemini, mistral or openrouter subpath.\nModel execution belongs to the consuming application's Vercel AI SDK integration."
+      }
+    ]
+  },
+  "children": [
+    {
+      "id": 1,
+      "name": "ApiKeyVerificationTransportBase",
+      "variant": "declaration",
+      "kind": 128,
+      "flags": {
+        "isPublic": true,
+        "isAbstract": true
+      },
+      "comment": {
+        "summary": [
+          {
+            "kind": "text",
+            "text": "Replaceable backend boundary for bounded provider authentication GET requests."
+          }
+        ],
+        "blockTags": [
+          {
+            "tag": "@remarks",
+            "content": [
+              {
+                "kind": "text",
+                "text": "Construction and imports must remain inert. Implementations own endpoint validation,\nsecret headers, response bounds and cancellation through awaited connection cleanup. They must\nnever invoke a model, follow redirects carrying credentials, retry or expose raw transport errors."
+              }
+            ]
+          }
+        ]
+      },
+      "children": [
+        {
+          "id": 2,
+          "name": "constructor",
+          "variant": "declaration",
+          "kind": 512,
+          "flags": {},
+          "signatures": [
+            {
+              "id": 3,
+              "name": "ApiKeyVerificationTransportBase",
+              "variant": "signature",
+              "kind": 16384,
+              "flags": {},
+              "type": {
+                "type": "reference",
+                "target": 1,
+                "name": "ApiKeyVerificationTransportBase",
+                "package": "@pixel-brewery/synapse-auth-providers"
+              }
+            }
+          ]
+        },
+        {
+          "id": 4,
+          "name": "get",
+          "variant": "declaration",
+          "kind": 2048,
+          "flags": {
+            "isPublic": true,
+            "isAbstract": true
+          },
+          "signatures": [
+            {
+              "id": 5,
+              "name": "get",
+              "variant": "signature",
+              "kind": 4096,
+              "flags": {
+                "isPublic": true
+              },
+              "comment": {
+                "summary": [
+                  {
+                    "kind": "text",
+                    "text": "Performs one non-inference authentication request without automatic retries."
+                  }
+                ],
+                "blockTags": [
+                  {
+                    "tag": "@returns",
+                    "content": [
+                      {
+                        "kind": "text",
+                        "text": "Bounded backend-only response after connection cleanup has completed."
+                      }
+                    ]
+                  },
+                  {
+                    "tag": "@throws",
+                    "content": [
+                      {
+                        "kind": "text",
+                        "text": "A safe AiError for invalid configuration, cancellation, limits or transport failure."
+                      }
+                    ]
+                  }
+                ]
+              },
+              "parameters": [
+                {
+                  "id": 6,
+                  "name": "request",
+                  "variant": "param",
+                  "kind": 32768,
+                  "flags": {},
+                  "comment": {
+                    "summary": [
+                      {
+                        "kind": "text",
+                        "text": "Explicit HTTPS endpoint, private headers and caller cancellation."
+                      }
+                    ]
+                  },
+                  "type": {
+                    "type": "reference",
+                    "target": 42,
+                    "name": "IApiKeyVerificationRequest",
+                    "package": "@pixel-brewery/synapse-auth-providers"
+                  }
+                }
+              ],
+              "type": {
+                "type": "reference",
+                "target": {
+                  "packageName": "typescript",
+                  "packagePath": "lib/lib.es5.d.ts",
+                  "qualifiedName": "Promise"
+                },
+                "typeArguments": [
+                  {
+                    "type": "reference",
+                    "target": 46,
+                    "name": "IApiKeyVerificationResponse",
+                    "package": "@pixel-brewery/synapse-auth-providers"
+                  }
+                ],
+                "name": "Promise",
+                "package": "typescript"
+              }
+            }
+          ]
+        }
+      ],
+      "groups": [
+        {
+          "title": "Constructors",
+          "children": [
+            2
+          ]
+        },
+        {
+          "title": "Methods",
+          "children": [
+            4
+          ]
+        }
+      ],
+      "extendedBy": [
+        {
+          "type": "reference",
+          "target": 7,
+          "name": "NodeApiKeyVerificationTransport"
+        }
+      ]
+    },
+    {
+      "id": 42,
+      "name": "IApiKeyVerificationRequest",
+      "variant": "declaration",
+      "kind": 256,
+      "flags": {
+        "isPublic": true
+      },
+      "comment": {
+        "summary": [
+          {
+            "kind": "text",
+            "text": "One bounded, non-inference provider authentication request."
+          }
+        ],
+        "blockTags": [
+          {
+            "tag": "@remarks",
+            "content": [
+              {
+                "kind": "text",
+                "text": "Only GET is supported. API keys belong in headers, never the URL or request body.\nThe selected transport must protect headers from redirects and reject unsafe destinations."
+              }
+            ]
+          }
+        ]
+      },
+      "children": [
+        {
+          "id": 44,
+          "name": "headers",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {
+            "isReadonly": true
+          },
+          "comment": {
+            "summary": [
+              {
+                "kind": "text",
+                "text": "Explicit authentication and protocol headers; values are backend-only secrets."
+              }
+            ]
+          },
+          "type": {
+            "type": "reference",
+            "target": {
+              "packageName": "typescript",
+              "packagePath": "lib/lib.es5.d.ts",
+              "qualifiedName": "Readonly"
+            },
+            "typeArguments": [
+              {
+                "type": "reference",
+                "target": {
+                  "packageName": "typescript",
+                  "packagePath": "lib/lib.es5.d.ts",
+                  "qualifiedName": "Record"
+                },
+                "typeArguments": [
+                  {
+                    "type": "intrinsic",
+                    "name": "string"
+                  },
+                  {
+                    "type": "intrinsic",
+                    "name": "string"
+                  }
+                ],
+                "name": "Record",
+                "package": "typescript"
+              }
+            ],
+            "name": "Readonly",
+            "package": "typescript"
+          }
+        },
+        {
+          "id": 45,
+          "name": "signal",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {
+            "isReadonly": true
+          },
+          "comment": {
+            "summary": [
+              {
+                "kind": "text",
+                "text": "Caller cancellation, including the outer authentication operation's expiry."
+              }
+            ]
+          },
+          "type": {
+            "type": "reference",
+            "target": {
+              "packageName": "typescript",
+              "packagePath": "lib/lib.dom.d.ts",
+              "qualifiedName": "AbortSignal"
+            },
+            "name": "AbortSignal",
+            "package": "typescript"
+          }
+        },
+        {
+          "id": 43,
+          "name": "url",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {
+            "isReadonly": true
+          },
+          "comment": {
+            "summary": [
+              {
+                "kind": "text",
+                "text": "Public HTTPS authentication or account-metadata endpoint selected by the verifier."
+              }
+            ]
+          },
+          "type": {
+            "type": "intrinsic",
+            "name": "string"
+          }
+        }
+      ],
+      "groups": [
+        {
+          "title": "Properties",
+          "children": [
+            44,
+            45,
+            43
+          ]
+        }
+      ]
+    },
+    {
+      "id": 46,
+      "name": "IApiKeyVerificationResponse",
+      "variant": "declaration",
+      "kind": 256,
+      "flags": {
+        "isPublic": true
+      },
+      "comment": {
+        "summary": [
+          {
+            "kind": "text",
+            "text": "Bounded provider authentication response, retained inside the backend verifier."
+          }
+        ],
+        "blockTags": [
+          {
+            "tag": "@remarks",
+            "content": [
+              {
+                "kind": "text",
+                "text": "The body is untrusted provider data. Concrete verifiers validate only the fields they\nneed and return safe authentication metadata instead of publishing this transport response."
+              }
+            ]
+          }
+        ]
+      },
+      "children": [
+        {
+          "id": 48,
+          "name": "body",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {
+            "isReadonly": true
+          },
+          "comment": {
+            "summary": [
+              {
+                "kind": "text",
+                "text": "Parsed JSON, or undefined for an empty or non-JSON unsuccessful response body."
+              }
+            ]
+          },
+          "type": {
+            "type": "intrinsic",
+            "name": "unknown"
+          }
+        },
+        {
+          "id": 47,
+          "name": "status",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {
+            "isReadonly": true
+          },
+          "comment": {
+            "summary": [
+              {
+                "kind": "text",
+                "text": "HTTP status returned by the selected endpoint, without following redirects."
+              }
+            ]
+          },
+          "type": {
+            "type": "intrinsic",
+            "name": "number"
+          }
+        }
+      ],
+      "groups": [
+        {
+          "title": "Properties",
+          "children": [
+            48,
+            47
+          ]
+        }
+      ]
+    },
+    {
+      "id": 49,
+      "name": "INodeApiKeyVerificationTransportOptions",
+      "variant": "declaration",
+      "kind": 256,
+      "flags": {
+        "isPublic": true
+      },
+      "comment": {
+        "summary": [
+          {
+            "kind": "text",
+            "text": "Resource limits for the built-in Node.js HTTPS authentication transport."
+          }
+        ]
+      },
+      "children": [
+        {
+          "id": 52,
+          "name": "maximumConcurrentRequests",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {
+            "isOptional": true,
+            "isReadonly": true
+          },
+          "comment": {
+            "summary": [
+              {
+                "kind": "text",
+                "text": "Maximum requests owned concurrently by this transport; default 64.\nExcess requests reject immediately instead of joining an unbounded queue.\nA non-cancellable OS DNS lookup retains its slot until its callback completes,\nincluding after the caller has already timed out or cancelled."
+              }
+            ]
+          },
+          "type": {
+            "type": "intrinsic",
+            "name": "number"
+          }
+        },
+        {
+          "id": 51,
+          "name": "maxResponseBytes",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {
+            "isOptional": true,
+            "isReadonly": true
+          },
+          "comment": {
+            "summary": [
+              {
+                "kind": "text",
+                "text": "Maximum uncompressed response bytes retained or read; default 1 MiB.\nCompressed responses are rejected instead of being decompressed."
+              }
+            ]
+          },
+          "type": {
+            "type": "intrinsic",
+            "name": "number"
+          }
+        },
+        {
+          "id": 50,
+          "name": "timeoutMs",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {
+            "isOptional": true,
+            "isReadonly": true
+          },
+          "comment": {
+            "summary": [
+              {
+                "kind": "text",
+                "text": "Total lifetime including DNS, connection and response; default 5,000 milliseconds.\nMust be a positive safe integer within Node.js's timer ceiling."
+              }
+            ]
+          },
+          "type": {
+            "type": "intrinsic",
+            "name": "number"
+          }
+        }
+      ],
+      "groups": [
+        {
+          "title": "Properties",
+          "children": [
+            52,
+            51,
+            50
+          ]
+        }
+      ]
+    },
+    {
+      "id": 7,
+      "name": "NodeApiKeyVerificationTransport",
+      "variant": "declaration",
+      "kind": 128,
+      "flags": {
+        "isPublic": true
+      },
+      "comment": {
+        "summary": [
+          {
+            "kind": "text",
+            "text": "Bounded Node.js HTTPS transport for provider authentication and account metadata only."
+          }
+        ],
+        "blockTags": [
+          {
+            "tag": "@remarks",
+            "content": [
+              {
+                "kind": "text",
+                "text": "Every call uses GET, a fresh direct connection and normal TLS certificate verification.\nPublic DNS answers are validated at connection time and pinned to that connection; private,\nreserved and mixed public/private answers are rejected. Credentials stay in headers. Redirects,\ncompressed responses, automatic retries and ambient proxy configuration are not used. A request\nsettles only after its owned request, response and socket have closed. Imports and construction\nperform no DNS lookup, network request, timer registration or environment capture."
+              }
+            ]
+          }
+        ]
+      },
+      "children": [
+        {
+          "id": 8,
+          "name": "constructor",
+          "variant": "declaration",
+          "kind": 512,
+          "flags": {
+            "isPublic": true
+          },
+          "signatures": [
+            {
+              "id": 9,
+              "name": "NodeApiKeyVerificationTransport",
+              "variant": "signature",
+              "kind": 16384,
+              "flags": {
+                "isPublic": true
+              },
+              "comment": {
+                "summary": [
+                  {
+                    "kind": "text",
+                    "text": "Validates explicit limits without creating connections or reading credentials."
+                  }
+                ],
+                "blockTags": [
+                  {
+                    "tag": "@throws",
+                    "content": [
+                      {
+                        "kind": "text",
+                        "text": "A safe AiError when a limit is not a positive safe integer or exceeds the timer ceiling."
+                      }
+                    ]
+                  }
+                ]
+              },
+              "parameters": [
+                {
+                  "id": 10,
+                  "name": "options",
+                  "variant": "param",
+                  "kind": 32768,
+                  "flags": {},
+                  "comment": {
+                    "summary": [
+                      {
+                        "kind": "text",
+                        "text": "Total timeout, response-byte budget and concurrent-request budget."
+                      }
+                    ]
+                  },
+                  "type": {
+                    "type": "reference",
+                    "target": 49,
+                    "name": "INodeApiKeyVerificationTransportOptions",
+                    "package": "@pixel-brewery/synapse-auth-providers"
+                  },
+                  "defaultValue": "{}"
+                }
+              ],
+              "type": {
+                "type": "reference",
+                "target": 7,
+                "name": "NodeApiKeyVerificationTransport",
+                "package": "@pixel-brewery/synapse-auth-providers"
+              },
+              "overwrites": {
+                "type": "reference",
+                "target": 3,
+                "name": "ApiKeyVerificationTransportBase.constructor"
+              }
+            }
+          ],
+          "overwrites": {
+            "type": "reference",
+            "target": 2,
+            "name": "ApiKeyVerificationTransportBase.constructor"
+          }
+        },
+        {
+          "id": 17,
+          "name": "get",
+          "variant": "declaration",
+          "kind": 2048,
+          "flags": {
+            "isPublic": true
+          },
+          "signatures": [
+            {
+              "id": 18,
+              "name": "get",
+              "variant": "signature",
+              "kind": 4096,
+              "flags": {
+                "isPublic": true
+              },
+              "comment": {
+                "summary": [
+                  {
+                    "kind": "text",
+                    "text": "Reads one authentication endpoint with bounded DNS, connection and response lifetime."
+                  }
+                ],
+                "blockTags": [
+                  {
+                    "tag": "@returns",
+                    "content": [
+                      {
+                        "kind": "text",
+                        "text": "Bounded parsed JSON and HTTP status after the direct connection has closed."
+                      }
+                    ]
+                  },
+                  {
+                    "tag": "@throws",
+                    "content": [
+                      {
+                        "kind": "text",
+                        "text": "A safe AiError for unsafe configuration, cancellation, expiry, concurrency/output limits or transport/protocol failure."
+                      }
+                    ]
+                  },
+                  {
+                    "tag": "@remarks",
+                    "content": [
+                      {
+                        "kind": "text",
+                        "text": "HTTP errors retain their status for provider-specific classification. Non-JSON error\nbodies are discarded. Response headers are limited to 16 KiB; bodies default to 1 MiB.\nNo key, destination URL, response body or raw error cause appears in a thrown error."
+                      }
+                    ]
+                  }
+                ]
+              },
+              "parameters": [
+                {
+                  "id": 19,
+                  "name": "request",
+                  "variant": "param",
+                  "kind": 32768,
+                  "flags": {},
+                  "comment": {
+                    "summary": [
+                      {
+                        "kind": "text",
+                        "text": "Public HTTPS endpoint, backend-only headers and caller cancellation."
+                      }
+                    ]
+                  },
+                  "type": {
+                    "type": "reference",
+                    "target": 42,
+                    "name": "IApiKeyVerificationRequest",
+                    "package": "@pixel-brewery/synapse-auth-providers"
+                  }
+                }
+              ],
+              "type": {
+                "type": "reference",
+                "target": {
+                  "packageName": "typescript",
+                  "packagePath": "lib/lib.es5.d.ts",
+                  "qualifiedName": "Promise"
+                },
+                "typeArguments": [
+                  {
+                    "type": "reference",
+                    "target": 46,
+                    "name": "IApiKeyVerificationResponse",
+                    "package": "@pixel-brewery/synapse-auth-providers"
+                  }
+                ],
+                "name": "Promise",
+                "package": "typescript"
+              },
+              "overwrites": {
+                "type": "reference",
+                "target": 5,
+                "name": "ApiKeyVerificationTransportBase.get"
+              }
+            }
+          ],
+          "overwrites": {
+            "type": "reference",
+            "target": 4,
+            "name": "ApiKeyVerificationTransportBase.get"
+          }
+        }
+      ],
+      "groups": [
+        {
+          "title": "Constructors",
+          "children": [
+            8
+          ]
+        },
+        {
+          "title": "Methods",
+          "children": [
+            17
+          ]
+        }
+      ],
+      "extendedTypes": [
+        {
+          "type": "reference",
+          "target": 1,
+          "name": "ApiKeyVerificationTransportBase",
+          "package": "@pixel-brewery/synapse-auth-providers"
+        }
+      ]
+    }
+  ],
+  "groups": [
+    {
+      "title": "Classes",
+      "children": [
+        1,
+        7
+      ]
+    },
+    {
+      "title": "Interfaces",
+      "children": [
+        42,
+        46,
+        49
+      ]
+    }
+  ],
+  "packageName": "@pixel-brewery/synapse-auth-providers",
+  "symbolIdMap": {
+    "0": {
+      "packageName": "@pixel-brewery/synapse-auth-providers",
+      "packagePath": "src/index.ts",
+      "qualifiedName": ""
+    },
+    "1": {
+      "packageName": "@pixel-brewery/synapse-auth-providers",
+      "packagePath": "src/abstracts/ApiKeyVerificationTransportBase.ts",
+      "qualifiedName": "ApiKeyVerificationTransportBase"
+    },
+    "4": {
+      "packageName": "@pixel-brewery/synapse-auth-providers",
+      "packagePath": "src/abstracts/ApiKeyVerificationTransportBase.ts",
+      "qualifiedName": "ApiKeyVerificationTransportBase.get"
+    },
+    "5": {
+      "packageName": "@pixel-brewery/synapse-auth-providers",
+      "packagePath": "src/abstracts/ApiKeyVerificationTransportBase.ts",
+      "qualifiedName": "ApiKeyVerificationTransportBase.get"
+    },
+    "6": {
+      "packageName": "@pixel-brewery/synapse-auth-providers",
+      "packagePath": "src/abstracts/ApiKeyVerificationTransportBase.ts",
+      "qualifiedName": "request"
+    },
+    "7": {
+      "packageName": "@pixel-brewery/synapse-auth-providers",
+      "packagePath": "src/services/NodeApiKeyVerificationTransport.ts",
+      "qualifiedName": "NodeApiKeyVerificationTransport"
+    },
+    "8": {
+      "packageName": "@pixel-brewery/synapse-auth-providers",
+      "packagePath": "src/services/NodeApiKeyVerificationTransport.ts",
+      "qualifiedName": "NodeApiKeyVerificationTransport.__constructor"
+    },
+    "9": {
+      "packageName": "@pixel-brewery/synapse-auth-providers",
+      "packagePath": "src/services/NodeApiKeyVerificationTransport.ts",
+      "qualifiedName": "NodeApiKeyVerificationTransport"
+    },
+    "10": {
+      "packageName": "@pixel-brewery/synapse-auth-providers",
+      "packagePath": "src/services/NodeApiKeyVerificationTransport.ts",
+      "qualifiedName": "options"
+    },
+    "17": {
+      "packageName": "@pixel-brewery/synapse-auth-providers",
+      "packagePath": "src/services/NodeApiKeyVerificationTransport.ts",
+      "qualifiedName": "NodeApiKeyVerificationTransport.get"
+    },
+    "18": {
+      "packageName": "@pixel-brewery/synapse-auth-providers",
+      "packagePath": "src/services/NodeApiKeyVerificationTransport.ts",
+      "qualifiedName": "NodeApiKeyVerificationTransport.get"
+    },
+    "19": {
+      "packageName": "@pixel-brewery/synapse-auth-providers",
+      "packagePath": "src/services/NodeApiKeyVerificationTransport.ts",
+      "qualifiedName": "request"
+    },
+    "42": {
+      "packageName": "@pixel-brewery/synapse-auth-providers",
+      "packagePath": "src/interfaces/IApiKeyVerificationRequest.ts",
+      "qualifiedName": "IApiKeyVerificationRequest"
+    },
+    "43": {
+      "packageName": "@pixel-brewery/synapse-auth-providers",
+      "packagePath": "src/interfaces/IApiKeyVerificationRequest.ts",
+      "qualifiedName": "IApiKeyVerificationRequest.url"
+    },
+    "44": {
+      "packageName": "@pixel-brewery/synapse-auth-providers",
+      "packagePath": "src/interfaces/IApiKeyVerificationRequest.ts",
+      "qualifiedName": "IApiKeyVerificationRequest.headers"
+    },
+    "45": {
+      "packageName": "@pixel-brewery/synapse-auth-providers",
+      "packagePath": "src/interfaces/IApiKeyVerificationRequest.ts",
+      "qualifiedName": "IApiKeyVerificationRequest.signal"
+    },
+    "46": {
+      "packageName": "@pixel-brewery/synapse-auth-providers",
+      "packagePath": "src/interfaces/IApiKeyVerificationResponse.ts",
+      "qualifiedName": "IApiKeyVerificationResponse"
+    },
+    "47": {
+      "packageName": "@pixel-brewery/synapse-auth-providers",
+      "packagePath": "src/interfaces/IApiKeyVerificationResponse.ts",
+      "qualifiedName": "IApiKeyVerificationResponse.status"
+    },
+    "48": {
+      "packageName": "@pixel-brewery/synapse-auth-providers",
+      "packagePath": "src/interfaces/IApiKeyVerificationResponse.ts",
+      "qualifiedName": "IApiKeyVerificationResponse.body"
+    },
+    "49": {
+      "packageName": "@pixel-brewery/synapse-auth-providers",
+      "packagePath": "src/interfaces/INodeApiKeyVerificationTransportOptions.ts",
+      "qualifiedName": "INodeApiKeyVerificationTransportOptions"
+    },
+    "50": {
+      "packageName": "@pixel-brewery/synapse-auth-providers",
+      "packagePath": "src/interfaces/INodeApiKeyVerificationTransportOptions.ts",
+      "qualifiedName": "INodeApiKeyVerificationTransportOptions.timeoutMs"
+    },
+    "51": {
+      "packageName": "@pixel-brewery/synapse-auth-providers",
+      "packagePath": "src/interfaces/INodeApiKeyVerificationTransportOptions.ts",
+      "qualifiedName": "INodeApiKeyVerificationTransportOptions.maxResponseBytes"
+    },
+    "52": {
+      "packageName": "@pixel-brewery/synapse-auth-providers",
+      "packagePath": "src/interfaces/INodeApiKeyVerificationTransportOptions.ts",
+      "qualifiedName": "INodeApiKeyVerificationTransportOptions.maximumConcurrentRequests"
+    }
+  },
+  "files": {
+    "entries": {
+      "1": "libs/synapse-auth-providers/src/index.ts"
+    },
+    "reflections": {
+      "1": 0
+    }
+  }
+}

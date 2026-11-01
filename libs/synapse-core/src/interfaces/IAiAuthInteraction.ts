@@ -5,7 +5,7 @@ import type { IAiAuthField } from './IAiAuthField.js';
 // #endregion
 
 /**
- * One correlated, expiring native authentication interaction.
+ * One correlated, expiring authentication interaction.
  *
  * @public
  */
@@ -31,7 +31,7 @@ export interface IAiAuthInteraction {
     readonly message?: string;
 
     /**
-     * Native login URL for an explicit user interaction.
+     * Authentication URL for an explicit user interaction.
      */
     readonly url?: string;
 

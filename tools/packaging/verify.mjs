@@ -51,8 +51,13 @@ export async function verify({ root = repository } = {}) {
 
         packages.sort((left, right) => left.name.localeCompare(right.name));
 
-        if (packages.length !== 9 || new Set(packages.map((pkg) => pkg.version)).size !== 1)
-            throw new Error('The nine public Synapse packages must share one version.');
+        if (
+            packages.length === 0 ||
+            packages.length > 64 ||
+            new Set(packages.map((pkg) => pkg.name)).size !== packages.length ||
+            new Set(packages.map((pkg) => pkg.version)).size !== 1
+        )
+            throw new Error('The bounded public Synapse library inventory must share one version.');
 
         let mcp;
 
@@ -216,73 +221,51 @@ export async function verify({ root = repository } = {}) {
             'synapse-provider-claude',
             'synapse-provider-opencode',
             'synapse-provider-acp',
+            'synapse-auth-providers',
             '@agentclientprotocol/sdk',
             '@anthropic-ai/sdk',
             '@opencode-ai/sdk',
         ];
-        const bundled = await build({
-            absWorkingDir: staging,
-            entryPoints: [codexEntry],
-            platform: 'node',
-            target: 'node24',
-            format: 'esm',
-            bundle: true,
-            treeShaking: true,
-            write: false,
-            metafile: true,
-        });
-        const contributors = Object.values(bundled.metafile.outputs).flatMap((output) =>
-            Object.entries(output.inputs)
-                .filter(([, value]) => value.bytesInOutput > 0)
-                .map(([name]) => name),
+
+        report.bundles.push(
+            ...(await verifyConsumerBundle({
+                staging,
+                entry: codexEntry,
+                selectedProvider: 'codex',
+                retained: 'synapse-provider-codex',
+                forbidden,
+            })),
         );
 
-        assertExclusion(contributors, forbidden, 'esbuild');
+        const authenticationEntry = path.join(staging, 'openai-auth-only.mjs');
 
-        if (!contributors.some((name) => name.includes('synapse-provider-codex')))
-            throw new Error('The esbuild consumer did not retain the selected driver.');
-
-        report.bundles.push({
-            tool: 'esbuild',
-            selectedProvider: 'codex',
-            excludedProviders: forbidden,
-            contributingModules: contributors.length,
-        });
-
-        const bundle = await rollup({
-            input: codexEntry,
-            plugins: [nodeResolve({ preferBuiltins: true }), json(), commonjs()],
-            treeshake: true,
-            onwarn: (warning) => {
-                if (warning.code !== 'CIRCULAR_DEPENDENCY')
-                    throw new Error(`Rollup warning: ${warning.message}`);
-            },
-        });
-
-        try {
-            const generated = await bundle.generate({ format: 'esm' });
-            const modules = generated.output.flatMap((chunk) =>
-                chunk.type === 'chunk'
-                    ? Object.entries(chunk.modules)
-                          .filter(([, value]) => value.renderedLength > 0)
-                          .map(([name]) => name)
-                    : [],
-            );
-
-            assertExclusion(modules, forbidden, 'Rollup');
-
-            if (!modules.some((name) => name.includes('synapse-provider-codex')))
-                throw new Error('The Rollup consumer did not retain the selected driver.');
-
-            report.bundles.push({
-                tool: 'rollup',
-                selectedProvider: 'codex',
-                excludedProviders: forbidden,
-                contributingModules: modules.length,
-            });
-        } finally {
-            await bundle.close();
-        }
+        await writeFile(
+            authenticationEntry,
+            "export { OpenAiApiKeyVerifier } from '@pixel-brewery/synapse-auth-providers/openai';\n",
+        );
+        report.bundles.push(
+            ...(await verifyConsumerBundle({
+                staging,
+                entry: authenticationEntry,
+                selectedProvider: 'openai-auth',
+                retained: 'synapse-auth-providers/dist/openai/',
+                forbidden: [
+                    'synapse-provider-codex',
+                    'synapse-provider-claude',
+                    'synapse-provider-opencode',
+                    'synapse-provider-acp',
+                    ...['anthropic', 'gemini', 'mistral', 'openrouter'].map(
+                        (provider) => `synapse-auth-providers/dist/${provider}/`,
+                    ),
+                    '@agentclientprotocol/sdk',
+                    '@anthropic-ai/sdk',
+                    '@opencode-ai/sdk',
+                    'node_modules/openai/',
+                    'node_modules/ai/',
+                    'node_modules/@ai-sdk/',
+                ],
+            })),
+        );
 
         const coreEntry = path.join(staging, 'core-only.mjs');
 
@@ -339,6 +322,68 @@ export async function verify({ root = repository } = {}) {
     } finally {
         await rm(staging, { recursive: true, force: true });
     }
+}
+
+async function verifyConsumerBundle({ staging, entry, selectedProvider, retained, forbidden }) {
+    const results = [];
+    const inspect = (modules, tool) => {
+        assertExclusion(modules, forbidden, tool);
+
+        if (!modules.some((name) => name.replaceAll('\\', '/').includes(retained)))
+            throw new Error(`${tool} consumer did not retain ${selectedProvider}.`);
+
+        results.push({
+            tool,
+            selectedProvider,
+            excludedProviders: forbidden,
+            contributingModules: modules.length,
+        });
+    };
+    const bundled = await build({
+        absWorkingDir: staging,
+        entryPoints: [entry],
+        platform: 'node',
+        target: 'node24',
+        format: 'esm',
+        bundle: true,
+        treeShaking: true,
+        write: false,
+        metafile: true,
+    });
+    const contributors = Object.values(bundled.metafile.outputs).flatMap((output) =>
+        Object.entries(output.inputs)
+            .filter(([, value]) => value.bytesInOutput > 0)
+            .map(([name]) => name),
+    );
+
+    inspect(contributors, 'esbuild');
+
+    const bundle = await rollup({
+        input: entry,
+        plugins: [nodeResolve({ preferBuiltins: true }), json(), commonjs()],
+        treeshake: true,
+        onwarn: (warning) => {
+            if (warning.code !== 'CIRCULAR_DEPENDENCY')
+                throw new Error(`Rollup warning: ${warning.message}`);
+        },
+    });
+
+    try {
+        const generated = await bundle.generate({ format: 'esm' });
+        const modules = generated.output.flatMap((chunk) =>
+            chunk.type === 'chunk'
+                ? Object.entries(chunk.modules)
+                      .filter(([, value]) => value.renderedLength > 0)
+                      .map(([name]) => name)
+                : [],
+        );
+
+        inspect(modules, 'rollup');
+    } finally {
+        await bundle.close();
+    }
+
+    return results;
 }
 
 function assertExclusion(modules, forbidden, tool) {

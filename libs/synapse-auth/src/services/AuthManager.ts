@@ -15,7 +15,7 @@ import { createAuthError } from '../errors/createAuthError.js';
 // #endregion
 
 /**
- * Coordinates native account changes with the same profile gate used by execution.
+ * Coordinates account authentication changes with the same profile gate used by execution.
  *
  * @remarks Construction is inert. Explicit starts/status/logout create bounded operations;
  * event consumption never controls completion. Reuse one manager for a host runtime.
@@ -46,7 +46,7 @@ export class AuthManager {
     // #region Ctor
 
     /**
-     * Captures lifecycle policy without accessing files, credentials or native CLIs.
+     * Captures lifecycle policy without accessing files, credentials or providers.
      *
      * @param coordinator - Exact access coordinator shared with AiRuntime.
      * @param options - Bounded lifetimes, event capacity and deterministic clock/ID seams.
@@ -72,11 +72,11 @@ export class AuthManager {
      * Starts one explicit login, cancelling and draining any older login for that profile.
      *
      * @param configuration - Isolated account instance; paths and options are snapshotted before reserving its profile.
-     * @param driver - Native authentication implementation selected by the host.
+     * @param driver - Authentication implementation selected by the host.
      * @param options - Authorized response owner, advertised method and optional lifetime/signal.
      * @returns Current state, bounded events and the same login's verified result.
      * @throws An AiError for disposal, invalid/unsupported configuration or the active-operation limit.
-     * @remarks Profile admission is blocked synchronously. A new login waits for prior native teardown.
+     * @remarks Profile admission is blocked synchronously. A new login waits for prior authentication teardown.
      *
      * @public
      */
@@ -98,10 +98,7 @@ export class AuthManager {
             throw new AiError('auth-busy', 'Too many authentication operations are active.');
 
         if (!driver.methods(instance).some((method) => method.id === options.methodId)) {
-            throw new AiError(
-                'unsupported',
-                'The selected native authentication method is unsupported.',
-            );
+            throw new AiError('unsupported', 'The selected authentication method is unsupported.');
         }
 
         const timeoutMs = this.limit(options.timeoutMs ?? this._defaultTimeoutMs, 1800000);
@@ -158,12 +155,12 @@ export class AuthManager {
     }
 
     /**
-     * Performs a bounded native status check without initiating login, hooks or inference.
+     * Performs a bounded authentication status check without initiating login or inference.
      *
      * @param configuration - Selected isolated account, snapshotted before acquiring its execution lease.
-     * @param driver - Read-only native authentication inspector.
+     * @param driver - Read-only authentication inspector.
      * @param signal - Optional caller cancellation.
-     * @returns Validated safe account metadata, without raw CLI messages.
+     * @returns Validated safe account metadata, without raw provider messages.
      * @throws An AiError for busy profiles, timeout, cancellation or inspection failure; unconfirmed cleanup leaves the profile blocked.
      *
      * @public
@@ -222,12 +219,12 @@ export class AuthManager {
     }
 
     /**
-     * Cancels/drains a profile's login and executions before removing its native credentials.
+     * Cancels/drains a profile's login and executions before removing its configured credentials.
      *
      * @param configuration - Account whose credentials are explicitly being removed; snapshotted before reserving its profile.
-     * @param driver - Native logout/status implementation.
-     * @param signal - Optional caller cancellation, still awaited through native cleanup.
-     * @returns Completion after native logout and verification that the account is signed out.
+     * @param driver - Logout/status implementation.
+     * @param signal - Optional caller cancellation, still awaited through owned cleanup.
+     * @returns Completion after logout and verification that the account is signed out.
      * @throws An AiError for timeout, cancellation, teardown failure or persistent authentication.
      *
      * @public
@@ -261,7 +258,7 @@ export class AuthManager {
                     operation.controller.signal.throwIfAborted();
 
                     if (status.authenticated)
-                        throw new AiError('provider', 'Native logout could not be verified.');
+                        throw new AiError('provider', 'Logout could not be verified.');
                 },
                 operation.controller.signal,
             )
@@ -274,7 +271,7 @@ export class AuthManager {
     }
 
     /**
-     * Cancels all login/status/logout work and awaits owned native cleanup.
+     * Cancels all login/status/logout work and awaits owned authentication cleanup.
      *
      * @returns Idempotent shutdown completion; future operations are rejected.
      * @throws An AiError with cleanupIncomplete after all cleanup attempts settle if termination remains unconfirmed.

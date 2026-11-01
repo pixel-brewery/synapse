@@ -2,15 +2,19 @@
 
 Public entry point for @pixel-brewery/synapse-auth.
 
-Isolated CLI profiles and explicit native authentication lifecycle.
+Isolated account profiles, native authentication and backend-managed API-key connections.
 
 ## Classes
 
+- [ApiKeyAuthDriver](classes/ApiKeyAuthDriver.md)
+- [ApiKeyStoreBase](classes/ApiKeyStoreBase.md)
+- [ApiKeyVerifierBase](classes/ApiKeyVerifierBase.md)
 - [AuthManager](classes/AuthManager.md)
 - [ProfileManager](classes/ProfileManager.md)
 
 ## Interfaces
 
+- [IApiKeyCredentialScope](interfaces/IApiKeyCredentialScope.md)
 - [IAuthHandle](interfaces/IAuthHandle.md)
 - [IAuthManagerOptions](interfaces/IAuthManagerOptions.md)
 - [IAuthOperationIdentity](interfaces/IAuthOperationIdentity.md)
@@ -21,3 +25,7 @@ Isolated CLI profiles and explicit native authentication lifecycle.
 ## Type Aliases
 
 - [AuthState](type-aliases/AuthState.md)
+
+## Functions
+
+- [apiKeyCredentialScope](functions/apiKeyCredentialScope.md)

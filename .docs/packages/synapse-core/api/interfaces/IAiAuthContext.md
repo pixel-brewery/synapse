@@ -1,6 +1,6 @@
 # Interface: IAiAuthContext
 
-Explicit native login execution with host-owned interaction presentation.
+Explicit authentication procedure with host-owned interaction presentation.
 
 ## Properties
 
@@ -16,7 +16,7 @@ Isolated account instance being authenticated.
 
 > `readonly` **interaction**: (`interaction`) => `void`
 
-Present a native interaction; auth owner validates identity and expiry.
+Present an authentication interaction; auth owner validates identity and expiry.
 
 #### Parameters
 
@@ -24,7 +24,7 @@ Present a native interaction; auth owner validates identity and expiry.
 
 [`IAiAuthInteraction`](IAiAuthInteraction.md)
 
-Correlated native interaction to present.
+Correlated authentication interaction to present.
 
 #### Returns
 

@@ -6,7 +6,7 @@ import type { IAiAuthInteraction } from './IAiAuthInteraction.js';
 // #endregion
 
 /**
- * Explicit native login execution with host-owned interaction presentation.
+ * Explicit authentication procedure with host-owned interaction presentation.
  *
  * @public
  */
@@ -27,9 +27,9 @@ export interface IAiAuthContext {
     readonly signal: AbortSignal;
 
     /**
-     * Present a native interaction; auth owner validates identity and expiry.
+     * Present an authentication interaction; auth owner validates identity and expiry.
      *
-     * @param interaction - Correlated native interaction to present.
+     * @param interaction - Correlated authentication interaction to present.
      */
     readonly interaction: (interaction: IAiAuthInteraction) => void;
 

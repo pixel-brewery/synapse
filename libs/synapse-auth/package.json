@@ -34,7 +34,7 @@
         "access": "public",
         "registry": "https://npm.pkg.github.com"
     },
-    "description": "Application/account profiles and explicit native CLI authentication with coordinated credential changes.",
+    "description": "Application/account profiles and coordinated native or backend API-key authentication.",
     "scripts": {
         "build": "tsc --build tsconfig.lib.json",
         "typecheck": "tsc --noEmit -p tsconfig.lib.json && tsc --noEmit -p tsconfig.spec.json",
