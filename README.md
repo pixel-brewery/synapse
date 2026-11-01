@@ -15,7 +15,7 @@ Native sign-in. Independent application and account profiles. Resumable runs. Po
 
 [Try the example](#try-it-from-a-checkout) · [Providers](#providers) · [Packages](#packages) · [Agent documentation](#documentation-for-your-coding-agent) · [Documentation](.docs/README.md) · [Comparison](.docs/guides/comparison.md)
 
-> **Initial family version: `0.0.1`.** Synapse is MIT licensed and is being prepared for public source hosting at [pixel-brewery/synapse](https://github.com/pixel-brewery/synapse). The owner must complete the [public source launch](.docs/guides/releases.md#public-source-launch), including repository transfer and visibility, separately from package publication. All ten packages target public GitHub Packages at `npm.pkg.github.com` under `@pixel-brewery`. Install a published version after [registry verification](.docs/guides/releases.md#first-publication-and-verification); [registry authentication](.docs/guides/consumers.md#install-from-github-packages) is required even for public GitHub npm packages. Local [verified archives](.docs/guides/consumers.md#local-archive-alternative) are also available.
+> **Initial family version: `0.0.1`.** Synapse is MIT licensed and is being prepared for public source hosting at [pixel-brewery/synapse](https://github.com/pixel-brewery/synapse). The owner must complete the [public source launch](.docs/guides/releases.md#public-source-launch), including repository transfer and visibility, separately from package publication. All public packages target public GitHub Packages at `npm.pkg.github.com` under `@pixel-brewery`. Install a published version after [registry verification](.docs/guides/releases.md#first-publication-and-verification); [registry authentication](.docs/guides/consumers.md#install-from-github-packages) is required even for public GitHub npm packages. Local [verified archives](.docs/guides/consumers.md#local-archive-alternative) are also available.
 
 ## Why Synapse exists
 
@@ -35,6 +35,8 @@ flowchart LR
 ```
 
 Supported native subscription sign-in avoids a mandatory API key. Inference follows the selected CLI and account: a local process can still call a remote model service.
+
+Authentication can also be used independently in a Node.js backend. `synapse-auth` provides an API-key authentication adapter with injected secret storage and provider verification; it requires no installed CLI or Synapse execution driver. The optional `synapse-auth-providers` package checks keys for OpenAI, Anthropic, Gemini, Mistral and OpenRouter using metadata endpoints. Resonanz supplies those same stored keys to Vercel AI SDK, which owns model calls, streaming and tools. See [cloud authentication](.docs/guides/cloud-authentication.md), including the SDK integration and separate prerequisites for future hosted ChatGPT subscription sign-in.
 
 Read the [project story](.docs/guides/why-synapse.md) for the motivation, design choices and examples beyond desktop orchestration.
 
@@ -145,7 +147,8 @@ Every npm name begins with `@pixel-brewery/`. Choose the packages your host need
 | --------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------- |
 | [synapse-core](libs/synapse-core/README.md)                           | Provider-neutral contracts, capabilities, events, session references and typed errors; zero runtime dependencies |
 | [synapse-runtime](libs/synapse-runtime/README.md)                     | Processes, workspaces, bounded streams, deadlines, cancellation, session storage and profile coordination        |
-| [synapse-auth](libs/synapse-auth/README.md)                           | Application/account profiles and correlated native login/logout flows                                            |
+| [synapse-auth](libs/synapse-auth/README.md)                           | Application/account profiles, native login/logout and backend API-key authentication                             |
+| [synapse-auth-providers](libs/synapse-auth-providers/README.md)       | Optional API-key verification for five providers through metadata endpoints                                      |
 | [synapse-routing](libs/synapse-routing/README.md)                     | Candidate selection, admission queues, concurrency, circuit state and quota cooldowns                            |
 | [synapse-provider-codex](libs/synapse-provider-codex/README.md)       | Codex execution, auth, sessions and metadata                                                                     |
 | [synapse-provider-claude](libs/synapse-provider-claude/README.md)     | Claude Code execution, auth and session normalization                                                            |
@@ -153,7 +156,7 @@ Every npm name begins with `@pixel-brewery/`. Choose the packages your host need
 | [synapse-provider-acp](libs/synapse-provider-acp/README.md)           | An extensible ACP stdio driver with explicit native permission mappings                                          |
 | [synapse-testing](libs/synapse-testing/README.md)                     | Simulated drivers and transport replays for account-free application tests                                       |
 
-Public APIs have English TSDoc. TypeDoc generates [portable Markdown references and reflection JSON](.docs/guides/api-documentation.md), ready to embed in a future documentation site. The nine runtime libraries remain independently composable; the optional developer tool below adds no dependency to an application.
+Public APIs have English TSDoc. TypeDoc generates [portable Markdown references and reflection JSON](.docs/guides/api-documentation.md), ready to embed in a future documentation site. The runtime libraries remain independently composable; the optional developer tool below adds no dependency to an application.
 
 ## Documentation for your coding agent
 
@@ -183,7 +186,7 @@ The [detailed comparison](.docs/guides/comparison.md) also covers Agent CLI SDK 
 
 ## Documentation and verification
 
-Start at the [documentation hub](.docs/README.md). Integration guidance, all nine package references, architecture decisions, CLI compatibility and release instructions live alongside the code. Repository-hosted guides become publicly accessible with the owner's public source launch; GitHub Packages availability is verified independently. The MCP package carries its documentation corpus, and checkout-relative links also work locally.
+Start at the [documentation hub](.docs/README.md). Integration guidance, all public package references, architecture decisions, CLI compatibility and release instructions live alongside the code. Repository-hosted guides become publicly accessible with the owner's public source launch; GitHub Packages availability is verified independently. The MCP package carries its documentation corpus, and checkout-relative links also work locally.
 
 ```sh
 yarn verify

@@ -1,16 +1,17 @@
 /**
- * Verified native CLI account state without reusable credential values.
+ * Driver-reported account authentication state without reusable credential values.
  *
  * @public
  */
 export interface IAiAuthStatus {
     /**
-     * Whether the CLI verified an authenticated account.
+     * Whether the driver's verification mechanism accepted the account's authentication.
+     * Host-managed API keys require a host-owned verifier; stored key presence alone is insufficient.
      */
     readonly authenticated: boolean;
 
     /**
-     * Verified native authentication family, e.g. chatgpt, subscription or api-key; absent when unknown.
+     * Authentication family established by the driver, e.g. chatgpt, subscription or api-key; absent when unknown.
      */
     readonly method?: string;
 
@@ -30,7 +31,7 @@ export interface IAiAuthStatus {
     readonly plan?: string;
 
     /**
-     * Safe bounded status explanation; never raw CLI output.
+     * Safe bounded status explanation; never raw provider output or credential values.
      */
     readonly message?: string;
 }

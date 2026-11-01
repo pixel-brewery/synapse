@@ -16,7 +16,7 @@ Driver-local method identifier.
 
 > `readonly` **kind**: `"browser"` \| `"device-code"` \| `"terminal"` \| `"credentials"`
 
-Required native interaction family.
+Required authentication interaction family.
 
 ***
 

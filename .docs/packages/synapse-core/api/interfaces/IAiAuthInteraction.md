@@ -1,6 +1,6 @@
 # Interface: IAiAuthInteraction
 
-One correlated, expiring native authentication interaction.
+One correlated, expiring authentication interaction.
 
 ## Properties
 
@@ -56,4 +56,4 @@ Extensible interaction discriminator, e.g. browser/device-code/terminal/credenti
 
 > `readonly` `optional` **url?**: `string`
 
-Native login URL for an explicit user interaction.
+Authentication URL for an explicit user interaction.

@@ -10,6 +10,7 @@ import { fileURLToPath, pathToFileURL } from 'node:url';
 
 const repository = resolve(dirname(fileURLToPath(import.meta.url)), '../..');
 const maximumCorpusBytes = 8 * 1024 * 1024;
+const maximumPackages = 64;
 const requiredPatterns = [
     'query-pattern',
     'repository-pattern',
@@ -42,13 +43,12 @@ export async function buildCorpus({ root = repository, output, check = false } =
     if (
         index.schemaVersion !== 1 ||
         !Array.isArray(index.packages) ||
-        index.packages.length !== 9 ||
+        index.packages.length === 0 ||
+        index.packages.length > maximumPackages ||
         !Array.isArray(index.entries) ||
         index.entries.length > 100_000
     )
-        throw new Error(
-            'The current version-one TypeDoc API index for nine libraries is required.',
-        );
+        throw new Error('A bounded version-one TypeDoc API index of public libraries is required.');
 
     const manifests = new Map();
 

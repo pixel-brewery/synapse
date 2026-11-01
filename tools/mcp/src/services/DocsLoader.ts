@@ -10,17 +10,6 @@ import type { IPackageKnowledge } from '../interfaces/IPackageKnowledge.js';
 // #endregion
 
 const maximumBytes = 8 * 1024 * 1024;
-const packageIdentities = [
-    'synapse-auth',
-    'synapse-core',
-    'synapse-provider-acp',
-    'synapse-provider-claude',
-    'synapse-provider-codex',
-    'synapse-provider-opencode',
-    'synapse-routing',
-    'synapse-runtime',
-    'synapse-testing',
-];
 const patternIdentities = [
     'config-pattern',
     'dto-pattern',
@@ -157,17 +146,13 @@ function corpus(value: unknown): IKnowledgeCorpus {
     unique(patterns.map((entry) => entry.name));
 
     if (
-        packages
-            .map((entry) => entry.name)
-            .sort()
-            .join('\0') !== packageIdentities.join('\0') ||
         patterns
             .map((entry) => entry.name)
             .sort()
             .join('\0') !== patternIdentities.join('\0')
     )
         throw new Error(
-            'The version-one knowledge corpus requires all nine libraries and patterns.',
+            'The version-one knowledge corpus requires all nine architecture patterns.',
         );
 
     return Object.freeze({

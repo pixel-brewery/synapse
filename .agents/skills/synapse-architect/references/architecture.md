@@ -16,9 +16,11 @@ Core has no Node.js, external provider or framework dependency. Runtime depends 
 
 Enforce package boundaries with actual imports and manifests. No all-provider registry, convenience root that imports concrete adapters, source aliases hiding undeclared dependencies or provider SDK types in neutral APIs.
 
+`synapse-auth-providers` depends on auth/core and exposes concrete metadata-check adapters through separate provider subpaths. Its root exports only the shared HTTP boundary. Core, runtime and auth never import these concrete checks. It provides no Vercel language-model interface; Resonanz uses Vercel AI SDK directly with backend-resolved credentials for all API inference.
+
 ## Optional developer knowledge server
 
-`tools/mcp` is a separately shipped documentation CLI beside the nine runtime libraries. It depends on the official MCP SDK and serves a bounded bundled corpus over stdio; runtime libraries neither depend on it nor acquire an MCP/HTTP service through it. It is not an execution adapter, provider gateway, account inspector or authentication owner.
+`tools/mcp` is a separately shipped documentation CLI beside the runtime libraries. It depends on the official MCP SDK and serves a bounded bundled corpus over stdio; runtime libraries neither depend on it nor acquire an MCP/HTTP service through it. It is not an execution adapter, provider gateway, account inspector or authentication owner.
 
 Package/API docs, guides and nine Synapse patterns remain the canonical knowledge sources. TypeDoc owns the API inventory; the MCP build checks drift and recursively consumes that output into `dist/data/corpus.json`. The 15 Archipel-compatible tool names/input shapes describe Synapse abstractions and explicit composition. Do not generate NestJS modules, Prisma repositories or product workflows from inherited pattern labels. No public TypeScript library entrypoint is added for this CLI.
 

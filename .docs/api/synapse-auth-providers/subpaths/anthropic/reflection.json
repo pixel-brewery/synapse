@@ -1,0 +1,480 @@
+{
+  "schemaVersion": "2.0",
+  "id": 0,
+  "name": "@pixel-brewery/synapse-auth-providers/anthropic",
+  "variant": "project",
+  "kind": 1,
+  "flags": {},
+  "children": [
+    {
+      "id": 1,
+      "name": "AnthropicApiKeyVerifier",
+      "variant": "declaration",
+      "kind": 128,
+      "flags": {
+        "isPublic": true
+      },
+      "comment": {
+        "summary": [
+          {
+            "kind": "text",
+            "text": "Verifies an Anthropic API key through its authenticated, non-inference models endpoint."
+          }
+        ],
+        "blockTags": [
+          {
+            "tag": "@remarks",
+            "content": [
+              {
+                "kind": "text",
+                "text": "Sends one GET to https://api.anthropic.com/v1/models?limit=1 using the documented\n2026-10-21 API version and bearer-key authentication. No model generation, catalog export,\nbilling check or entitlement claim occurs. Keys without permission for this endpoint cannot\nbe verified by this adapter. Construction and imports perform no credential or network I/O."
+              }
+            ]
+          }
+        ]
+      },
+      "children": [
+        {
+          "id": 2,
+          "name": "constructor",
+          "variant": "declaration",
+          "kind": 512,
+          "flags": {
+            "isPublic": true
+          },
+          "signatures": [
+            {
+              "id": 3,
+              "name": "AnthropicApiKeyVerifier",
+              "variant": "signature",
+              "kind": 16384,
+              "flags": {
+                "isPublic": true
+              },
+              "comment": {
+                "summary": [
+                  {
+                    "kind": "text",
+                    "text": "Captures an explicit transport and optional workspace selector."
+                  }
+                ],
+                "blockTags": [
+                  {
+                    "tag": "@throws",
+                    "content": [
+                      {
+                        "kind": "text",
+                        "text": "An AiError for an invalid transport or unsafe/unknown workspace options."
+                      }
+                    ]
+                  }
+                ]
+              },
+              "parameters": [
+                {
+                  "id": 4,
+                  "name": "_transport",
+                  "variant": "param",
+                  "kind": 32768,
+                  "flags": {},
+                  "comment": {
+                    "summary": [
+                      {
+                        "kind": "text",
+                        "text": "Bounded verification HTTP owner; defaults to the native Node transport."
+                      }
+                    ]
+                  },
+                  "type": {
+                    "type": "reference",
+                    "target": {
+                      "packageName": "@pixel-brewery/synapse-auth-providers",
+                      "packagePath": "src/abstracts/ApiKeyVerificationTransportBase.ts",
+                      "qualifiedName": "ApiKeyVerificationTransportBase"
+                    },
+                    "name": "ApiKeyVerificationTransportBase",
+                    "package": "@pixel-brewery/synapse-auth-providers",
+                    "externalUrl": "packages/synapse-auth-providers/api/classes/ApiKeyVerificationTransportBase.md"
+                  },
+                  "defaultValue": "..."
+                },
+                {
+                  "id": 5,
+                  "name": "options",
+                  "variant": "param",
+                  "kind": 32768,
+                  "flags": {},
+                  "comment": {
+                    "summary": [
+                      {
+                        "kind": "text",
+                        "text": "Workspace selection matching the host's later inference client."
+                      }
+                    ]
+                  },
+                  "type": {
+                    "type": "reference",
+                    "target": 13,
+                    "name": "IAnthropicApiKeyVerifierOptions",
+                    "package": "@pixel-brewery/synapse-auth-providers"
+                  },
+                  "defaultValue": "{}"
+                }
+              ],
+              "type": {
+                "type": "reference",
+                "target": 1,
+                "name": "AnthropicApiKeyVerifier",
+                "package": "@pixel-brewery/synapse-auth-providers"
+              },
+              "overwrites": {
+                "type": "reference",
+                "target": -1,
+                "name": "ApiKeyVerifierBase.constructor",
+                "package": "@pixel-brewery/synapse-auth",
+                "externalUrl": "packages/synapse-auth/api/classes/ApiKeyVerifierBase.md#constructor"
+              }
+            }
+          ],
+          "overwrites": {
+            "type": "reference",
+            "target": -1,
+            "name": "ApiKeyVerifierBase.constructor",
+            "package": "@pixel-brewery/synapse-auth",
+            "externalUrl": "packages/synapse-auth/api/classes/ApiKeyVerifierBase.md#constructor"
+          }
+        },
+        {
+          "id": 8,
+          "name": "verify",
+          "variant": "declaration",
+          "kind": 2048,
+          "flags": {
+            "isPublic": true
+          },
+          "signatures": [
+            {
+              "id": 9,
+              "name": "verify",
+              "variant": "signature",
+              "kind": 4096,
+              "flags": {
+                "isPublic": true
+              },
+              "comment": {
+                "summary": [
+                  {
+                    "kind": "text",
+                    "text": "Performs one cancellable authentication probe and returns safe verified state."
+                  }
+                ],
+                "blockTags": [
+                  {
+                    "tag": "@returns",
+                    "content": [
+                      {
+                        "kind": "text",
+                        "text": "Authenticated state after a valid models page, or false for HTTP 401/403."
+                      }
+                    ]
+                  },
+                  {
+                    "tag": "@throws",
+                    "content": [
+                      {
+                        "kind": "text",
+                        "text": "An AiError for invalid input, cancellation, rate limiting, provider/network failure\nor malformed successful responses. Raw provider bodies and secrets are never returned."
+                      }
+                    ]
+                  }
+                ]
+              },
+              "parameters": [
+                {
+                  "id": 10,
+                  "name": "_scope",
+                  "variant": "param",
+                  "kind": 32768,
+                  "flags": {},
+                  "comment": {
+                    "summary": [
+                      {
+                        "kind": "text",
+                        "text": "Authorized connection identity; no identity values are sent to Anthropic."
+                      }
+                    ]
+                  },
+                  "type": {
+                    "type": "reference",
+                    "target": {
+                      "packageName": "@pixel-brewery/synapse-auth",
+                      "packagePath": "src/interfaces/IApiKeyCredentialScope.ts",
+                      "qualifiedName": "IApiKeyCredentialScope"
+                    },
+                    "name": "IApiKeyCredentialScope",
+                    "package": "@pixel-brewery/synapse-auth",
+                    "externalUrl": "packages/synapse-auth/api/interfaces/IApiKeyCredentialScope.md"
+                  }
+                },
+                {
+                  "id": 11,
+                  "name": "apiKey",
+                  "variant": "param",
+                  "kind": 32768,
+                  "flags": {},
+                  "comment": {
+                    "summary": [
+                      {
+                        "kind": "text",
+                        "text": "Backend-only candidate key supplied by the authentication lifecycle."
+                      }
+                    ]
+                  },
+                  "type": {
+                    "type": "intrinsic",
+                    "name": "string"
+                  }
+                },
+                {
+                  "id": 12,
+                  "name": "signal",
+                  "variant": "param",
+                  "kind": 32768,
+                  "flags": {},
+                  "comment": {
+                    "summary": [
+                      {
+                        "kind": "text",
+                        "text": "Bounded caller cancellation checked around the HTTP exchange."
+                      }
+                    ]
+                  },
+                  "type": {
+                    "type": "reference",
+                    "target": {
+                      "packageName": "typescript",
+                      "packagePath": "lib/lib.dom.d.ts",
+                      "qualifiedName": "AbortSignal"
+                    },
+                    "name": "AbortSignal",
+                    "package": "typescript"
+                  }
+                }
+              ],
+              "type": {
+                "type": "reference",
+                "target": {
+                  "packageName": "typescript",
+                  "packagePath": "lib/lib.es5.d.ts",
+                  "qualifiedName": "Promise"
+                },
+                "typeArguments": [
+                  {
+                    "type": "reference",
+                    "target": {
+                      "packageName": "@pixel-brewery/synapse-core",
+                      "packagePath": "src/interfaces/IAiAuthStatus.ts",
+                      "qualifiedName": "IAiAuthStatus"
+                    },
+                    "name": "IAiAuthStatus",
+                    "package": "@pixel-brewery/synapse-core",
+                    "externalUrl": "packages/synapse-core/api/interfaces/IAiAuthStatus.md"
+                  }
+                ],
+                "name": "Promise",
+                "package": "typescript"
+              },
+              "overwrites": {
+                "type": "reference",
+                "target": -1,
+                "name": "ApiKeyVerifierBase.verify"
+              }
+            }
+          ],
+          "overwrites": {
+            "type": "reference",
+            "target": -1,
+            "name": "ApiKeyVerifierBase.verify"
+          }
+        }
+      ],
+      "groups": [
+        {
+          "title": "Constructors",
+          "children": [
+            2
+          ]
+        },
+        {
+          "title": "Methods",
+          "children": [
+            8
+          ]
+        }
+      ],
+      "extendedTypes": [
+        {
+          "type": "reference",
+          "target": {
+            "packageName": "@pixel-brewery/synapse-auth",
+            "packagePath": "src/abstracts/ApiKeyVerifierBase.ts",
+            "qualifiedName": "ApiKeyVerifierBase"
+          },
+          "name": "ApiKeyVerifierBase",
+          "package": "@pixel-brewery/synapse-auth",
+          "externalUrl": "packages/synapse-auth/api/classes/ApiKeyVerifierBase.md"
+        }
+      ]
+    },
+    {
+      "id": 13,
+      "name": "IAnthropicApiKeyVerifierOptions",
+      "variant": "declaration",
+      "kind": 256,
+      "flags": {
+        "isPublic": true
+      },
+      "comment": {
+        "summary": [
+          {
+            "kind": "text",
+            "text": "Optional Anthropic workspace selection for an API-key authentication probe."
+          }
+        ],
+        "blockTags": [
+          {
+            "tag": "@remarks",
+            "content": [
+              {
+                "kind": "text",
+                "text": "Keys that can select multiple workspaces require a workspace ID. The selected\nworkspace must match the application's later inference-client configuration. A key already\nscoped to one workspace can omit this option. The supplied value is captured at construction."
+              }
+            ]
+          }
+        ]
+      },
+      "children": [
+        {
+          "id": 14,
+          "name": "workspaceId",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {
+            "isOptional": true,
+            "isReadonly": true
+          },
+          "comment": {
+            "summary": [
+              {
+                "kind": "text",
+                "text": "Optional Anthropic workspace ID sent through the anthropic-workspace-id header."
+              }
+            ]
+          },
+          "type": {
+            "type": "intrinsic",
+            "name": "string"
+          }
+        }
+      ],
+      "groups": [
+        {
+          "title": "Properties",
+          "children": [
+            14
+          ]
+        }
+      ]
+    }
+  ],
+  "groups": [
+    {
+      "title": "Classes",
+      "children": [
+        1
+      ]
+    },
+    {
+      "title": "Interfaces",
+      "children": [
+        13
+      ]
+    }
+  ],
+  "packageName": "@pixel-brewery/synapse-auth-providers",
+  "symbolIdMap": {
+    "0": {
+      "packageName": "@pixel-brewery/synapse-auth-providers",
+      "packagePath": "src/anthropic/index.ts",
+      "qualifiedName": ""
+    },
+    "1": {
+      "packageName": "@pixel-brewery/synapse-auth-providers",
+      "packagePath": "src/anthropic/AnthropicApiKeyVerifier.ts",
+      "qualifiedName": "AnthropicApiKeyVerifier"
+    },
+    "2": {
+      "packageName": "@pixel-brewery/synapse-auth-providers",
+      "packagePath": "src/anthropic/AnthropicApiKeyVerifier.ts",
+      "qualifiedName": "AnthropicApiKeyVerifier.__constructor"
+    },
+    "3": {
+      "packageName": "@pixel-brewery/synapse-auth-providers",
+      "packagePath": "src/anthropic/AnthropicApiKeyVerifier.ts",
+      "qualifiedName": "AnthropicApiKeyVerifier"
+    },
+    "4": {
+      "packageName": "@pixel-brewery/synapse-auth-providers",
+      "packagePath": "src/anthropic/AnthropicApiKeyVerifier.ts",
+      "qualifiedName": "_transport"
+    },
+    "5": {
+      "packageName": "@pixel-brewery/synapse-auth-providers",
+      "packagePath": "src/anthropic/AnthropicApiKeyVerifier.ts",
+      "qualifiedName": "options"
+    },
+    "8": {
+      "packageName": "@pixel-brewery/synapse-auth-providers",
+      "packagePath": "src/anthropic/AnthropicApiKeyVerifier.ts",
+      "qualifiedName": "AnthropicApiKeyVerifier.verify"
+    },
+    "9": {
+      "packageName": "@pixel-brewery/synapse-auth-providers",
+      "packagePath": "src/anthropic/AnthropicApiKeyVerifier.ts",
+      "qualifiedName": "AnthropicApiKeyVerifier.verify"
+    },
+    "10": {
+      "packageName": "@pixel-brewery/synapse-auth-providers",
+      "packagePath": "src/anthropic/AnthropicApiKeyVerifier.ts",
+      "qualifiedName": "_scope"
+    },
+    "11": {
+      "packageName": "@pixel-brewery/synapse-auth-providers",
+      "packagePath": "src/anthropic/AnthropicApiKeyVerifier.ts",
+      "qualifiedName": "apiKey"
+    },
+    "12": {
+      "packageName": "@pixel-brewery/synapse-auth-providers",
+      "packagePath": "src/anthropic/AnthropicApiKeyVerifier.ts",
+      "qualifiedName": "signal"
+    },
+    "13": {
+      "packageName": "@pixel-brewery/synapse-auth-providers",
+      "packagePath": "src/anthropic/interfaces/IAnthropicApiKeyVerifierOptions.ts",
+      "qualifiedName": "IAnthropicApiKeyVerifierOptions"
+    },
+    "14": {
+      "packageName": "@pixel-brewery/synapse-auth-providers",
+      "packagePath": "src/anthropic/interfaces/IAnthropicApiKeyVerifierOptions.ts",
+      "qualifiedName": "IAnthropicApiKeyVerifierOptions.workspaceId"
+    }
+  },
+  "files": {
+    "entries": {
+      "1": "libs/synapse-auth-providers/src/anthropic/index.ts"
+    },
+    "reflections": {
+      "1": 0
+    }
+  }
+}

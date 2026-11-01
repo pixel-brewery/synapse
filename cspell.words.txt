@@ -6,8 +6,10 @@ cooldowns
 CTYPE
 EPERM
 fileset
+generativelanguage
 Imagegen
 LOCALAPPDATA
+mapfile
 mcpc
 metacharacters
 modelcontextprotocol
@@ -22,6 +24,7 @@ nonretryable
 npmjs
 onwarn
 opencode
+openrouter
 PATHEXT
 pipefail
 pivanov
@@ -41,4 +44,5 @@ vitest
 WINDIR
 wordmark
 worktrees
+wrkspc
 xhigh

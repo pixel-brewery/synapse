@@ -1,7 +1,7 @@
 // #region Imports
 
 import { execFile } from 'node:child_process';
-import { open, realpath } from 'node:fs/promises';
+import { open, readdir, realpath } from 'node:fs/promises';
 import { dirname, isAbsolute, join, relative, resolve, sep } from 'node:path';
 import { fileURLToPath, pathToFileURL } from 'node:url';
 import { promisify } from 'node:util';
@@ -14,23 +14,11 @@ const organization = 'pixel-brewery';
 const sourceRepository = `${organization}/synapse`;
 const execute = promisify(execFile);
 const versionPattern = /^\d+\.\d+\.\d+(?:-[\w.-]+)?(?:\+[\w.-]+)?$/u;
-const expectedProjects = [
-    'synapse-auth',
-    'synapse-core',
-    'synapse-mcp',
-    'synapse-provider-acp',
-    'synapse-provider-claude',
-    'synapse-provider-codex',
-    'synapse-provider-opencode',
-    'synapse-routing',
-    'synapse-runtime',
-    'synapse-testing',
-];
 
 /**
  * Verifies every member of the actual fixed release group against GitHub Packages and organization metadata.
  *
- * @returns Completion after all ten packages expose the local family version, matching latest tag and public organization visibility; any exposed registry repository URL must match the expected source.
+ * @returns Completion after every public family package exposes the local version, matching latest tag and public organization visibility; any exposed registry repository URL must match the expected source.
  * @throws An Error with safe diagnostics when configuration, authentication, registry metadata or visibility cannot be verified.
  * @remarks This explicitly invoked read-only check never installs, publishes or changes package visibility. Tokens come from existing environment credentials or the existing GitHub CLI account and remain in memory. GitHub REST repository association is deliberately independent of the npm manifest's source URL. A registry-hidden repository URL is reported as not-exposed; proving the source URL inside an installed archive requires a separate check.
  *
@@ -91,15 +79,31 @@ async function releasePackages() {
     try {
         const configuration = await readJson(join(root, 'nx.json'));
         const group = configuration?.release?.groups?.synapse;
+        const expectedProjects = [];
+
+        for (const entry of await readdir(join(root, 'libs'), { withFileTypes: true })) {
+            if (!entry.isDirectory() || !/^synapse-[a-z0-9-]+$/u.test(entry.name)) continue;
+
+            const manifest = await readJson(join(root, 'libs', entry.name, 'package.json'));
+
+            if (manifest?.private !== true) expectedProjects.push(entry.name);
+
+            if (expectedProjects.length > 64)
+                throw new Error('The synapse release group exceeds its public-library budget.');
+        }
+
+        expectedProjects.push('synapse-mcp');
+        expectedProjects.sort();
 
         if (
+            expectedProjects.length < 2 ||
             group?.projectsRelationship !== 'fixed' ||
             !Array.isArray(group.projects) ||
             group.projects.some((name) => typeof name !== 'string') ||
             [...group.projects].sort().join('\0') !== expectedProjects.join('\0')
         )
             throw new Error(
-                'The synapse release group must contain exactly the ten fixed family projects.',
+                'The synapse release group must match the public library manifests and MCP project.',
             );
 
         previousDirectory = process.cwd();

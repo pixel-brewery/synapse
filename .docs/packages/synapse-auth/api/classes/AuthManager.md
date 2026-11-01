@@ -1,6 +1,6 @@
 # Class: AuthManager
 
-Coordinates native account changes with the same profile gate used by execution.
+Coordinates account authentication changes with the same profile gate used by execution.
 
 ## Remarks
 
@@ -13,7 +13,7 @@ event consumption never controls completion. Reuse one manager for a host runtim
 
 > **new AuthManager**(`coordinator`, `options?`): `AuthManager`
 
-Captures lifecycle policy without accessing files, credentials or native CLIs.
+Captures lifecycle policy without accessing files, credentials or providers.
 
 #### Parameters
 
@@ -43,7 +43,7 @@ An AiError when a configured limit is invalid.
 
 > **dispose**(): `Promise`\<`void`\>
 
-Cancels all login/status/logout work and awaits owned native cleanup.
+Cancels all login/status/logout work and awaits owned authentication cleanup.
 
 #### Returns
 
@@ -61,7 +61,7 @@ An AiError with cleanupIncomplete after all cleanup attempts settle if terminati
 
 > **logout**(`configuration`, `driver`, `signal?`): `Promise`\<`void`\>
 
-Cancels/drains a profile's login and executions before removing its native credentials.
+Cancels/drains a profile's login and executions before removing its configured credentials.
 
 #### Parameters
 
@@ -75,19 +75,19 @@ Account whose credentials are explicitly being removed; snapshotted before reser
 
 [`AiAuthDriverBase`](../../../synapse-core/api/classes/AiAuthDriverBase.md)
 
-Native logout/status implementation.
+Logout/status implementation.
 
 ##### signal?
 
 `AbortSignal`
 
-Optional caller cancellation, still awaited through native cleanup.
+Optional caller cancellation, still awaited through owned cleanup.
 
 #### Returns
 
 `Promise`\<`void`\>
 
-Completion after native logout and verification that the account is signed out.
+Completion after logout and verification that the account is signed out.
 
 #### Throws
 
@@ -113,7 +113,7 @@ Isolated account instance; paths and options are snapshotted before reserving it
 
 [`AiAuthDriverBase`](../../../synapse-core/api/classes/AiAuthDriverBase.md)
 
-Native authentication implementation selected by the host.
+Authentication implementation selected by the host.
 
 ##### options
 
@@ -133,7 +133,7 @@ An AiError for disposal, invalid/unsupported configuration or the active-operati
 
 #### Remarks
 
-Profile admission is blocked synchronously. A new login waits for prior native teardown.
+Profile admission is blocked synchronously. A new login waits for prior authentication teardown.
 
 ***
 
@@ -141,7 +141,7 @@ Profile admission is blocked synchronously. A new login waits for prior native t
 
 > **status**(`configuration`, `driver`, `signal?`): `Promise`\<[`IAiAuthStatus`](../../../synapse-core/api/interfaces/IAiAuthStatus.md)\>
 
-Performs a bounded native status check without initiating login, hooks or inference.
+Performs a bounded authentication status check without initiating login or inference.
 
 #### Parameters
 
@@ -155,7 +155,7 @@ Selected isolated account, snapshotted before acquiring its execution lease.
 
 [`AiAuthDriverBase`](../../../synapse-core/api/classes/AiAuthDriverBase.md)
 
-Read-only native authentication inspector.
+Read-only authentication inspector.
 
 ##### signal?
 
@@ -167,7 +167,7 @@ Optional caller cancellation.
 
 `Promise`\<[`IAiAuthStatus`](../../../synapse-core/api/interfaces/IAiAuthStatus.md)\>
 
-Validated safe account metadata, without raw CLI messages.
+Validated safe account metadata, without raw provider messages.
 
 #### Throws
 

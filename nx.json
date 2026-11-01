@@ -49,6 +49,7 @@
                     "synapse-core",
                     "synapse-runtime",
                     "synapse-auth",
+                    "synapse-auth-providers",
                     "synapse-routing",
                     "synapse-provider-codex",
                     "synapse-provider-claude",

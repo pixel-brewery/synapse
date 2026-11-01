@@ -2,7 +2,7 @@
 
 Local development knowledge for AI coding agents: Synapse package documentation, full generated API references, integration/architecture guides and nine architecture patterns through 15 MCP tools.
 
-This optional CLI uses the official `@modelcontextprotocol/sdk` **1.32.1** over stdio. It ships its own corpus and has no public TypeScript import surface. The nine Synapse runtime libraries remain independent of this developer tool.
+This optional CLI uses the official `@modelcontextprotocol/sdk` **1.32.1** over stdio. It ships its own corpus and has no public TypeScript import surface. The Synapse libraries remain independent of this developer tool.
 
 **Initial family version: `0.0.1`.** Install a published package from public GitHub Packages after registry verification. The MIT-licensed source is being prepared for public hosting at [pixel-brewery/synapse](https://github.com/pixel-brewery/synapse). Repository transfer and public visibility follow the owner's [public source launch](../../.docs/guides/releases.md#public-source-launch), independently of package publication.
 

@@ -1,6 +1,6 @@
 # Abstract Class: AiAuthDriverBase
 
-Replaceable native authentication procedures, without an application token broker.
+Replaceable authentication procedures, without an application token broker.
 
 ## Constructors
 
@@ -18,7 +18,7 @@ Replaceable native authentication procedures, without an application token broke
 
 > `abstract` **login**(`context`): `Promise`\<`void`\>
 
-Performs the selected explicit native login while the auth owner holds exclusive profile access.
+Performs the selected explicit authentication procedure under exclusive profile access.
 
 #### Parameters
 
@@ -32,7 +32,7 @@ Expiring login and correlated interaction context.
 
 `Promise`\<`void`\>
 
-Native CLI completion; the auth owner verifies status again before success.
+Procedure completion; the auth owner verifies status again before success.
 
 #### Throws
 
@@ -44,7 +44,7 @@ An AiError when login fails or is cancelled.
 
 > `abstract` **logout**(`instance`, `signal`): `Promise`\<`void`\>
 
-Removes this isolated account's native credentials after its executions drain.
+Removes this isolated account's configured credentials after its executions drain.
 
 #### Parameters
 
@@ -68,7 +68,7 @@ Completion after owned credential changes finish.
 
 #### Throws
 
-An AiError when the native logout fails.
+An AiError when logout fails.
 
 ***
 
@@ -98,7 +98,7 @@ Only procedures this implementation actually supports.
 
 > `abstract` **status**(`instance`, `signal`): `Promise`\<[`IAiAuthStatus`](../interfaces/IAiAuthStatus.md)\>
 
-Verifies native CLI account state without launching a login or hooks.
+Inspects account authentication through the driver's supported verification mechanism.
 
 #### Parameters
 
@@ -118,8 +118,12 @@ Bounded inspection cancellation.
 
 `Promise`\<[`IAiAuthStatus`](../interfaces/IAiAuthStatus.md)\>
 
-Safe verified account metadata.
+Safe account metadata with the authentication result.
 
 #### Throws
 
-An AiError when the host/CLI inspection fails.
+An AiError when the host or provider inspection fails.
+
+#### Remarks
+
+Inspection does not initiate login or inference. Stored credentials alone do not establish remote validity; host-managed API keys require a host-owned verifier.

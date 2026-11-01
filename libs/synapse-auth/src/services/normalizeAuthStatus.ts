@@ -6,11 +6,11 @@ import type { IAiAuthStatus } from '@pixel-brewery/synapse-core';
 // #endregion
 
 /**
- * Validates native status metadata and omits provider-supplied free-form output.
+ * Validates authentication status metadata and omits provider-supplied free-form output.
  *
- * @param value - Unknown native adapter status.
- * @returns Bounded safe account metadata with no credential values or raw CLI message.
- * @throws An AiError when status violates the native inspection contract.
+ * @param value - Unknown authentication adapter status.
+ * @returns Bounded safe account metadata with no credential values or raw provider message.
+ * @throws An AiError when status violates the authentication inspection contract.
  *
  * @internal
  */
@@ -22,7 +22,7 @@ export function normalizeAuthStatus(value: unknown): IAiAuthStatus {
         !('authenticated' in value) ||
         typeof value.authenticated !== 'boolean'
     ) {
-        throw new AiError('protocol', 'The native authentication status was malformed.');
+        throw new AiError('protocol', 'The authentication status was malformed.');
     }
 
     const field = (name: string): string | undefined => {
@@ -37,7 +37,7 @@ export function normalizeAuthStatus(value: unknown): IAiAuthStatus {
                 (character) => character.charCodeAt(0) <= 0x1f || character.charCodeAt(0) === 0x7f,
             )
         ) {
-            throw new AiError('protocol', 'The native authentication metadata was malformed.');
+            throw new AiError('protocol', 'The authentication metadata was malformed.');
         }
 
         return item;
@@ -53,8 +53,6 @@ export function normalizeAuthStatus(value: unknown): IAiAuthStatus {
         ...(displayName !== undefined ? { displayName } : {}),
         ...(plan !== undefined ? { plan } : {}),
         ...(method !== undefined ? { method } : {}),
-        ...(!value.authenticated
-            ? { message: 'The native CLI account is not authenticated.' }
-            : {}),
+        ...(!value.authenticated ? { message: 'The account is not authenticated.' } : {}),
     });
 }

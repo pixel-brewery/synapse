@@ -1,6 +1,6 @@
 # Interface: IAiAuthStatus
 
-Verified native CLI account state without reusable credential values.
+Driver-reported account authentication state without reusable credential values.
 
 ## Properties
 
@@ -16,7 +16,8 @@ Safe provider account identifier, if exposed.
 
 > `readonly` **authenticated**: `boolean`
 
-Whether the CLI verified an authenticated account.
+Whether the driver's verification mechanism accepted the account's authentication.
+Host-managed API keys require a host-owned verifier; stored key presence alone is insufficient.
 
 ***
 
@@ -32,7 +33,7 @@ Safe account display name, if exposed.
 
 > `readonly` `optional` **message?**: `string`
 
-Safe bounded status explanation; never raw CLI output.
+Safe bounded status explanation; never raw provider output or credential values.
 
 ***
 
@@ -40,7 +41,7 @@ Safe bounded status explanation; never raw CLI output.
 
 > `readonly` `optional` **method?**: `string`
 
-Verified native authentication family, e.g. chatgpt, subscription or api-key; absent when unknown.
+Authentication family established by the driver, e.g. chatgpt, subscription or api-key; absent when unknown.
 
 ***
 

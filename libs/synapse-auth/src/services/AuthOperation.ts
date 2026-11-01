@@ -34,7 +34,7 @@ type OperationOptions = {
 };
 
 /**
- * Owns one bounded login, its correlated input and its native cleanup.
+ * Owns one bounded login, its correlated input and its authentication cleanup.
  *
  * @internal
  */
@@ -74,7 +74,7 @@ export class AuthOperation implements IAuthHandle {
     /**
      * Captures one flow without starting a timer, driver or credential change.
      *
-     * @param instance - Isolated native account.
+     * @param instance - Isolated account instance.
      * @param driver - Actually supported authentication implementation.
      * @param identity - Owner and expiry correlation.
      * @param options - Selected method, clock and bounded event policy.
@@ -176,10 +176,7 @@ export class AuthOperation implements IAuthHandle {
                     this.assertActive();
 
                     if (!status.authenticated)
-                        throw new AiError(
-                            'auth-required',
-                            'Native authentication could not be verified.',
-                        );
+                        throw new AiError('auth-required', 'Authentication could not be verified.');
 
                     return status;
                 },
@@ -259,7 +256,7 @@ export class AuthOperation implements IAuthHandle {
     }
 
     /**
-     * Cancels and awaits all native login/status cleanup.
+     * Cancels and awaits all authentication procedure and status cleanup.
      *
      * @returns Completion after the operation releases exclusive profile ownership.
      * @throws An AiError with cleanupIncomplete when owned process termination cannot be confirmed.
@@ -346,7 +343,7 @@ export class AuthOperation implements IAuthHandle {
             !Number.isFinite(value.expiresAt) ||
             value.expiresAt <= this._options.now()
         ) {
-            throw new AiError('protocol', 'The native authentication interaction was invalid.');
+            throw new AiError('protocol', 'The authentication interaction was invalid.');
         }
 
         for (const item of [value.message, value.url, value.code]) {
@@ -357,10 +354,7 @@ export class AuthOperation implements IAuthHandle {
                     item.includes('\0') ||
                     item.includes('\u007f'))
             ) {
-                throw new AiError(
-                    'protocol',
-                    'The native authentication interaction was malformed.',
-                );
+                throw new AiError('protocol', 'The authentication interaction was malformed.');
             }
         }
 
@@ -370,11 +364,11 @@ export class AuthOperation implements IAuthHandle {
             try {
                 url = new URL(value.url);
             } catch {
-                throw new AiError('protocol', 'The native authentication URL was invalid.');
+                throw new AiError('protocol', 'The authentication URL was invalid.');
             }
 
             if (!['https:', 'http:'].includes(url.protocol) || url.username || url.password) {
-                throw new AiError('protocol', 'The native authentication URL was unsupported.');
+                throw new AiError('protocol', 'The authentication URL was unsupported.');
             }
         }
 
@@ -394,7 +388,7 @@ export class AuthOperation implements IAuthHandle {
                         (field.required !== undefined && typeof field.required !== 'boolean'),
                 ))
         ) {
-            throw new AiError('protocol', 'The native authentication fields were invalid.');
+            throw new AiError('protocol', 'The authentication fields were invalid.');
         }
 
         this._pending?.reject(
@@ -427,7 +421,7 @@ export class AuthOperation implements IAuthHandle {
                     ['__proto__', 'prototype', 'constructor'].includes(field.id),
                 ))
         ) {
-            throw new AiError('protocol', 'The native authentication fields were ambiguous.');
+            throw new AiError('protocol', 'The authentication fields were ambiguous.');
         }
 
         this._interaction = Object.freeze({
@@ -456,7 +450,7 @@ export class AuthOperation implements IAuthHandle {
         const pending = this._pending;
 
         if (!pending || this._interaction?.id !== interactionId || pending.requested) {
-            throw new AiError('protocol', 'The native authentication response request was stale.');
+            throw new AiError('protocol', 'The authentication response request was stale.');
         }
 
         pending.requested = true;

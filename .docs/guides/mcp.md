@@ -1,6 +1,6 @@
 # Local Synapse knowledge over MCP
 
-`@pixel-brewery/synapse-mcp` gives coding agents structured access to Synapse's package documentation, complete generated API, integration guides and architecture patterns. It is an optional developer CLI alongside the nine runtime libraries. Applications do not need it to execute an AI request.
+`@pixel-brewery/synapse-mcp` gives coding agents structured access to Synapse's package documentation, complete generated API, integration guides and architecture patterns. It is an optional developer CLI alongside the runtime libraries. Applications do not need it to execute an AI request.
 
 The server uses `@modelcontextprotocol/sdk` **1.32.1** over **stdio**. Its 15 tool names and input shapes match Archipel's documentation server. Returned knowledge applies to Synapse: explicit constructor composition, CLI adapters, isolated profiles, session binding, routing and process ownership. Pattern names such as `get-module-pattern` and `get-repository-pattern` do not introduce NestJS modules, Prisma models or an application database.
 
@@ -15,7 +15,7 @@ yarn nx run synapse-mcp:build
 yarn workspace @pixel-brewery/synapse-mcp start
 ```
 
-The Nx build first checks the nine-library TypeDoc reference for drift, then compiles the CLI and writes its knowledge corpus to `tools/mcp/dist/data/corpus.json`. After changing exported API documentation, explicitly run `yarn docs` before building. The build does not silently regenerate stale API pages.
+The Nx build first checks the public-library TypeDoc reference for drift, then compiles the CLI and writes its knowledge corpus to `tools/mcp/dist/data/corpus.json`. After changing exported API documentation, explicitly run `yarn docs` before building. The build does not silently regenerate stale API pages.
 
 A directly started server waits for MCP messages on stdin; the intended caller is an MCP client. Stdout is reserved for protocol traffic, with diagnostics on stderr. Stop a manually started server with Ctrl+C; an MCP client owns the process it starts.
 

@@ -1,0 +1,508 @@
+{
+  "schemaVersion": "2.0",
+  "id": 0,
+  "name": "@pixel-brewery/synapse-auth-providers/openai",
+  "variant": "project",
+  "kind": 1,
+  "flags": {},
+  "children": [
+    {
+      "id": 17,
+      "name": "IOpenAiApiKeyVerifierOptions",
+      "variant": "declaration",
+      "kind": 256,
+      "flags": {
+        "isPublic": true
+      },
+      "comment": {
+        "summary": [
+          {
+            "kind": "text",
+            "text": "Optional OpenAI organization/project selection for an API-key authentication probe."
+          }
+        ],
+        "blockTags": [
+          {
+            "tag": "@remarks",
+            "content": [
+              {
+                "kind": "text",
+                "text": "These selectors must match the host's later inference-client configuration. They do\nnot change the fixed OpenAI endpoint, grant permissions or select a model. Construction\ncaptures detached values; subsequent mutations of the supplied object have no effect."
+              }
+            ]
+          }
+        ]
+      },
+      "children": [
+        {
+          "id": 18,
+          "name": "organization",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {
+            "isOptional": true,
+            "isReadonly": true
+          },
+          "comment": {
+            "summary": [
+              {
+                "kind": "text",
+                "text": "Optional OpenAI organization ID sent through the OpenAI-Organization header."
+              }
+            ]
+          },
+          "type": {
+            "type": "intrinsic",
+            "name": "string"
+          }
+        },
+        {
+          "id": 19,
+          "name": "project",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {
+            "isOptional": true,
+            "isReadonly": true
+          },
+          "comment": {
+            "summary": [
+              {
+                "kind": "text",
+                "text": "Optional OpenAI project ID sent through the OpenAI-Project header."
+              }
+            ]
+          },
+          "type": {
+            "type": "intrinsic",
+            "name": "string"
+          }
+        }
+      ],
+      "groups": [
+        {
+          "title": "Properties",
+          "children": [
+            18,
+            19
+          ]
+        }
+      ]
+    },
+    {
+      "id": 1,
+      "name": "OpenAiApiKeyVerifier",
+      "variant": "declaration",
+      "kind": 128,
+      "flags": {
+        "isPublic": true
+      },
+      "comment": {
+        "summary": [
+          {
+            "kind": "text",
+            "text": "Verifies an OpenAI API key through its authenticated, non-inference models endpoint."
+          }
+        ],
+        "blockTags": [
+          {
+            "tag": "@remarks",
+            "content": [
+              {
+                "kind": "text",
+                "text": "Sends one GET to https://api.openai.com/v1/models without generating tokens or\nreturning the model catalog. Acceptance proves access to this endpoint only; it does not\nestablish model entitlement, billing readiness or available budget. A restricted key without\nmodel-list permission cannot be verified by this adapter. Keys remain backend-only secrets.\nImports and construction neither access credentials nor perform network I/O."
+              }
+            ]
+          }
+        ]
+      },
+      "children": [
+        {
+          "id": 2,
+          "name": "constructor",
+          "variant": "declaration",
+          "kind": 512,
+          "flags": {
+            "isPublic": true
+          },
+          "signatures": [
+            {
+              "id": 3,
+              "name": "OpenAiApiKeyVerifier",
+              "variant": "signature",
+              "kind": 16384,
+              "flags": {
+                "isPublic": true
+              },
+              "comment": {
+                "summary": [
+                  {
+                    "kind": "text",
+                    "text": "Captures an explicit transport and optional organization/project selectors."
+                  }
+                ],
+                "blockTags": [
+                  {
+                    "tag": "@throws",
+                    "content": [
+                      {
+                        "kind": "text",
+                        "text": "An AiError for an invalid transport or unsafe/unknown header options."
+                      }
+                    ]
+                  }
+                ]
+              },
+              "parameters": [
+                {
+                  "id": 4,
+                  "name": "_transport",
+                  "variant": "param",
+                  "kind": 32768,
+                  "flags": {},
+                  "comment": {
+                    "summary": [
+                      {
+                        "kind": "text",
+                        "text": "Bounded verification HTTP owner; defaults to the native Node transport."
+                      }
+                    ]
+                  },
+                  "type": {
+                    "type": "reference",
+                    "target": {
+                      "packageName": "@pixel-brewery/synapse-auth-providers",
+                      "packagePath": "src/abstracts/ApiKeyVerificationTransportBase.ts",
+                      "qualifiedName": "ApiKeyVerificationTransportBase"
+                    },
+                    "name": "ApiKeyVerificationTransportBase",
+                    "package": "@pixel-brewery/synapse-auth-providers",
+                    "externalUrl": "packages/synapse-auth-providers/api/classes/ApiKeyVerificationTransportBase.md"
+                  },
+                  "defaultValue": "..."
+                },
+                {
+                  "id": 5,
+                  "name": "options",
+                  "variant": "param",
+                  "kind": 32768,
+                  "flags": {},
+                  "comment": {
+                    "summary": [
+                      {
+                        "kind": "text",
+                        "text": "Optional fixed OpenAI selectors, matching the host's inference client."
+                      }
+                    ]
+                  },
+                  "type": {
+                    "type": "reference",
+                    "target": 17,
+                    "name": "IOpenAiApiKeyVerifierOptions",
+                    "package": "@pixel-brewery/synapse-auth-providers"
+                  },
+                  "defaultValue": "{}"
+                }
+              ],
+              "type": {
+                "type": "reference",
+                "target": 1,
+                "name": "OpenAiApiKeyVerifier",
+                "package": "@pixel-brewery/synapse-auth-providers"
+              },
+              "overwrites": {
+                "type": "reference",
+                "target": -1,
+                "name": "ApiKeyVerifierBase.constructor",
+                "package": "@pixel-brewery/synapse-auth",
+                "externalUrl": "packages/synapse-auth/api/classes/ApiKeyVerifierBase.md#constructor"
+              }
+            }
+          ],
+          "overwrites": {
+            "type": "reference",
+            "target": -1,
+            "name": "ApiKeyVerifierBase.constructor",
+            "package": "@pixel-brewery/synapse-auth",
+            "externalUrl": "packages/synapse-auth/api/classes/ApiKeyVerifierBase.md#constructor"
+          }
+        },
+        {
+          "id": 9,
+          "name": "verify",
+          "variant": "declaration",
+          "kind": 2048,
+          "flags": {
+            "isPublic": true
+          },
+          "signatures": [
+            {
+              "id": 10,
+              "name": "verify",
+              "variant": "signature",
+              "kind": 4096,
+              "flags": {
+                "isPublic": true
+              },
+              "comment": {
+                "summary": [
+                  {
+                    "kind": "text",
+                    "text": "Performs one cancellable authentication probe and returns safe verified state."
+                  }
+                ],
+                "blockTags": [
+                  {
+                    "tag": "@returns",
+                    "content": [
+                      {
+                        "kind": "text",
+                        "text": "Authenticated state after a valid models response, or false for HTTP 401/403."
+                      }
+                    ]
+                  },
+                  {
+                    "tag": "@throws",
+                    "content": [
+                      {
+                        "kind": "text",
+                        "text": "An AiError for invalid input, cancellation, rate limiting, provider/network failure\nor malformed successful responses. Error messages contain no provider payload or key."
+                      }
+                    ]
+                  }
+                ]
+              },
+              "parameters": [
+                {
+                  "id": 11,
+                  "name": "_scope",
+                  "variant": "param",
+                  "kind": 32768,
+                  "flags": {},
+                  "comment": {
+                    "summary": [
+                      {
+                        "kind": "text",
+                        "text": "Authorized connection identity; no identity values are sent to OpenAI."
+                      }
+                    ]
+                  },
+                  "type": {
+                    "type": "reference",
+                    "target": {
+                      "packageName": "@pixel-brewery/synapse-auth",
+                      "packagePath": "src/interfaces/IApiKeyCredentialScope.ts",
+                      "qualifiedName": "IApiKeyCredentialScope"
+                    },
+                    "name": "IApiKeyCredentialScope",
+                    "package": "@pixel-brewery/synapse-auth",
+                    "externalUrl": "packages/synapse-auth/api/interfaces/IApiKeyCredentialScope.md"
+                  }
+                },
+                {
+                  "id": 12,
+                  "name": "apiKey",
+                  "variant": "param",
+                  "kind": 32768,
+                  "flags": {},
+                  "comment": {
+                    "summary": [
+                      {
+                        "kind": "text",
+                        "text": "Backend-only candidate API key supplied by the authentication lifecycle."
+                      }
+                    ]
+                  },
+                  "type": {
+                    "type": "intrinsic",
+                    "name": "string"
+                  }
+                },
+                {
+                  "id": 13,
+                  "name": "signal",
+                  "variant": "param",
+                  "kind": 32768,
+                  "flags": {},
+                  "comment": {
+                    "summary": [
+                      {
+                        "kind": "text",
+                        "text": "Bounded caller cancellation, checked before and after the HTTP exchange."
+                      }
+                    ]
+                  },
+                  "type": {
+                    "type": "reference",
+                    "target": {
+                      "packageName": "typescript",
+                      "packagePath": "lib/lib.dom.d.ts",
+                      "qualifiedName": "AbortSignal"
+                    },
+                    "name": "AbortSignal",
+                    "package": "typescript"
+                  }
+                }
+              ],
+              "type": {
+                "type": "reference",
+                "target": {
+                  "packageName": "typescript",
+                  "packagePath": "lib/lib.es5.d.ts",
+                  "qualifiedName": "Promise"
+                },
+                "typeArguments": [
+                  {
+                    "type": "reference",
+                    "target": {
+                      "packageName": "@pixel-brewery/synapse-core",
+                      "packagePath": "src/interfaces/IAiAuthStatus.ts",
+                      "qualifiedName": "IAiAuthStatus"
+                    },
+                    "name": "IAiAuthStatus",
+                    "package": "@pixel-brewery/synapse-core",
+                    "externalUrl": "packages/synapse-core/api/interfaces/IAiAuthStatus.md"
+                  }
+                ],
+                "name": "Promise",
+                "package": "typescript"
+              },
+              "overwrites": {
+                "type": "reference",
+                "target": -1,
+                "name": "ApiKeyVerifierBase.verify"
+              }
+            }
+          ],
+          "overwrites": {
+            "type": "reference",
+            "target": -1,
+            "name": "ApiKeyVerifierBase.verify"
+          }
+        }
+      ],
+      "groups": [
+        {
+          "title": "Constructors",
+          "children": [
+            2
+          ]
+        },
+        {
+          "title": "Methods",
+          "children": [
+            9
+          ]
+        }
+      ],
+      "extendedTypes": [
+        {
+          "type": "reference",
+          "target": {
+            "packageName": "@pixel-brewery/synapse-auth",
+            "packagePath": "src/abstracts/ApiKeyVerifierBase.ts",
+            "qualifiedName": "ApiKeyVerifierBase"
+          },
+          "name": "ApiKeyVerifierBase",
+          "package": "@pixel-brewery/synapse-auth",
+          "externalUrl": "packages/synapse-auth/api/classes/ApiKeyVerifierBase.md"
+        }
+      ]
+    }
+  ],
+  "groups": [
+    {
+      "title": "Classes",
+      "children": [
+        1
+      ]
+    },
+    {
+      "title": "Interfaces",
+      "children": [
+        17
+      ]
+    }
+  ],
+  "packageName": "@pixel-brewery/synapse-auth-providers",
+  "symbolIdMap": {
+    "0": {
+      "packageName": "@pixel-brewery/synapse-auth-providers",
+      "packagePath": "src/openai/index.ts",
+      "qualifiedName": ""
+    },
+    "1": {
+      "packageName": "@pixel-brewery/synapse-auth-providers",
+      "packagePath": "src/openai/OpenAiApiKeyVerifier.ts",
+      "qualifiedName": "OpenAiApiKeyVerifier"
+    },
+    "2": {
+      "packageName": "@pixel-brewery/synapse-auth-providers",
+      "packagePath": "src/openai/OpenAiApiKeyVerifier.ts",
+      "qualifiedName": "OpenAiApiKeyVerifier.__constructor"
+    },
+    "3": {
+      "packageName": "@pixel-brewery/synapse-auth-providers",
+      "packagePath": "src/openai/OpenAiApiKeyVerifier.ts",
+      "qualifiedName": "OpenAiApiKeyVerifier"
+    },
+    "4": {
+      "packageName": "@pixel-brewery/synapse-auth-providers",
+      "packagePath": "src/openai/OpenAiApiKeyVerifier.ts",
+      "qualifiedName": "_transport"
+    },
+    "5": {
+      "packageName": "@pixel-brewery/synapse-auth-providers",
+      "packagePath": "src/openai/OpenAiApiKeyVerifier.ts",
+      "qualifiedName": "options"
+    },
+    "9": {
+      "packageName": "@pixel-brewery/synapse-auth-providers",
+      "packagePath": "src/openai/OpenAiApiKeyVerifier.ts",
+      "qualifiedName": "OpenAiApiKeyVerifier.verify"
+    },
+    "10": {
+      "packageName": "@pixel-brewery/synapse-auth-providers",
+      "packagePath": "src/openai/OpenAiApiKeyVerifier.ts",
+      "qualifiedName": "OpenAiApiKeyVerifier.verify"
+    },
+    "11": {
+      "packageName": "@pixel-brewery/synapse-auth-providers",
+      "packagePath": "src/openai/OpenAiApiKeyVerifier.ts",
+      "qualifiedName": "_scope"
+    },
+    "12": {
+      "packageName": "@pixel-brewery/synapse-auth-providers",
+      "packagePath": "src/openai/OpenAiApiKeyVerifier.ts",
+      "qualifiedName": "apiKey"
+    },
+    "13": {
+      "packageName": "@pixel-brewery/synapse-auth-providers",
+      "packagePath": "src/openai/OpenAiApiKeyVerifier.ts",
+      "qualifiedName": "signal"
+    },
+    "17": {
+      "packageName": "@pixel-brewery/synapse-auth-providers",
+      "packagePath": "src/openai/interfaces/IOpenAiApiKeyVerifierOptions.ts",
+      "qualifiedName": "IOpenAiApiKeyVerifierOptions"
+    },
+    "18": {
+      "packageName": "@pixel-brewery/synapse-auth-providers",
+      "packagePath": "src/openai/interfaces/IOpenAiApiKeyVerifierOptions.ts",
+      "qualifiedName": "IOpenAiApiKeyVerifierOptions.organization"
+    },
+    "19": {
+      "packageName": "@pixel-brewery/synapse-auth-providers",
+      "packagePath": "src/openai/interfaces/IOpenAiApiKeyVerifierOptions.ts",
+      "qualifiedName": "IOpenAiApiKeyVerifierOptions.project"
+    }
+  },
+  "files": {
+    "entries": {
+      "1": "libs/synapse-auth-providers/src/openai/index.ts"
+    },
+    "reflections": {
+      "1": 0
+    }
+  }
+}

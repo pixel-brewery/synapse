@@ -1,0 +1,383 @@
+{
+  "schemaVersion": "2.0",
+  "id": 0,
+  "name": "@pixel-brewery/synapse-auth-providers/gemini",
+  "variant": "project",
+  "kind": 1,
+  "flags": {},
+  "comment": {
+    "summary": [
+      {
+        "kind": "text",
+        "text": "Gemini Developer API authentication without CLI or inference dependencies."
+      }
+    ]
+  },
+  "children": [
+    {
+      "id": 1,
+      "name": "GeminiApiKeyVerifier",
+      "variant": "declaration",
+      "kind": 128,
+      "flags": {
+        "isPublic": true
+      },
+      "comment": {
+        "summary": [
+          {
+            "kind": "text",
+            "text": "Verifies Gemini Developer API credentials through its authenticated metadata endpoint."
+          }
+        ],
+        "blockTags": [
+          {
+            "tag": "@remarks",
+            "content": [
+              {
+                "kind": "text",
+                "text": "Performs only GET /v1beta/models with a single-item page and a secret header.\nAuthorization keys and supported standard keys use the same header; key prefixes are not\ntreated as evidence of validity. A successful metadata check establishes credential acceptance\nat that endpoint, not project tier, billing status, model entitlement or inference availability.\nVertex AI credentials and OAuth flows are outside this verifier's contract."
+              }
+            ]
+          }
+        ]
+      },
+      "children": [
+        {
+          "id": 2,
+          "name": "constructor",
+          "variant": "declaration",
+          "kind": 512,
+          "flags": {
+            "isPublic": true
+          },
+          "signatures": [
+            {
+              "id": 3,
+              "name": "GeminiApiKeyVerifier",
+              "variant": "signature",
+              "kind": 16384,
+              "flags": {
+                "isPublic": true
+              },
+              "comment": {
+                "summary": [
+                  {
+                    "kind": "text",
+                    "text": "Captures the bounded HTTPS transport without reading credentials or contacting Google."
+                  }
+                ]
+              },
+              "parameters": [
+                {
+                  "id": 4,
+                  "name": "_transport",
+                  "variant": "param",
+                  "kind": 32768,
+                  "flags": {},
+                  "comment": {
+                    "summary": [
+                      {
+                        "kind": "text",
+                        "text": "Injected verification transport; defaults to the inert Node HTTPS adapter."
+                      }
+                    ]
+                  },
+                  "type": {
+                    "type": "reference",
+                    "target": {
+                      "packageName": "@pixel-brewery/synapse-auth-providers",
+                      "packagePath": "src/abstracts/ApiKeyVerificationTransportBase.ts",
+                      "qualifiedName": "ApiKeyVerificationTransportBase"
+                    },
+                    "name": "ApiKeyVerificationTransportBase",
+                    "package": "@pixel-brewery/synapse-auth-providers",
+                    "externalUrl": "packages/synapse-auth-providers/api/classes/ApiKeyVerificationTransportBase.md"
+                  },
+                  "defaultValue": "..."
+                }
+              ],
+              "type": {
+                "type": "reference",
+                "target": 1,
+                "name": "GeminiApiKeyVerifier",
+                "package": "@pixel-brewery/synapse-auth-providers"
+              },
+              "overwrites": {
+                "type": "reference",
+                "target": -1,
+                "name": "ApiKeyVerifierBase.constructor",
+                "package": "@pixel-brewery/synapse-auth",
+                "externalUrl": "packages/synapse-auth/api/classes/ApiKeyVerifierBase.md#constructor"
+              }
+            }
+          ],
+          "overwrites": {
+            "type": "reference",
+            "target": -1,
+            "name": "ApiKeyVerifierBase.constructor",
+            "package": "@pixel-brewery/synapse-auth",
+            "externalUrl": "packages/synapse-auth/api/classes/ApiKeyVerifierBase.md#constructor"
+          }
+        },
+        {
+          "id": 6,
+          "name": "verify",
+          "variant": "declaration",
+          "kind": 2048,
+          "flags": {
+            "isPublic": true
+          },
+          "signatures": [
+            {
+              "id": 7,
+              "name": "verify",
+              "variant": "signature",
+              "kind": 4096,
+              "flags": {
+                "isPublic": true
+              },
+              "comment": {
+                "summary": [
+                  {
+                    "kind": "text",
+                    "text": "Checks one explicitly supplied key without generating content or returning model data."
+                  }
+                ],
+                "blockTags": [
+                  {
+                    "tag": "@returns",
+                    "content": [
+                      {
+                        "kind": "text",
+                        "text": "Safe API-key status; false means this check could not establish authentication."
+                      }
+                    ]
+                  },
+                  {
+                    "tag": "@throws",
+                    "content": [
+                      {
+                        "kind": "text",
+                        "text": "An AiError for invalid input, cancellation, malformed responses, rate limits or provider failure."
+                      }
+                    ]
+                  },
+                  {
+                    "tag": "@remarks",
+                    "content": [
+                      {
+                        "kind": "text",
+                        "text": "A denied request can reflect credential restrictions or project policy rather than\nan invalid key. No failed check causes an inference request or an automatic retry."
+                      }
+                    ]
+                  }
+                ]
+              },
+              "parameters": [
+                {
+                  "id": 8,
+                  "name": "_scope",
+                  "variant": "param",
+                  "kind": 32768,
+                  "flags": {},
+                  "comment": {
+                    "summary": [
+                      {
+                        "kind": "text",
+                        "text": "Authorized connection identity; no account state is retained by this verifier."
+                      }
+                    ]
+                  },
+                  "type": {
+                    "type": "reference",
+                    "target": {
+                      "packageName": "@pixel-brewery/synapse-auth",
+                      "packagePath": "src/interfaces/IApiKeyCredentialScope.ts",
+                      "qualifiedName": "IApiKeyCredentialScope"
+                    },
+                    "name": "IApiKeyCredentialScope",
+                    "package": "@pixel-brewery/synapse-auth",
+                    "externalUrl": "packages/synapse-auth/api/interfaces/IApiKeyCredentialScope.md"
+                  }
+                },
+                {
+                  "id": 9,
+                  "name": "apiKey",
+                  "variant": "param",
+                  "kind": 32768,
+                  "flags": {},
+                  "comment": {
+                    "summary": [
+                      {
+                        "kind": "text",
+                        "text": "Backend-only candidate sent in x-goog-api-key, never in a URL or result."
+                      }
+                    ]
+                  },
+                  "type": {
+                    "type": "intrinsic",
+                    "name": "string"
+                  }
+                },
+                {
+                  "id": 10,
+                  "name": "signal",
+                  "variant": "param",
+                  "kind": 32768,
+                  "flags": {},
+                  "comment": {
+                    "summary": [
+                      {
+                        "kind": "text",
+                        "text": "Caller cancellation propagated to the bounded transport."
+                      }
+                    ]
+                  },
+                  "type": {
+                    "type": "reference",
+                    "target": {
+                      "packageName": "typescript",
+                      "packagePath": "lib/lib.dom.d.ts",
+                      "qualifiedName": "AbortSignal"
+                    },
+                    "name": "AbortSignal",
+                    "package": "typescript"
+                  }
+                }
+              ],
+              "type": {
+                "type": "reference",
+                "target": {
+                  "packageName": "typescript",
+                  "packagePath": "lib/lib.es5.d.ts",
+                  "qualifiedName": "Promise"
+                },
+                "typeArguments": [
+                  {
+                    "type": "reference",
+                    "target": {
+                      "packageName": "@pixel-brewery/synapse-core",
+                      "packagePath": "src/interfaces/IAiAuthStatus.ts",
+                      "qualifiedName": "IAiAuthStatus"
+                    },
+                    "name": "IAiAuthStatus",
+                    "package": "@pixel-brewery/synapse-core",
+                    "externalUrl": "packages/synapse-core/api/interfaces/IAiAuthStatus.md"
+                  }
+                ],
+                "name": "Promise",
+                "package": "typescript"
+              },
+              "overwrites": {
+                "type": "reference",
+                "target": -1,
+                "name": "ApiKeyVerifierBase.verify"
+              }
+            }
+          ],
+          "overwrites": {
+            "type": "reference",
+            "target": -1,
+            "name": "ApiKeyVerifierBase.verify"
+          }
+        }
+      ],
+      "groups": [
+        {
+          "title": "Constructors",
+          "children": [
+            2
+          ]
+        },
+        {
+          "title": "Methods",
+          "children": [
+            6
+          ]
+        }
+      ],
+      "extendedTypes": [
+        {
+          "type": "reference",
+          "target": {
+            "packageName": "@pixel-brewery/synapse-auth",
+            "packagePath": "src/abstracts/ApiKeyVerifierBase.ts",
+            "qualifiedName": "ApiKeyVerifierBase"
+          },
+          "name": "ApiKeyVerifierBase",
+          "package": "@pixel-brewery/synapse-auth",
+          "externalUrl": "packages/synapse-auth/api/classes/ApiKeyVerifierBase.md"
+        }
+      ]
+    }
+  ],
+  "groups": [
+    {
+      "title": "Classes",
+      "children": [
+        1
+      ]
+    }
+  ],
+  "packageName": "@pixel-brewery/synapse-auth-providers",
+  "symbolIdMap": {
+    "0": {
+      "packageName": "@pixel-brewery/synapse-auth-providers",
+      "packagePath": "src/gemini/index.ts",
+      "qualifiedName": ""
+    },
+    "1": {
+      "packageName": "@pixel-brewery/synapse-auth-providers",
+      "packagePath": "src/gemini/GeminiApiKeyVerifier.ts",
+      "qualifiedName": "GeminiApiKeyVerifier"
+    },
+    "2": {
+      "packageName": "@pixel-brewery/synapse-auth-providers",
+      "packagePath": "src/gemini/GeminiApiKeyVerifier.ts",
+      "qualifiedName": "GeminiApiKeyVerifier.__constructor"
+    },
+    "3": {
+      "packageName": "@pixel-brewery/synapse-auth-providers",
+      "packagePath": "src/gemini/GeminiApiKeyVerifier.ts",
+      "qualifiedName": "GeminiApiKeyVerifier"
+    },
+    "4": {
+      "packageName": "@pixel-brewery/synapse-auth-providers",
+      "packagePath": "src/gemini/GeminiApiKeyVerifier.ts",
+      "qualifiedName": "_transport"
+    },
+    "6": {
+      "packageName": "@pixel-brewery/synapse-auth-providers",
+      "packagePath": "src/gemini/GeminiApiKeyVerifier.ts",
+      "qualifiedName": "GeminiApiKeyVerifier.verify"
+    },
+    "7": {
+      "packageName": "@pixel-brewery/synapse-auth-providers",
+      "packagePath": "src/gemini/GeminiApiKeyVerifier.ts",
+      "qualifiedName": "GeminiApiKeyVerifier.verify"
+    },
+    "8": {
+      "packageName": "@pixel-brewery/synapse-auth-providers",
+      "packagePath": "src/gemini/GeminiApiKeyVerifier.ts",
+      "qualifiedName": "_scope"
+    },
+    "9": {
+      "packageName": "@pixel-brewery/synapse-auth-providers",
+      "packagePath": "src/gemini/GeminiApiKeyVerifier.ts",
+      "qualifiedName": "apiKey"
+    },
+    "10": {
+      "packageName": "@pixel-brewery/synapse-auth-providers",
+      "packagePath": "src/gemini/GeminiApiKeyVerifier.ts",
+      "qualifiedName": "signal"
+    }
+  },
+  "files": {
+    "entries": {
+      "1": "libs/synapse-auth-providers/src/gemini/index.ts"
+    },
+    "reflections": {
+      "1": 0
+    }
+  }
+}

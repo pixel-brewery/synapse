@@ -79,6 +79,29 @@ async function fixture(value: unknown = corpus()): Promise<string> {
 }
 
 describe('DocsLoader', () => {
+    it('loads optional libraries from a bounded self-contained package inventory', async () => {
+        // Arrange
+        const value = corpus();
+        const file = await fixture({
+            ...value,
+            packages: [
+                ...value.packages,
+                {
+                    ...value.packages[0],
+                    name: 'synapse-auth-providers',
+                    packageName: '@pixel-brewery/synapse-auth-providers',
+                },
+            ],
+        });
+
+        // Act
+        const loaded = await new DocsLoader(file).load();
+
+        // Assert
+        expect(loaded.packages).toHaveLength(10);
+        expect(loaded.packages.at(-1)?.packageName).toBe('@pixel-brewery/synapse-auth-providers');
+    });
+
     it('reads one immutable self-contained revision once without depending on a source checkout', async () => {
         // Arrange
         const file = await fixture();
@@ -105,8 +128,8 @@ describe('DocsLoader', () => {
     it.each([
         { name: 'unknown-version', value: { ...corpus(), schemaVersion: 2 } },
         {
-            name: 'missing-one-package',
-            value: { ...corpus(), packages: corpus().packages.slice(1) },
+            name: 'empty-packages',
+            value: { ...corpus(), packages: [] },
         },
         {
             name: 'missing-one-pattern',
@@ -127,6 +150,17 @@ describe('DocsLoader', () => {
         {
             name: 'non-finite-order',
             value: { ...corpus(), guides: [{ ...corpus().guides[0], order: 1.5 }] },
+        },
+        {
+            name: 'excessive-packages',
+            value: {
+                ...corpus(),
+                packages: Array.from({ length: 65 }, (_, index) => ({
+                    ...corpus().packages[0],
+                    name: `synapse-fixture-${index}`,
+                    packageName: `@pixel-brewery/synapse-fixture-${index}`,
+                })),
+            },
         },
         {
             name: 'excessive-documents',

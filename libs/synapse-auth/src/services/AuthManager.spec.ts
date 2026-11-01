@@ -727,7 +727,7 @@ describe('AuthManager', () => {
         // Assert
         expect(failure).toMatchObject({
             code: 'provider',
-            message: 'The native authentication operation failed.',
+            message: 'The authentication operation failed.',
         });
         expect(failure instanceof Error && failure.cause).toBeUndefined();
         expect(JSON.stringify(handle.state)).not.toContain('FAKE_SECRET_INPUT');

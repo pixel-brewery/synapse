@@ -28,6 +28,9 @@
         },
         {
             "path": "./libs/synapse-testing"
+        },
+        {
+            "path": "./libs/synapse-auth-providers"
         }
     ]
 }

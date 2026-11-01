@@ -26,7 +26,7 @@ Native ESM with per-file `.js` and `.d.ts`, explicit package exports and `sideEf
 
 Package family versioning is coordinated through the fixed Nx release group. Pack/build from each manifest's real output; validate exported targets and declarations from tarballs without workspace aliases. esbuild and Rollup single-provider consumers must exclude other provider implementations. Local artifact preparation does not publish or trigger releases. Owner-authorized publication uses the main-branch workflow or the separate `:local` release commands documented in `.docs/guides/releases.md`, GitHub Packages and an explicit prepared release tag. Preserve the existing remote commands when changing the local path. Nx replaces local dependency protocols with publishable version ranges because its Yarn-backed publisher cannot publish `workspace:` dependencies.
 
-The fixed release group contains nine runtime libraries and the optional `synapse-mcp` CLI. `tools/mcp` ships `dist/main.js` as the `synapse-mcp` bin and only exports `./package.json`; it has no library entrypoint to add to TypeDoc or all-provider imports. The official MCP SDK dependency stays in this developer workspace. CLI startup is an explicit host action, not an import-time library effect.
+The fixed release group contains the public runtime libraries and the optional `synapse-mcp` CLI. `tools/mcp` ships `dist/main.js` as the `synapse-mcp` bin and only exports `./package.json`; it has no library entrypoint to add to TypeDoc or all-provider imports. The official MCP SDK dependency stays in this developer workspace. CLI startup is an explicit host action, not an import-time library effect.
 
 ## Documentation
 

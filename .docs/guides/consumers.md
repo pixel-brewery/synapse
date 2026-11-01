@@ -43,7 +43,7 @@ yarn install --immutable
 yarn packaging:verify
 ```
 
-The target builds its prerequisites and writes the nine library archives and optional MCP archive to `artifacts/packages/`. A Codex consumer with profile/auth management needs these four files, copied into its own `vendor/synapse/` directory:
+The target builds its prerequisites and writes the public library archives and optional MCP archive to `artifacts/packages/`. A Codex consumer with profile/auth management needs these four files, copied into its own `vendor/synapse/` directory:
 
 ```text
 synapse-core-0.0.1.tgz
@@ -150,6 +150,8 @@ Wrap any host-managed native credential mutation, including `importOpenCodeCrede
 
 Native subscription methods depend on the installed provider CLI. API keys are optional explicit inputs and are not a library prerequisite. ACP has no universal authenticated-account check; inject a verified native auth adapter and trustworthy native mode mappings when needed.
 
+For a backend API-key connection without a CLI, use `ApiKeyAuthDriver` from `synapse-auth` directly with `AuthManager`. Inject the application's secret store and non-inference credential verifier. This reuses the authentication lifecycle without adding a Synapse API execution driver or replacing the application's inference SDK. The [cloud authentication guide](cloud-authentication.md) covers identity, storage, authorization and future hosted ChatGPT account integration.
+
 ## Independent meeting-text example
 
 `apps/meeting-notes` is an unpublished Node CLI consuming only publishable Synapse imports and Node builtins. Its host-owned prompt converts a fixed synthetic transcript into `{ summary, decisions, tasks }`. No audio, Symphony, Electron or repository is involved.
@@ -164,7 +166,7 @@ yarn workspace @pixel-brewery/synapse-meeting-notes-example start --provider cod
 
 ## Package and bundle evidence
 
-`yarn packaging:verify` packs all nine libraries, installs those archives in a temporary consumer and validates advertised runtime/declaration exports with NodeNext. It rejects workspace-only dependencies, compiler state, specs and CommonJS output in public artifacts. A separate import process blocks process launches, directory/file searches, network calls, timers and global listeners while permitting Node's ordinary module loading.
+`yarn packaging:verify` packs all public libraries, installs those archives in a temporary consumer and validates advertised runtime/declaration exports with NodeNext. It rejects workspace-only dependencies, compiler state, specs and CommonJS output in public artifacts. A separate import process blocks process launches, directory/file searches, network calls, timers and global listeners while permitting Node's ordinary module loading.
 
 Codex-only consumers are actually bundled by esbuild and Rollup. Their rendered module contributions must exclude Claude, OpenCode and ACP implementations. The same temporary consumer executes the standalone meeting example against installed tarballs with explicit simulation and a private temporary profile root. Successful archives and a machine-readable evidence report are written under ignored `artifacts/` for local integration; publication is a separate owner action.
 

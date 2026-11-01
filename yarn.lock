@@ -2725,6 +2725,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@pixel-brewery/synapse-auth-providers@workspace:libs/synapse-auth-providers":
+  version: 0.0.0-use.local
+  resolution: "@pixel-brewery/synapse-auth-providers@workspace:libs/synapse-auth-providers"
+  dependencies:
+    "@pixel-brewery/synapse-auth": "workspace:^"
+    "@pixel-brewery/synapse-core": "workspace:^"
+  languageName: unknown
+  linkType: soft
+
 "@pixel-brewery/synapse-auth@workspace:^, @pixel-brewery/synapse-auth@workspace:libs/synapse-auth":
   version: 0.0.0-use.local
   resolution: "@pixel-brewery/synapse-auth@workspace:libs/synapse-auth"

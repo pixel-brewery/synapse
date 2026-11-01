@@ -1,6 +1,6 @@
 # Coordinated releases to GitHub Packages
 
-The family version is recorded in the committed package manifests. Registry availability is established by exact-version and public-visibility verification, rather than by a prepared manifest, archive or workflow. The MIT-licensed source is public at [pixel-brewery/synapse](https://github.com/pixel-brewery/synapse), under the [Pixel Brewery organization](https://github.com/pixel-brewery). All ten packages target **public visibility on GitHub Packages** at `https://npm.pkg.github.com` under `@pixel-brewery`. Repository visibility, branch protection and package publication have separate owner actions and verification. Package publication uses GitHub Packages.
+The family version is recorded in the committed package manifests. Registry availability is established by exact-version and public-visibility verification, rather than by a prepared manifest, archive or workflow. The MIT-licensed source is public at [pixel-brewery/synapse](https://github.com/pixel-brewery/synapse), under the [Pixel Brewery organization](https://github.com/pixel-brewery). All public packages target **public visibility on GitHub Packages** at `https://npm.pkg.github.com` under `@pixel-brewery`. Repository visibility, branch protection and package publication have separate owner actions and verification. Package publication uses GitHub Packages.
 
 ## Public source launch
 
@@ -14,11 +14,11 @@ Verify package versions and package visibility independently using the commands 
 
 ## One package family
 
-The fixed `synapse` release group contains nine runtime libraries in `libs/synapse-*` and the optional `synapse-mcp` CLI in `tools/mcp`. They share one version. The unpublished workspace root and meeting-text example are outside the published group.
+The fixed `synapse` release group contains the public runtime libraries in `libs/synapse-*` and the optional `synapse-mcp` CLI in `tools/mcp`. They share one version. The unpublished workspace root and meeting-text example are outside the published group.
 
-The MCP CLI starts `dist/main.js` through its `synapse-mcp` bin and exports only `./package.json`. Its bundled `dist/data/corpus.json` contains the nine libraries' recursive API references, guides and patterns. It adds no public TypeScript library entrypoint or dependency to the runtime libraries.
+The MCP CLI starts `dist/main.js` through its `synapse-mcp` bin and exports only `./package.json`. Its bundled `dist/data/corpus.json` contains the public libraries' recursive API references, guides and patterns. It adds no public TypeScript library entrypoint or dependency to the runtime libraries.
 
-The TypeDoc API surface remains nine libraries. Regenerate it explicitly with `yarn docs` after changing source documentation or package versions; the MCP build checks drift before building its corpus. Do not hand-edit generated API or corpus files.
+The TypeDoc API surface covers the public libraries and their explicit package subpaths. Regenerate it explicitly with `yarn docs` after changing source documentation or package versions; the MCP build checks drift before building its corpus. Do not hand-edit generated API or corpus files.
 
 ## First publication and verification
 
@@ -31,7 +31,7 @@ yarn release:verify
 
 `release:publish` publishes the prepared version without another version bump and builds its Nx prerequisites automatically. It is also the recovery command when only part of that same family reached the registry. It must retain the selected version and complete the missing publications instead of creating another release.
 
-`release:verify` checks that every selected package exists at its exact prepared version and that all ten GitHub package ACLs are public. A successful upload alone is insufficient. GitHub initially creates packages with private visibility, and package visibility is distinct from repository visibility. The package owner sets the intended visibility; the publisher does not change package ACLs, and the verification command confirms the result. See [GitHub package visibility](https://docs.github.com/en/packages/learn-github-packages/configuring-a-packages-access-control-and-visibility).
+`release:verify` checks that every selected package exists at its exact prepared version and that all selected GitHub package ACLs are public. A successful upload alone is insufficient. GitHub initially creates packages with private visibility, and package visibility is distinct from repository visibility. The package owner sets the intended visibility; the publisher does not change package ACLs, and the verification command confirms the result. See [GitHub package visibility](https://docs.github.com/en/packages/learn-github-packages/configuring-a-packages-access-control-and-visibility).
 
 Use the published version only after those registry/version/visibility checks succeed. Record the actual local command or workflow run and candidate revision with the result.
 
@@ -61,7 +61,7 @@ If publication stops after uploading part of the family, resume with `yarn relea
 
 Future releases follow Symphony's release shape:
 
-- A normal push to `main` requests a patch release of the fixed ten-package family.
+- A normal push to `main` requests a patch release of the fixed package family.
 - A manually dispatched release workflow selects `patch`, `minor` or `major` for the same family.
 - `yarn release` and `yarn release:patch` dispatch the patch workflow; `yarn release:minor` and `yarn release:major` dispatch the other manual increments.
 - Release preparation updates the family versions, lockfile, generated documentation and `CHANGELOG.md` together.
@@ -104,7 +104,7 @@ yarn packaging:verify
 
 The same verification includes `yarn public:check`, which rejects excluded private project references in tracked and new non-ignored paths, symlink targets, UTF-8 and UTF-16 content, and decoded gzip archives. It streams file and archive content without an expanded-size limit and fails if a compressed file cannot be decoded. Diagnostics redact the excluded identifier from paths. Ignored local data is outside this source check unless force-tracked; Git history and remote issues or projects require a separate audit.
 
-Archives and the local report under `artifacts/` are ignored evidence. Their filenames include the prepared version; select the candidate's ten archives explicitly rather than publishing every historical archive left in that directory.
+Archives and the local report under `artifacts/` are ignored evidence. Their filenames include the prepared version; select all of the candidate's selected archives explicitly rather than publishing every historical archive left in that directory.
 
 Development verification has run on macOS with Node.js 24.21.0. Node.js 24.15+ is the declared minimum, and CI targets macOS, Linux and native Windows. A configured job does not establish a completed platform run. Live CLI login/inference remains separately invoked for the chosen account, executable version and platform; ordinary tests need no personal AI accounts. Downstream Symphony verification belongs to that consumer's own gates.
 

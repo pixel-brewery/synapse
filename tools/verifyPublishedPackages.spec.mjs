@@ -9,6 +9,7 @@ import { verifyPublishedPackages } from './verifyPublishedPackages.mjs';
 
 const boundaries = vi.hoisted(() => ({
     open: vi.fn(),
+    readdir: vi.fn(),
     realpath: vi.fn(),
     graph: vi.fn(),
     execute: vi.fn(),
@@ -16,6 +17,7 @@ const boundaries = vi.hoisted(() => ({
 
 vi.mock('node:fs/promises', () => ({
     open: boundaries.open,
+    readdir: boundaries.readdir,
     realpath: boundaries.realpath,
 }));
 vi.mock('@nx/devkit', () => ({ createProjectGraphAsync: boundaries.graph }));
@@ -32,6 +34,7 @@ const repository = 'git+https://github.com/pixel-brewery/synapse.git';
 const version = '1.2.3';
 const projects = [
     'synapse-auth',
+    'synapse-auth-providers',
     'synapse-core',
     'synapse-mcp',
     'synapse-provider-acp',
@@ -47,6 +50,7 @@ let registryMetadata;
 let visibilityMetadata;
 let fetchMock;
 let output;
+let releaseGroup;
 
 function directory(project) {
     return project === 'synapse-mcp' ? 'tools/mcp' : `libs/${project}`;
@@ -72,6 +76,7 @@ beforeEach(() => {
             },
         ]),
     );
+    releaseGroup = { projectsRelationship: 'fixed', projects: [...projects] };
     registryMetadata = (project) => ({
         versions: {
             [version]: { name: `@pixel-brewery/${project}`, version, repository },
@@ -85,6 +90,11 @@ beforeEach(() => {
         visibility: 'public',
     });
     boundaries.realpath.mockImplementation(async (file) => resolve(file));
+    boundaries.readdir.mockResolvedValue(
+        projects
+            .filter((project) => project !== 'synapse-mcp')
+            .map((name) => ({ name, isDirectory: () => true })),
+    );
     boundaries.graph.mockResolvedValue({
         nodes: Object.fromEntries(
             projects.map((project) => [project, { data: { root: directory(project) } }]),
@@ -96,7 +106,7 @@ beforeEach(() => {
         );
         const value =
             file === join(root, 'nx.json')
-                ? { release: { groups: { synapse: { projectsRelationship: 'fixed', projects } } } }
+                ? { release: { groups: { synapse: releaseGroup } } }
                 : manifests.get(project);
 
         if (!value) throw new Error('Unexpected controlled metadata path.');
@@ -170,14 +180,16 @@ describe('published package verification', () => {
             await verifyPublishedPackages();
 
             // Assert
-            expect(fetchMock).toHaveBeenCalledTimes(20);
+            expect(fetchMock).toHaveBeenCalledTimes(projects.length * 2);
             expect(boundaries.execute).not.toHaveBeenCalled();
-            expect(printed()).toContain(`Verified all 10 public Synapse packages at ${version}`);
+            expect(printed()).toContain(
+                `Verified all ${projects.length} public Synapse packages at ${version}`,
+            );
             expect(
                 fetchMock.mock.calls.map(([endpoint]) => new URL(endpoint).hostname).sort(),
             ).toEqual([
-                ...Array(10).fill('api.github.com'),
-                ...Array(10).fill('npm.pkg.github.com'),
+                ...Array(projects.length).fill('api.github.com'),
+                ...Array(projects.length).fill('npm.pkg.github.com'),
             ]);
 
             for (const [, options] of fetchMock.mock.calls)
@@ -187,6 +199,19 @@ describe('published package verification', () => {
                 });
         },
     );
+
+    it('rejects a release group that omits a public optional library before reading credentials', async () => {
+        // Arrange
+        releaseGroup.projects = projects.filter((project) => project !== 'synapse-auth-providers');
+
+        // Act
+        const result = verifyPublishedPackages();
+
+        // Assert
+        await expect(result).rejects.toThrow('match the public library manifests');
+        expect(boundaries.execute).not.toHaveBeenCalled();
+        expect(fetchMock).not.toHaveBeenCalled();
+    });
 
     it.each([
         'https://github.com/former-owner/synapse.git',

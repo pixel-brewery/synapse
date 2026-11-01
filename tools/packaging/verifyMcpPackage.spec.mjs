@@ -119,6 +119,52 @@ async function changeCorpus(context, change) {
 }
 
 describe('installed MCP artifact verification', () => {
+    it('accepts optional libraries when the corpus matches the complete manifest inventory', async () => {
+        // Arrange
+        const context = await fixture();
+        const additional = {
+            slug: 'synapse-auth-providers',
+            name: '@pixel-brewery/synapse-auth-providers',
+            version,
+        };
+
+        context.options.packages.push(additional);
+        await changeCorpus(context, (corpus) => {
+            corpus.packages.push({
+                name: additional.slug,
+                packageName: additional.name,
+                version,
+                overview: '# Authentication providers',
+                apiContent: '# API-key verification API',
+            });
+        });
+
+        // Act
+        const result = await verifyMcpPackage(context.options);
+
+        // Assert
+        expect(result.corpus.packages).toBe(10);
+        expect(context.run).toHaveBeenCalledTimes(1);
+    });
+
+    it('rejects a corpus that omits a manifest-selected optional library', async () => {
+        // Arrange
+        const context = await fixture();
+
+        context.options.packages.push({
+            slug: 'synapse-auth-providers',
+            name: '@pixel-brewery/synapse-auth-providers',
+            version,
+        });
+
+        // Act
+        const result = verifyMcpPackage(context.options);
+
+        // Assert
+        await expect(result).rejects.toThrow('match every public library manifest');
+        expect(context.run).not.toHaveBeenCalled();
+    });
+
     it('checks a CLI-only payload and probes installed files from an empty foreign working directory', async () => {
         // Arrange
         const context = await fixture();

@@ -1,5 +1,5 @@
 /**
- * One declared input for a native credentials interaction.
+ * One declared input for a credentials interaction.
  *
  * @public
  */

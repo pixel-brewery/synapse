@@ -212,20 +212,33 @@ function inspectManifest(manifest, expected) {
 
 function inspectCorpus(corpus, packages) {
     const expected = packages.map((pkg) => `${pkg.name}@${pkg.version}`).sort();
-    const actual = corpus.packages?.map((pkg) => `${pkg.packageName}@${pkg.version}`).sort();
-    const runtime = corpus.packages?.find((pkg) => pkg.name === 'synapse-runtime');
+    const actual = Array.isArray(corpus.packages)
+        ? corpus.packages.map((pkg) => `${pkg?.packageName}@${pkg?.version}`).sort()
+        : undefined;
+    const runtime = Array.isArray(corpus.packages)
+        ? corpus.packages.find((pkg) => pkg?.name === 'synapse-runtime')
+        : undefined;
 
     if (
         corpus.schemaVersion !== 1 ||
-        expected.length !== 9 ||
+        expected.length === 0 ||
+        expected.length > 64 ||
+        new Set(expected).size !== expected.length ||
         JSON.stringify(actual) !== JSON.stringify(expected) ||
-        corpus.packages.some((pkg) => !pkg.overview?.trim() || !pkg.apiContent?.trim()) ||
+        corpus.packages.some(
+            (pkg) =>
+                typeof pkg.name !== 'string' ||
+                !/^synapse-[a-z0-9-]+$/u.test(pkg.name) ||
+                pkg.packageName !== `@pixel-brewery/${pkg.name}` ||
+                !pkg.overview?.trim() ||
+                !pkg.apiContent?.trim(),
+        ) ||
         !runtime?.apiContent?.includes('Class: AiRuntime') ||
         !runtime.apiContent.includes('### run()') ||
         !runtime.apiContent.includes('### dispose()')
     )
         throw new Error(
-            'The MCP corpus must contain all nine libraries and the nested AiRuntime API.',
+            'The MCP corpus must match every public library manifest and the nested AiRuntime API.',
         );
 
     if (

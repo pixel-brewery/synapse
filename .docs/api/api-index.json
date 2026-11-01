@@ -11,15 +11,80 @@
           "api": "packages/synapse-auth/api/index.md",
           "reflection": "api/synapse-auth/reflection.json",
           "exports": [
+            "ApiKeyAuthDriver",
+            "ApiKeyStoreBase",
+            "ApiKeyVerifierBase",
             "AuthManager",
             "AuthState",
+            "IApiKeyCredentialScope",
             "IAuthHandle",
             "IAuthManagerOptions",
             "IAuthOperationIdentity",
             "IAuthStartOptions",
             "IProfileManagerOptions",
             "IProfileRequest",
-            "ProfileManager"
+            "ProfileManager",
+            "apiKeyCredentialScope"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "@pixel-brewery/synapse-auth-providers",
+      "version": "0.0.5",
+      "entryPoints": [
+        {
+          "importPath": "@pixel-brewery/synapse-auth-providers",
+          "api": "packages/synapse-auth-providers/api/index.md",
+          "reflection": "api/synapse-auth-providers/reflection.json",
+          "exports": [
+            "ApiKeyVerificationTransportBase",
+            "IApiKeyVerificationRequest",
+            "IApiKeyVerificationResponse",
+            "INodeApiKeyVerificationTransportOptions",
+            "NodeApiKeyVerificationTransport"
+          ]
+        },
+        {
+          "importPath": "@pixel-brewery/synapse-auth-providers/anthropic",
+          "api": "packages/synapse-auth-providers/api/subpaths/anthropic/index.md",
+          "reflection": "api/synapse-auth-providers/subpaths/anthropic/reflection.json",
+          "exports": [
+            "AnthropicApiKeyVerifier",
+            "IAnthropicApiKeyVerifierOptions"
+          ]
+        },
+        {
+          "importPath": "@pixel-brewery/synapse-auth-providers/gemini",
+          "api": "packages/synapse-auth-providers/api/subpaths/gemini/index.md",
+          "reflection": "api/synapse-auth-providers/subpaths/gemini/reflection.json",
+          "exports": [
+            "GeminiApiKeyVerifier"
+          ]
+        },
+        {
+          "importPath": "@pixel-brewery/synapse-auth-providers/mistral",
+          "api": "packages/synapse-auth-providers/api/subpaths/mistral/index.md",
+          "reflection": "api/synapse-auth-providers/subpaths/mistral/reflection.json",
+          "exports": [
+            "MistralApiKeyVerifier"
+          ]
+        },
+        {
+          "importPath": "@pixel-brewery/synapse-auth-providers/openai",
+          "api": "packages/synapse-auth-providers/api/subpaths/openai/index.md",
+          "reflection": "api/synapse-auth-providers/subpaths/openai/reflection.json",
+          "exports": [
+            "IOpenAiApiKeyVerifierOptions",
+            "OpenAiApiKeyVerifier"
+          ]
+        },
+        {
+          "importPath": "@pixel-brewery/synapse-auth-providers/openrouter",
+          "api": "packages/synapse-auth-providers/api/subpaths/openrouter/index.md",
+          "reflection": "api/synapse-auth-providers/subpaths/openrouter/reflection.json",
+          "exports": [
+            "OpenRouterApiKeyVerifier"
           ]
         }
       ]
@@ -220,12 +285,122 @@
   ],
   "entries": [
     {
+      "id": "@pixel-brewery/synapse-auth#ApiKeyAuthDriver",
+      "packageName": "@pixel-brewery/synapse-auth",
+      "importPath": "@pixel-brewery/synapse-auth",
+      "name": "ApiKeyAuthDriver",
+      "kind": "Class",
+      "summary": "Authenticates backend-owned API-key connections without a CLI or inference driver.",
+      "link": "packages/synapse-auth/api/classes/ApiKeyAuthDriver.md",
+      "reflectionId": 122
+    },
+    {
+      "id": "@pixel-brewery/synapse-auth#ApiKeyAuthDriver.login",
+      "packageName": "@pixel-brewery/synapse-auth",
+      "importPath": "@pixel-brewery/synapse-auth",
+      "name": "ApiKeyAuthDriver.login",
+      "kind": "Method",
+      "summary": "Requests one secret, verifies it and atomically replaces only this connection's stored key.",
+      "link": "packages/synapse-auth/api/classes/ApiKeyAuthDriver.md#login",
+      "reflectionId": 136
+    },
+    {
+      "id": "@pixel-brewery/synapse-auth#ApiKeyAuthDriver.logout",
+      "packageName": "@pixel-brewery/synapse-auth",
+      "importPath": "@pixel-brewery/synapse-auth",
+      "name": "ApiKeyAuthDriver.logout",
+      "kind": "Method",
+      "summary": "Removes only this connection's stored key after AuthManager drains affected work.",
+      "link": "packages/synapse-auth/api/classes/ApiKeyAuthDriver.md#logout",
+      "reflectionId": 139
+    },
+    {
+      "id": "@pixel-brewery/synapse-auth#ApiKeyAuthDriver.methods",
+      "packageName": "@pixel-brewery/synapse-auth",
+      "importPath": "@pixel-brewery/synapse-auth",
+      "name": "ApiKeyAuthDriver.methods",
+      "kind": "Method",
+      "summary": "Advertises explicit secret input for one authorized backend connection.",
+      "link": "packages/synapse-auth/api/classes/ApiKeyAuthDriver.md#methods",
+      "reflectionId": 129
+    },
+    {
+      "id": "@pixel-brewery/synapse-auth#ApiKeyAuthDriver.status",
+      "packageName": "@pixel-brewery/synapse-auth",
+      "importPath": "@pixel-brewery/synapse-auth",
+      "name": "ApiKeyAuthDriver.status",
+      "kind": "Method",
+      "summary": "Rechecks the stored key with the injected provider verifier without invoking a model.",
+      "link": "packages/synapse-auth/api/classes/ApiKeyAuthDriver.md#status",
+      "reflectionId": 132
+    },
+    {
+      "id": "@pixel-brewery/synapse-auth#ApiKeyStoreBase",
+      "packageName": "@pixel-brewery/synapse-auth",
+      "importPath": "@pixel-brewery/synapse-auth",
+      "name": "ApiKeyStoreBase",
+      "kind": "Class",
+      "summary": "Backend secret-storage boundary for API-key connections.",
+      "link": "packages/synapse-auth/api/classes/ApiKeyStoreBase.md",
+      "reflectionId": 154
+    },
+    {
+      "id": "@pixel-brewery/synapse-auth#ApiKeyStoreBase.read",
+      "packageName": "@pixel-brewery/synapse-auth",
+      "importPath": "@pixel-brewery/synapse-auth",
+      "name": "ApiKeyStoreBase.read",
+      "kind": "Method",
+      "summary": "Resolves one connection's secret without changing persistent state.",
+      "link": "packages/synapse-auth/api/classes/ApiKeyStoreBase.md#read",
+      "reflectionId": 157
+    },
+    {
+      "id": "@pixel-brewery/synapse-auth#ApiKeyStoreBase.remove",
+      "packageName": "@pixel-brewery/synapse-auth",
+      "importPath": "@pixel-brewery/synapse-auth",
+      "name": "ApiKeyStoreBase.remove",
+      "kind": "Method",
+      "summary": "Idempotently removes this connection's locally managed secret reference.",
+      "link": "packages/synapse-auth/api/classes/ApiKeyStoreBase.md#remove",
+      "reflectionId": 166
+    },
+    {
+      "id": "@pixel-brewery/synapse-auth#ApiKeyStoreBase.write",
+      "packageName": "@pixel-brewery/synapse-auth",
+      "importPath": "@pixel-brewery/synapse-auth",
+      "name": "ApiKeyStoreBase.write",
+      "kind": "Method",
+      "summary": "Atomically stores a verified key for exactly one connection.",
+      "link": "packages/synapse-auth/api/classes/ApiKeyStoreBase.md#write",
+      "reflectionId": 161
+    },
+    {
+      "id": "@pixel-brewery/synapse-auth#ApiKeyVerifierBase",
+      "packageName": "@pixel-brewery/synapse-auth",
+      "importPath": "@pixel-brewery/synapse-auth",
+      "name": "ApiKeyVerifierBase",
+      "kind": "Class",
+      "summary": "Backend adapter that verifies an API key using the host's selected provider client.",
+      "link": "packages/synapse-auth/api/classes/ApiKeyVerifierBase.md",
+      "reflectionId": 170
+    },
+    {
+      "id": "@pixel-brewery/synapse-auth#ApiKeyVerifierBase.verify",
+      "packageName": "@pixel-brewery/synapse-auth",
+      "importPath": "@pixel-brewery/synapse-auth",
+      "name": "ApiKeyVerifierBase.verify",
+      "kind": "Method",
+      "summary": "Checks this connection's candidate secret without storing it or invoking a model.",
+      "link": "packages/synapse-auth/api/classes/ApiKeyVerifierBase.md#verify",
+      "reflectionId": 173
+    },
+    {
       "id": "@pixel-brewery/synapse-auth#AuthManager",
       "packageName": "@pixel-brewery/synapse-auth",
       "importPath": "@pixel-brewery/synapse-auth",
       "name": "AuthManager",
       "kind": "Class",
-      "summary": "Coordinates native account changes with the same profile gate used by execution.",
+      "summary": "Coordinates account authentication changes with the same profile gate used by execution.",
       "link": "packages/synapse-auth/api/classes/AuthManager.md",
       "reflectionId": 59
     },
@@ -235,7 +410,7 @@
       "importPath": "@pixel-brewery/synapse-auth",
       "name": "AuthManager.dispose",
       "kind": "Method",
-      "summary": "Cancels all login/status/logout work and awaits owned native cleanup.",
+      "summary": "Cancels all login/status/logout work and awaits owned authentication cleanup.",
       "link": "packages/synapse-auth/api/classes/AuthManager.md#dispose",
       "reflectionId": 98
     },
@@ -245,7 +420,7 @@
       "importPath": "@pixel-brewery/synapse-auth",
       "name": "AuthManager.logout",
       "kind": "Method",
-      "summary": "Cancels/drains a profile's login and executions before removing its native credentials.",
+      "summary": "Cancels/drains a profile's login and executions before removing its configured credentials.",
       "link": "packages/synapse-auth/api/classes/AuthManager.md#logout",
       "reflectionId": 93
     },
@@ -265,7 +440,7 @@
       "importPath": "@pixel-brewery/synapse-auth",
       "name": "AuthManager.status",
       "kind": "Method",
-      "summary": "Performs a bounded native status check without initiating login, hooks or inference.",
+      "summary": "Performs a bounded authentication status check without initiating login or inference.",
       "link": "packages/synapse-auth/api/classes/AuthManager.md#status",
       "reflectionId": 88
     },
@@ -277,7 +452,67 @@
       "kind": "Type Alias",
       "summary": "Correlated authentication lifecycle snapshots containing no submitted credential values.",
       "link": "packages/synapse-auth/api/type-aliases/AuthState.md",
-      "reflectionId": 164
+      "reflectionId": 229
+    },
+    {
+      "id": "@pixel-brewery/synapse-auth#IApiKeyCredentialScope",
+      "packageName": "@pixel-brewery/synapse-auth",
+      "importPath": "@pixel-brewery/synapse-auth",
+      "name": "IApiKeyCredentialScope",
+      "kind": "Interface",
+      "summary": "Detached identity of one backend-owned API-key connection, without a secret or native path.",
+      "link": "packages/synapse-auth/api/interfaces/IApiKeyCredentialScope.md",
+      "reflectionId": 181
+    },
+    {
+      "id": "@pixel-brewery/synapse-auth#IApiKeyCredentialScope.accountId",
+      "packageName": "@pixel-brewery/synapse-auth",
+      "importPath": "@pixel-brewery/synapse-auth",
+      "name": "IApiKeyCredentialScope.accountId",
+      "kind": "Property",
+      "summary": "Host-defined account identity within the application.",
+      "link": "packages/synapse-auth/api/interfaces/IApiKeyCredentialScope.md#accountid",
+      "reflectionId": 183
+    },
+    {
+      "id": "@pixel-brewery/synapse-auth#IApiKeyCredentialScope.applicationId",
+      "packageName": "@pixel-brewery/synapse-auth",
+      "importPath": "@pixel-brewery/synapse-auth",
+      "name": "IApiKeyCredentialScope.applicationId",
+      "kind": "Property",
+      "summary": "Application that owns the connection.",
+      "link": "packages/synapse-auth/api/interfaces/IApiKeyCredentialScope.md#applicationid",
+      "reflectionId": 182
+    },
+    {
+      "id": "@pixel-brewery/synapse-auth#IApiKeyCredentialScope.driverId",
+      "packageName": "@pixel-brewery/synapse-auth",
+      "importPath": "@pixel-brewery/synapse-auth",
+      "name": "IApiKeyCredentialScope.driverId",
+      "kind": "Property",
+      "summary": "Open provider/authentication adapter identity selected by the host.",
+      "link": "packages/synapse-auth/api/interfaces/IApiKeyCredentialScope.md#driverid",
+      "reflectionId": 184
+    },
+    {
+      "id": "@pixel-brewery/synapse-auth#IApiKeyCredentialScope.instanceId",
+      "packageName": "@pixel-brewery/synapse-auth",
+      "importPath": "@pixel-brewery/synapse-auth",
+      "name": "IApiKeyCredentialScope.instanceId",
+      "kind": "Property",
+      "summary": "Configured connection identity within the host runtime.",
+      "link": "packages/synapse-auth/api/interfaces/IApiKeyCredentialScope.md#instanceid",
+      "reflectionId": 185
+    },
+    {
+      "id": "@pixel-brewery/synapse-auth#IApiKeyCredentialScope.profileId",
+      "packageName": "@pixel-brewery/synapse-auth",
+      "importPath": "@pixel-brewery/synapse-auth",
+      "name": "IApiKeyCredentialScope.profileId",
+      "kind": "Property",
+      "summary": "Profile identity used by the shared credential-change coordinator.",
+      "link": "packages/synapse-auth/api/interfaces/IApiKeyCredentialScope.md#profileid",
+      "reflectionId": 186
     },
     {
       "id": "@pixel-brewery/synapse-auth#IAuthHandle",
@@ -287,7 +522,7 @@
       "kind": "Interface",
       "summary": "One login's current state, bounded history and awaited native completion.",
       "link": "packages/synapse-auth/api/interfaces/IAuthHandle.md",
-      "reflectionId": 131
+      "reflectionId": 196
     },
     {
       "id": "@pixel-brewery/synapse-auth#IAuthHandle.cancel",
@@ -297,7 +532,7 @@
       "kind": "Method",
       "summary": "Cancels this flow and waits for native teardown, including queued starts.",
       "link": "packages/synapse-auth/api/interfaces/IAuthHandle.md#cancel",
-      "reflectionId": 138
+      "reflectionId": 203
     },
     {
       "id": "@pixel-brewery/synapse-auth#IAuthHandle.events",
@@ -307,7 +542,7 @@
       "kind": "Property",
       "summary": "Bounded snapshots; result completion never depends on consuming this iterable.",
       "link": "packages/synapse-auth/api/interfaces/IAuthHandle.md#events",
-      "reflectionId": 133
+      "reflectionId": 198
     },
     {
       "id": "@pixel-brewery/synapse-auth#IAuthHandle.respond",
@@ -317,7 +552,7 @@
       "kind": "Method",
       "summary": "Provides in-memory input to the current owner-scoped interaction.",
       "link": "packages/synapse-auth/api/interfaces/IAuthHandle.md#respond",
-      "reflectionId": 135
+      "reflectionId": 200
     },
     {
       "id": "@pixel-brewery/synapse-auth#IAuthHandle.result",
@@ -327,7 +562,7 @@
       "kind": "Property",
       "summary": "Resolves only after native login and status verification; rejects after cleanup on failure.",
       "link": "packages/synapse-auth/api/interfaces/IAuthHandle.md#result",
-      "reflectionId": 134
+      "reflectionId": 199
     },
     {
       "id": "@pixel-brewery/synapse-auth#IAuthHandle.state",
@@ -337,7 +572,7 @@
       "kind": "Property",
       "summary": "Authoritative latest snapshot even when older events were dropped.",
       "link": "packages/synapse-auth/api/interfaces/IAuthHandle.md#state",
-      "reflectionId": 132
+      "reflectionId": 197
     },
     {
       "id": "@pixel-brewery/synapse-auth#IAuthManagerOptions",
@@ -347,7 +582,7 @@
       "kind": "Interface",
       "summary": "Bounded authentication lifecycle policy and deterministic test seams.",
       "link": "packages/synapse-auth/api/interfaces/IAuthManagerOptions.md",
-      "reflectionId": 140
+      "reflectionId": 205
     },
     {
       "id": "@pixel-brewery/synapse-auth#IAuthManagerOptions.createId",
@@ -357,7 +592,7 @@
       "kind": "Property",
       "summary": "Correlation ID factory; defaults to randomUUID and must produce unique nonempty values.",
       "link": "packages/synapse-auth/api/interfaces/IAuthManagerOptions.md#createid",
-      "reflectionId": 144
+      "reflectionId": 209
     },
     {
       "id": "@pixel-brewery/synapse-auth#IAuthManagerOptions.defaultTimeoutMs",
@@ -367,7 +602,7 @@
       "kind": "Property",
       "summary": "Default total login lifetime in milliseconds; defaults to 300000, maximum 1800000.",
       "link": "packages/synapse-auth/api/interfaces/IAuthManagerOptions.md#defaulttimeoutms",
-      "reflectionId": 147
+      "reflectionId": 212
     },
     {
       "id": "@pixel-brewery/synapse-auth#IAuthManagerOptions.eventCapacity",
@@ -377,7 +612,7 @@
       "kind": "Property",
       "summary": "Maximum retained event snapshots; defaults to 64. Older snapshots are dropped on overflow.",
       "link": "packages/synapse-auth/api/interfaces/IAuthManagerOptions.md#eventcapacity",
-      "reflectionId": 149
+      "reflectionId": 214
     },
     {
       "id": "@pixel-brewery/synapse-auth#IAuthManagerOptions.maxPendingOperations",
@@ -387,7 +622,7 @@
       "kind": "Property",
       "summary": "Maximum live/tearing-down login operations; defaults to 64.",
       "link": "packages/synapse-auth/api/interfaces/IAuthManagerOptions.md#maxpendingoperations",
-      "reflectionId": 150
+      "reflectionId": 215
     },
     {
       "id": "@pixel-brewery/synapse-auth#IAuthManagerOptions.now",
@@ -397,7 +632,7 @@
       "kind": "Property",
       "summary": "UTC epoch-millisecond clock; defaults to Date.now and is read only on explicit operations.",
       "link": "packages/synapse-auth/api/interfaces/IAuthManagerOptions.md#now",
-      "reflectionId": 141
+      "reflectionId": 206
     },
     {
       "id": "@pixel-brewery/synapse-auth#IAuthManagerOptions.statusTimeoutMs",
@@ -407,7 +642,7 @@
       "kind": "Property",
       "summary": "Background status deadline in milliseconds; defaults to 5000, maximum 30000.",
       "link": "packages/synapse-auth/api/interfaces/IAuthManagerOptions.md#statustimeoutms",
-      "reflectionId": 148
+      "reflectionId": 213
     },
     {
       "id": "@pixel-brewery/synapse-auth#IAuthOperationIdentity",
@@ -417,7 +652,7 @@
       "kind": "Interface",
       "summary": "Correlation and ownership shared by every state of one native login.",
       "link": "packages/synapse-auth/api/interfaces/IAuthOperationIdentity.md",
-      "reflectionId": 156
+      "reflectionId": 221
     },
     {
       "id": "@pixel-brewery/synapse-auth#IAuthOperationIdentity.driverId",
@@ -427,7 +662,7 @@
       "kind": "Property",
       "summary": "Open implementation identifier owning the native procedure.",
       "link": "packages/synapse-auth/api/interfaces/IAuthOperationIdentity.md#driverid",
-      "reflectionId": 161
+      "reflectionId": 226
     },
     {
       "id": "@pixel-brewery/synapse-auth#IAuthOperationIdentity.expiresAt",
@@ -437,7 +672,7 @@
       "kind": "Property",
       "summary": "Absolute UTC epoch milliseconds after which the operation is cancelled.",
       "link": "packages/synapse-auth/api/interfaces/IAuthOperationIdentity.md#expiresat",
-      "reflectionId": 163
+      "reflectionId": 228
     },
     {
       "id": "@pixel-brewery/synapse-auth#IAuthOperationIdentity.instanceId",
@@ -447,7 +682,7 @@
       "kind": "Property",
       "summary": "Instance whose native credentials are changing.",
       "link": "packages/synapse-auth/api/interfaces/IAuthOperationIdentity.md#instanceid",
-      "reflectionId": 159
+      "reflectionId": 224
     },
     {
       "id": "@pixel-brewery/synapse-auth#IAuthOperationIdentity.operationId",
@@ -457,7 +692,7 @@
       "kind": "Property",
       "summary": "Unique authentication flow identifier, never reused by a manager.",
       "link": "packages/synapse-auth/api/interfaces/IAuthOperationIdentity.md#operationid",
-      "reflectionId": 157
+      "reflectionId": 222
     },
     {
       "id": "@pixel-brewery/synapse-auth#IAuthOperationIdentity.ownerId",
@@ -467,7 +702,7 @@
       "kind": "Property",
       "summary": "Host interaction owner authorized to provide secret responses.",
       "link": "packages/synapse-auth/api/interfaces/IAuthOperationIdentity.md#ownerid",
-      "reflectionId": 158
+      "reflectionId": 223
     },
     {
       "id": "@pixel-brewery/synapse-auth#IAuthOperationIdentity.profileId",
@@ -477,7 +712,7 @@
       "kind": "Property",
       "summary": "Isolated account profile whose execution admission is blocked.",
       "link": "packages/synapse-auth/api/interfaces/IAuthOperationIdentity.md#profileid",
-      "reflectionId": 160
+      "reflectionId": 225
     },
     {
       "id": "@pixel-brewery/synapse-auth#IAuthOperationIdentity.startedAt",
@@ -487,7 +722,7 @@
       "kind": "Property",
       "summary": "Absolute UTC epoch milliseconds when this operation started.",
       "link": "packages/synapse-auth/api/interfaces/IAuthOperationIdentity.md#startedat",
-      "reflectionId": 162
+      "reflectionId": 227
     },
     {
       "id": "@pixel-brewery/synapse-auth#IAuthStartOptions",
@@ -497,7 +732,7 @@
       "kind": "Interface",
       "summary": "Explicit owner and procedure selected for one bounded native login.",
       "link": "packages/synapse-auth/api/interfaces/IAuthStartOptions.md",
-      "reflectionId": 151
+      "reflectionId": 216
     },
     {
       "id": "@pixel-brewery/synapse-auth#IAuthStartOptions.methodId",
@@ -507,7 +742,7 @@
       "kind": "Property",
       "summary": "Driver-local procedure identifier returned by its methods function.",
       "link": "packages/synapse-auth/api/interfaces/IAuthStartOptions.md#methodid",
-      "reflectionId": 153
+      "reflectionId": 218
     },
     {
       "id": "@pixel-brewery/synapse-auth#IAuthStartOptions.ownerId",
@@ -517,7 +752,7 @@
       "kind": "Property",
       "summary": "Host owner allowed to respond; it must be stable for the lifetime of this flow.",
       "link": "packages/synapse-auth/api/interfaces/IAuthStartOptions.md#ownerid",
-      "reflectionId": 152
+      "reflectionId": 217
     },
     {
       "id": "@pixel-brewery/synapse-auth#IAuthStartOptions.signal",
@@ -527,7 +762,7 @@
       "kind": "Property",
       "summary": "Optional host cancellation, propagated through native teardown.",
       "link": "packages/synapse-auth/api/interfaces/IAuthStartOptions.md#signal",
-      "reflectionId": 155
+      "reflectionId": 220
     },
     {
       "id": "@pixel-brewery/synapse-auth#IAuthStartOptions.timeoutMs",
@@ -537,7 +772,7 @@
       "kind": "Property",
       "summary": "Total lifetime in milliseconds, including queue/drain time; defaults to the manager policy.",
       "link": "packages/synapse-auth/api/interfaces/IAuthStartOptions.md#timeoutms",
-      "reflectionId": 154
+      "reflectionId": 219
     },
     {
       "id": "@pixel-brewery/synapse-auth#IProfileManagerOptions",
@@ -547,7 +782,7 @@
       "kind": "Interface",
       "summary": "Application-owned storage options for isolated CLI profiles.",
       "link": "packages/synapse-auth/api/interfaces/IProfileManagerOptions.md",
-      "reflectionId": 122
+      "reflectionId": 187
     },
     {
       "id": "@pixel-brewery/synapse-auth#IProfileManagerOptions.maxProfiles",
@@ -557,7 +792,7 @@
       "kind": "Property",
       "summary": "Maximum remembered profile mappings per manager; defaults to 1024.",
       "link": "packages/synapse-auth/api/interfaces/IProfileManagerOptions.md#maxprofiles",
-      "reflectionId": 124
+      "reflectionId": 189
     },
     {
       "id": "@pixel-brewery/synapse-auth#IProfileManagerOptions.rootDirectory",
@@ -567,7 +802,7 @@
       "kind": "Property",
       "summary": "Absolute private storage root. Construction performs no filesystem access.",
       "link": "packages/synapse-auth/api/interfaces/IProfileManagerOptions.md#rootdirectory",
-      "reflectionId": 123
+      "reflectionId": 188
     },
     {
       "id": "@pixel-brewery/synapse-auth#IProfileRequest",
@@ -577,7 +812,7 @@
       "kind": "Interface",
       "summary": "Stable application/account identity and optional existing native CLI locations.",
       "link": "packages/synapse-auth/api/interfaces/IProfileRequest.md",
-      "reflectionId": 125
+      "reflectionId": 190
     },
     {
       "id": "@pixel-brewery/synapse-auth#IProfileRequest.accountId",
@@ -587,7 +822,7 @@
       "kind": "Property",
       "summary": "Host-defined account identifier, never a credential value.",
       "link": "packages/synapse-auth/api/interfaces/IProfileRequest.md#accountid",
-      "reflectionId": 127
+      "reflectionId": 192
     },
     {
       "id": "@pixel-brewery/synapse-auth#IProfileRequest.applicationId",
@@ -597,7 +832,7 @@
       "kind": "Property",
       "summary": "Application owner, never an authentication secret.",
       "link": "packages/synapse-auth/api/interfaces/IProfileRequest.md#applicationid",
-      "reflectionId": 126
+      "reflectionId": 191
     },
     {
       "id": "@pixel-brewery/synapse-auth#IProfileRequest.driverId",
@@ -607,7 +842,7 @@
       "kind": "Property",
       "summary": "Open driver identifier used to separate native configuration formats.",
       "link": "packages/synapse-auth/api/interfaces/IProfileRequest.md#driverid",
-      "reflectionId": 128
+      "reflectionId": 193
     },
     {
       "id": "@pixel-brewery/synapse-auth#IProfileRequest.id",
@@ -617,7 +852,7 @@
       "kind": "Property",
       "summary": "Optional existing stable profile identity; otherwise derived from the owner tuple.",
       "link": "packages/synapse-auth/api/interfaces/IProfileRequest.md#id",
-      "reflectionId": 129
+      "reflectionId": 194
     },
     {
       "id": "@pixel-brewery/synapse-auth#IProfileRequest.paths",
@@ -627,7 +862,7 @@
       "kind": "Property",
       "summary": "Explicit absolute legacy paths; absent locations use isolated profile defaults.",
       "link": "packages/synapse-auth/api/interfaces/IProfileRequest.md#paths",
-      "reflectionId": 130
+      "reflectionId": 195
     },
     {
       "id": "@pixel-brewery/synapse-auth#ProfileManager",
@@ -650,12 +885,322 @@
       "reflectionId": 11
     },
     {
+      "id": "@pixel-brewery/synapse-auth#apiKeyCredentialScope",
+      "packageName": "@pixel-brewery/synapse-auth",
+      "importPath": "@pixel-brewery/synapse-auth",
+      "name": "apiKeyCredentialScope",
+      "kind": "Function",
+      "summary": "Captures the canonical storage identity for one authorized API-key connection.",
+      "link": "packages/synapse-auth/api/functions/apiKeyCredentialScope.md",
+      "reflectionId": 178
+    },
+    {
+      "id": "@pixel-brewery/synapse-auth-providers#ApiKeyVerificationTransportBase",
+      "packageName": "@pixel-brewery/synapse-auth-providers",
+      "importPath": "@pixel-brewery/synapse-auth-providers",
+      "name": "ApiKeyVerificationTransportBase",
+      "kind": "Class",
+      "summary": "Replaceable backend boundary for bounded provider authentication GET requests.",
+      "link": "packages/synapse-auth-providers/api/classes/ApiKeyVerificationTransportBase.md",
+      "reflectionId": 1
+    },
+    {
+      "id": "@pixel-brewery/synapse-auth-providers#ApiKeyVerificationTransportBase.get",
+      "packageName": "@pixel-brewery/synapse-auth-providers",
+      "importPath": "@pixel-brewery/synapse-auth-providers",
+      "name": "ApiKeyVerificationTransportBase.get",
+      "kind": "Method",
+      "summary": "Performs one non-inference authentication request without automatic retries.",
+      "link": "packages/synapse-auth-providers/api/classes/ApiKeyVerificationTransportBase.md#get",
+      "reflectionId": 4
+    },
+    {
+      "id": "@pixel-brewery/synapse-auth-providers#IApiKeyVerificationRequest",
+      "packageName": "@pixel-brewery/synapse-auth-providers",
+      "importPath": "@pixel-brewery/synapse-auth-providers",
+      "name": "IApiKeyVerificationRequest",
+      "kind": "Interface",
+      "summary": "One bounded, non-inference provider authentication request.",
+      "link": "packages/synapse-auth-providers/api/interfaces/IApiKeyVerificationRequest.md",
+      "reflectionId": 42
+    },
+    {
+      "id": "@pixel-brewery/synapse-auth-providers#IApiKeyVerificationRequest.headers",
+      "packageName": "@pixel-brewery/synapse-auth-providers",
+      "importPath": "@pixel-brewery/synapse-auth-providers",
+      "name": "IApiKeyVerificationRequest.headers",
+      "kind": "Property",
+      "summary": "Explicit authentication and protocol headers; values are backend-only secrets.",
+      "link": "packages/synapse-auth-providers/api/interfaces/IApiKeyVerificationRequest.md#headers",
+      "reflectionId": 44
+    },
+    {
+      "id": "@pixel-brewery/synapse-auth-providers#IApiKeyVerificationRequest.signal",
+      "packageName": "@pixel-brewery/synapse-auth-providers",
+      "importPath": "@pixel-brewery/synapse-auth-providers",
+      "name": "IApiKeyVerificationRequest.signal",
+      "kind": "Property",
+      "summary": "Caller cancellation, including the outer authentication operation's expiry.",
+      "link": "packages/synapse-auth-providers/api/interfaces/IApiKeyVerificationRequest.md#signal",
+      "reflectionId": 45
+    },
+    {
+      "id": "@pixel-brewery/synapse-auth-providers#IApiKeyVerificationRequest.url",
+      "packageName": "@pixel-brewery/synapse-auth-providers",
+      "importPath": "@pixel-brewery/synapse-auth-providers",
+      "name": "IApiKeyVerificationRequest.url",
+      "kind": "Property",
+      "summary": "Public HTTPS authentication or account-metadata endpoint selected by the verifier.",
+      "link": "packages/synapse-auth-providers/api/interfaces/IApiKeyVerificationRequest.md#url",
+      "reflectionId": 43
+    },
+    {
+      "id": "@pixel-brewery/synapse-auth-providers#IApiKeyVerificationResponse",
+      "packageName": "@pixel-brewery/synapse-auth-providers",
+      "importPath": "@pixel-brewery/synapse-auth-providers",
+      "name": "IApiKeyVerificationResponse",
+      "kind": "Interface",
+      "summary": "Bounded provider authentication response, retained inside the backend verifier.",
+      "link": "packages/synapse-auth-providers/api/interfaces/IApiKeyVerificationResponse.md",
+      "reflectionId": 46
+    },
+    {
+      "id": "@pixel-brewery/synapse-auth-providers#IApiKeyVerificationResponse.body",
+      "packageName": "@pixel-brewery/synapse-auth-providers",
+      "importPath": "@pixel-brewery/synapse-auth-providers",
+      "name": "IApiKeyVerificationResponse.body",
+      "kind": "Property",
+      "summary": "Parsed JSON, or undefined for an empty or non-JSON unsuccessful response body.",
+      "link": "packages/synapse-auth-providers/api/interfaces/IApiKeyVerificationResponse.md#body",
+      "reflectionId": 48
+    },
+    {
+      "id": "@pixel-brewery/synapse-auth-providers#IApiKeyVerificationResponse.status",
+      "packageName": "@pixel-brewery/synapse-auth-providers",
+      "importPath": "@pixel-brewery/synapse-auth-providers",
+      "name": "IApiKeyVerificationResponse.status",
+      "kind": "Property",
+      "summary": "HTTP status returned by the selected endpoint, without following redirects.",
+      "link": "packages/synapse-auth-providers/api/interfaces/IApiKeyVerificationResponse.md#status",
+      "reflectionId": 47
+    },
+    {
+      "id": "@pixel-brewery/synapse-auth-providers#INodeApiKeyVerificationTransportOptions",
+      "packageName": "@pixel-brewery/synapse-auth-providers",
+      "importPath": "@pixel-brewery/synapse-auth-providers",
+      "name": "INodeApiKeyVerificationTransportOptions",
+      "kind": "Interface",
+      "summary": "Resource limits for the built-in Node.js HTTPS authentication transport.",
+      "link": "packages/synapse-auth-providers/api/interfaces/INodeApiKeyVerificationTransportOptions.md",
+      "reflectionId": 49
+    },
+    {
+      "id": "@pixel-brewery/synapse-auth-providers#INodeApiKeyVerificationTransportOptions.maxResponseBytes",
+      "packageName": "@pixel-brewery/synapse-auth-providers",
+      "importPath": "@pixel-brewery/synapse-auth-providers",
+      "name": "INodeApiKeyVerificationTransportOptions.maxResponseBytes",
+      "kind": "Property",
+      "summary": "Maximum uncompressed response bytes retained or read; default 1 MiB.\nCompressed responses are rejected instead of being decompressed.",
+      "link": "packages/synapse-auth-providers/api/interfaces/INodeApiKeyVerificationTransportOptions.md#maxresponsebytes",
+      "reflectionId": 51
+    },
+    {
+      "id": "@pixel-brewery/synapse-auth-providers#INodeApiKeyVerificationTransportOptions.maximumConcurrentRequests",
+      "packageName": "@pixel-brewery/synapse-auth-providers",
+      "importPath": "@pixel-brewery/synapse-auth-providers",
+      "name": "INodeApiKeyVerificationTransportOptions.maximumConcurrentRequests",
+      "kind": "Property",
+      "summary": "Maximum requests owned concurrently by this transport; default 64.\nExcess requests reject immediately instead of joining an unbounded queue.\nA non-cancellable OS DNS lookup retains its slot until its callback completes,\nincluding after the caller has already timed out or cancelled.",
+      "link": "packages/synapse-auth-providers/api/interfaces/INodeApiKeyVerificationTransportOptions.md#maximumconcurrentrequests",
+      "reflectionId": 52
+    },
+    {
+      "id": "@pixel-brewery/synapse-auth-providers#INodeApiKeyVerificationTransportOptions.timeoutMs",
+      "packageName": "@pixel-brewery/synapse-auth-providers",
+      "importPath": "@pixel-brewery/synapse-auth-providers",
+      "name": "INodeApiKeyVerificationTransportOptions.timeoutMs",
+      "kind": "Property",
+      "summary": "Total lifetime including DNS, connection and response; default 5,000 milliseconds.\nMust be a positive safe integer within Node.js's timer ceiling.",
+      "link": "packages/synapse-auth-providers/api/interfaces/INodeApiKeyVerificationTransportOptions.md#timeoutms",
+      "reflectionId": 50
+    },
+    {
+      "id": "@pixel-brewery/synapse-auth-providers#NodeApiKeyVerificationTransport",
+      "packageName": "@pixel-brewery/synapse-auth-providers",
+      "importPath": "@pixel-brewery/synapse-auth-providers",
+      "name": "NodeApiKeyVerificationTransport",
+      "kind": "Class",
+      "summary": "Bounded Node.js HTTPS transport for provider authentication and account metadata only.",
+      "link": "packages/synapse-auth-providers/api/classes/NodeApiKeyVerificationTransport.md",
+      "reflectionId": 7
+    },
+    {
+      "id": "@pixel-brewery/synapse-auth-providers#NodeApiKeyVerificationTransport.get",
+      "packageName": "@pixel-brewery/synapse-auth-providers",
+      "importPath": "@pixel-brewery/synapse-auth-providers",
+      "name": "NodeApiKeyVerificationTransport.get",
+      "kind": "Method",
+      "summary": "Reads one authentication endpoint with bounded DNS, connection and response lifetime.",
+      "link": "packages/synapse-auth-providers/api/classes/NodeApiKeyVerificationTransport.md#get",
+      "reflectionId": 17
+    },
+    {
+      "id": "@pixel-brewery/synapse-auth-providers/anthropic#AnthropicApiKeyVerifier",
+      "packageName": "@pixel-brewery/synapse-auth-providers",
+      "importPath": "@pixel-brewery/synapse-auth-providers/anthropic",
+      "name": "AnthropicApiKeyVerifier",
+      "kind": "Class",
+      "summary": "Verifies an Anthropic API key through its authenticated, non-inference models endpoint.",
+      "link": "packages/synapse-auth-providers/api/subpaths/anthropic/classes/AnthropicApiKeyVerifier.md",
+      "reflectionId": 1
+    },
+    {
+      "id": "@pixel-brewery/synapse-auth-providers/anthropic#AnthropicApiKeyVerifier.verify",
+      "packageName": "@pixel-brewery/synapse-auth-providers",
+      "importPath": "@pixel-brewery/synapse-auth-providers/anthropic",
+      "name": "AnthropicApiKeyVerifier.verify",
+      "kind": "Method",
+      "summary": "Performs one cancellable authentication probe and returns safe verified state.",
+      "link": "packages/synapse-auth-providers/api/subpaths/anthropic/classes/AnthropicApiKeyVerifier.md#verify",
+      "reflectionId": 8
+    },
+    {
+      "id": "@pixel-brewery/synapse-auth-providers/anthropic#IAnthropicApiKeyVerifierOptions",
+      "packageName": "@pixel-brewery/synapse-auth-providers",
+      "importPath": "@pixel-brewery/synapse-auth-providers/anthropic",
+      "name": "IAnthropicApiKeyVerifierOptions",
+      "kind": "Interface",
+      "summary": "Optional Anthropic workspace selection for an API-key authentication probe.",
+      "link": "packages/synapse-auth-providers/api/subpaths/anthropic/interfaces/IAnthropicApiKeyVerifierOptions.md",
+      "reflectionId": 13
+    },
+    {
+      "id": "@pixel-brewery/synapse-auth-providers/anthropic#IAnthropicApiKeyVerifierOptions.workspaceId",
+      "packageName": "@pixel-brewery/synapse-auth-providers",
+      "importPath": "@pixel-brewery/synapse-auth-providers/anthropic",
+      "name": "IAnthropicApiKeyVerifierOptions.workspaceId",
+      "kind": "Property",
+      "summary": "Optional Anthropic workspace ID sent through the anthropic-workspace-id header.",
+      "link": "packages/synapse-auth-providers/api/subpaths/anthropic/interfaces/IAnthropicApiKeyVerifierOptions.md#workspaceid",
+      "reflectionId": 14
+    },
+    {
+      "id": "@pixel-brewery/synapse-auth-providers/gemini#GeminiApiKeyVerifier",
+      "packageName": "@pixel-brewery/synapse-auth-providers",
+      "importPath": "@pixel-brewery/synapse-auth-providers/gemini",
+      "name": "GeminiApiKeyVerifier",
+      "kind": "Class",
+      "summary": "Verifies Gemini Developer API credentials through its authenticated metadata endpoint.",
+      "link": "packages/synapse-auth-providers/api/subpaths/gemini/classes/GeminiApiKeyVerifier.md",
+      "reflectionId": 1
+    },
+    {
+      "id": "@pixel-brewery/synapse-auth-providers/gemini#GeminiApiKeyVerifier.verify",
+      "packageName": "@pixel-brewery/synapse-auth-providers",
+      "importPath": "@pixel-brewery/synapse-auth-providers/gemini",
+      "name": "GeminiApiKeyVerifier.verify",
+      "kind": "Method",
+      "summary": "Checks one explicitly supplied key without generating content or returning model data.",
+      "link": "packages/synapse-auth-providers/api/subpaths/gemini/classes/GeminiApiKeyVerifier.md#verify",
+      "reflectionId": 6
+    },
+    {
+      "id": "@pixel-brewery/synapse-auth-providers/mistral#MistralApiKeyVerifier",
+      "packageName": "@pixel-brewery/synapse-auth-providers",
+      "importPath": "@pixel-brewery/synapse-auth-providers/mistral",
+      "name": "MistralApiKeyVerifier",
+      "kind": "Class",
+      "summary": "Verifies Mistral API credentials through its authenticated model-metadata endpoint.",
+      "link": "packages/synapse-auth-providers/api/subpaths/mistral/classes/MistralApiKeyVerifier.md",
+      "reflectionId": 1
+    },
+    {
+      "id": "@pixel-brewery/synapse-auth-providers/mistral#MistralApiKeyVerifier.verify",
+      "packageName": "@pixel-brewery/synapse-auth-providers",
+      "importPath": "@pixel-brewery/synapse-auth-providers/mistral",
+      "name": "MistralApiKeyVerifier.verify",
+      "kind": "Method",
+      "summary": "Checks one explicitly supplied key without generating content or returning model data.",
+      "link": "packages/synapse-auth-providers/api/subpaths/mistral/classes/MistralApiKeyVerifier.md#verify",
+      "reflectionId": 6
+    },
+    {
+      "id": "@pixel-brewery/synapse-auth-providers/openai#IOpenAiApiKeyVerifierOptions",
+      "packageName": "@pixel-brewery/synapse-auth-providers",
+      "importPath": "@pixel-brewery/synapse-auth-providers/openai",
+      "name": "IOpenAiApiKeyVerifierOptions",
+      "kind": "Interface",
+      "summary": "Optional OpenAI organization/project selection for an API-key authentication probe.",
+      "link": "packages/synapse-auth-providers/api/subpaths/openai/interfaces/IOpenAiApiKeyVerifierOptions.md",
+      "reflectionId": 17
+    },
+    {
+      "id": "@pixel-brewery/synapse-auth-providers/openai#IOpenAiApiKeyVerifierOptions.organization",
+      "packageName": "@pixel-brewery/synapse-auth-providers",
+      "importPath": "@pixel-brewery/synapse-auth-providers/openai",
+      "name": "IOpenAiApiKeyVerifierOptions.organization",
+      "kind": "Property",
+      "summary": "Optional OpenAI organization ID sent through the OpenAI-Organization header.",
+      "link": "packages/synapse-auth-providers/api/subpaths/openai/interfaces/IOpenAiApiKeyVerifierOptions.md#organization",
+      "reflectionId": 18
+    },
+    {
+      "id": "@pixel-brewery/synapse-auth-providers/openai#IOpenAiApiKeyVerifierOptions.project",
+      "packageName": "@pixel-brewery/synapse-auth-providers",
+      "importPath": "@pixel-brewery/synapse-auth-providers/openai",
+      "name": "IOpenAiApiKeyVerifierOptions.project",
+      "kind": "Property",
+      "summary": "Optional OpenAI project ID sent through the OpenAI-Project header.",
+      "link": "packages/synapse-auth-providers/api/subpaths/openai/interfaces/IOpenAiApiKeyVerifierOptions.md#project",
+      "reflectionId": 19
+    },
+    {
+      "id": "@pixel-brewery/synapse-auth-providers/openai#OpenAiApiKeyVerifier",
+      "packageName": "@pixel-brewery/synapse-auth-providers",
+      "importPath": "@pixel-brewery/synapse-auth-providers/openai",
+      "name": "OpenAiApiKeyVerifier",
+      "kind": "Class",
+      "summary": "Verifies an OpenAI API key through its authenticated, non-inference models endpoint.",
+      "link": "packages/synapse-auth-providers/api/subpaths/openai/classes/OpenAiApiKeyVerifier.md",
+      "reflectionId": 1
+    },
+    {
+      "id": "@pixel-brewery/synapse-auth-providers/openai#OpenAiApiKeyVerifier.verify",
+      "packageName": "@pixel-brewery/synapse-auth-providers",
+      "importPath": "@pixel-brewery/synapse-auth-providers/openai",
+      "name": "OpenAiApiKeyVerifier.verify",
+      "kind": "Method",
+      "summary": "Performs one cancellable authentication probe and returns safe verified state.",
+      "link": "packages/synapse-auth-providers/api/subpaths/openai/classes/OpenAiApiKeyVerifier.md#verify",
+      "reflectionId": 9
+    },
+    {
+      "id": "@pixel-brewery/synapse-auth-providers/openrouter#OpenRouterApiKeyVerifier",
+      "packageName": "@pixel-brewery/synapse-auth-providers",
+      "importPath": "@pixel-brewery/synapse-auth-providers/openrouter",
+      "name": "OpenRouterApiKeyVerifier",
+      "kind": "Class",
+      "summary": "Verifies an OpenRouter key through its authenticated current-key metadata endpoint.",
+      "link": "packages/synapse-auth-providers/api/subpaths/openrouter/classes/OpenRouterApiKeyVerifier.md",
+      "reflectionId": 1
+    },
+    {
+      "id": "@pixel-brewery/synapse-auth-providers/openrouter#OpenRouterApiKeyVerifier.verify",
+      "packageName": "@pixel-brewery/synapse-auth-providers",
+      "importPath": "@pixel-brewery/synapse-auth-providers/openrouter",
+      "name": "OpenRouterApiKeyVerifier.verify",
+      "kind": "Method",
+      "summary": "Checks whether OpenRouter accepts the key for authenticated key metadata.",
+      "link": "packages/synapse-auth-providers/api/subpaths/openrouter/classes/OpenRouterApiKeyVerifier.md#verify",
+      "reflectionId": 6
+    },
+    {
       "id": "@pixel-brewery/synapse-core#AiAuthDriverBase",
       "packageName": "@pixel-brewery/synapse-core",
       "importPath": "@pixel-brewery/synapse-core",
       "name": "AiAuthDriverBase",
       "kind": "Class",
-      "summary": "Replaceable native authentication procedures, without an application token broker.",
+      "summary": "Replaceable authentication procedures, without an application token broker.",
       "link": "packages/synapse-core/api/classes/AiAuthDriverBase.md",
       "reflectionId": 1
     },
@@ -665,7 +1210,7 @@
       "importPath": "@pixel-brewery/synapse-core",
       "name": "AiAuthDriverBase.login",
       "kind": "Method",
-      "summary": "Performs the selected explicit native login while the auth owner holds exclusive profile access.",
+      "summary": "Performs the selected explicit authentication procedure under exclusive profile access.",
       "link": "packages/synapse-core/api/classes/AiAuthDriverBase.md#login",
       "reflectionId": 11
     },
@@ -675,7 +1220,7 @@
       "importPath": "@pixel-brewery/synapse-core",
       "name": "AiAuthDriverBase.logout",
       "kind": "Method",
-      "summary": "Removes this isolated account's native credentials after its executions drain.",
+      "summary": "Removes this isolated account's configured credentials after its executions drain.",
       "link": "packages/synapse-core/api/classes/AiAuthDriverBase.md#logout",
       "reflectionId": 14
     },
@@ -695,7 +1240,7 @@
       "importPath": "@pixel-brewery/synapse-core",
       "name": "AiAuthDriverBase.status",
       "kind": "Method",
-      "summary": "Verifies native CLI account state without launching a login or hooks.",
+      "summary": "Inspects account authentication through the driver's supported verification mechanism.",
       "link": "packages/synapse-core/api/classes/AiAuthDriverBase.md#status",
       "reflectionId": 7
     },
@@ -905,7 +1450,7 @@
       "importPath": "@pixel-brewery/synapse-core",
       "name": "IAiAuthContext",
       "kind": "Interface",
-      "summary": "Explicit native login execution with host-owned interaction presentation.",
+      "summary": "Explicit authentication procedure with host-owned interaction presentation.",
       "link": "packages/synapse-core/api/interfaces/IAiAuthContext.md",
       "reflectionId": 70
     },
@@ -925,7 +1470,7 @@
       "importPath": "@pixel-brewery/synapse-core",
       "name": "IAiAuthContext.interaction",
       "kind": "Property",
-      "summary": "Present a native interaction; auth owner validates identity and expiry.",
+      "summary": "Present an authentication interaction; auth owner validates identity and expiry.",
       "link": "packages/synapse-core/api/interfaces/IAiAuthContext.md#interaction",
       "reflectionId": 74
     },
@@ -965,7 +1510,7 @@
       "importPath": "@pixel-brewery/synapse-core",
       "name": "IAiAuthField",
       "kind": "Interface",
-      "summary": "One declared input for a native credentials interaction.",
+      "summary": "One declared input for a credentials interaction.",
       "link": "packages/synapse-core/api/interfaces/IAiAuthField.md",
       "reflectionId": 82
     },
@@ -1015,7 +1560,7 @@
       "importPath": "@pixel-brewery/synapse-core",
       "name": "IAiAuthInteraction",
       "kind": "Interface",
-      "summary": "One correlated, expiring native authentication interaction.",
+      "summary": "One correlated, expiring authentication interaction.",
       "link": "packages/synapse-core/api/interfaces/IAiAuthInteraction.md",
       "reflectionId": 87
     },
@@ -1085,7 +1630,7 @@
       "importPath": "@pixel-brewery/synapse-core",
       "name": "IAiAuthInteraction.url",
       "kind": "Property",
-      "summary": "Native login URL for an explicit user interaction.",
+      "summary": "Authentication URL for an explicit user interaction.",
       "link": "packages/synapse-core/api/interfaces/IAiAuthInteraction.md#url",
       "reflectionId": 92
     },
@@ -1115,7 +1660,7 @@
       "importPath": "@pixel-brewery/synapse-core",
       "name": "IAiAuthMethod.kind",
       "kind": "Property",
-      "summary": "Required native interaction family.",
+      "summary": "Required authentication interaction family.",
       "link": "packages/synapse-core/api/interfaces/IAiAuthMethod.md#kind",
       "reflectionId": 98
     },
@@ -1185,7 +1730,7 @@
       "importPath": "@pixel-brewery/synapse-core",
       "name": "IAiAuthStatus",
       "kind": "Interface",
-      "summary": "Verified native CLI account state without reusable credential values.",
+      "summary": "Driver-reported account authentication state without reusable credential values.",
       "link": "packages/synapse-core/api/interfaces/IAiAuthStatus.md",
       "reflectionId": 104
     },
@@ -1205,7 +1750,7 @@
       "importPath": "@pixel-brewery/synapse-core",
       "name": "IAiAuthStatus.authenticated",
       "kind": "Property",
-      "summary": "Whether the CLI verified an authenticated account.",
+      "summary": "Whether the driver's verification mechanism accepted the account's authentication.\nHost-managed API keys require a host-owned verifier; stored key presence alone is insufficient.",
       "link": "packages/synapse-core/api/interfaces/IAiAuthStatus.md#authenticated",
       "reflectionId": 105
     },
@@ -1225,7 +1770,7 @@
       "importPath": "@pixel-brewery/synapse-core",
       "name": "IAiAuthStatus.message",
       "kind": "Property",
-      "summary": "Safe bounded status explanation; never raw CLI output.",
+      "summary": "Safe bounded status explanation; never raw provider output or credential values.",
       "link": "packages/synapse-core/api/interfaces/IAiAuthStatus.md#message",
       "reflectionId": 110
     },
@@ -1235,7 +1780,7 @@
       "importPath": "@pixel-brewery/synapse-core",
       "name": "IAiAuthStatus.method",
       "kind": "Property",
-      "summary": "Verified native authentication family, e.g. chatgpt, subscription or api-key; absent when unknown.",
+      "summary": "Authentication family established by the driver, e.g. chatgpt, subscription or api-key; absent when unknown.",
       "link": "packages/synapse-core/api/interfaces/IAiAuthStatus.md#method",
       "reflectionId": 106
     },

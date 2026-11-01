@@ -27,7 +27,7 @@
         "summary": [
           {
             "kind": "text",
-            "text": "Replaceable native authentication procedures, without an application token broker."
+            "text": "Replaceable authentication procedures, without an application token broker."
           }
         ]
       },
@@ -76,7 +76,7 @@
                 "summary": [
                   {
                     "kind": "text",
-                    "text": "Performs the selected explicit native login while the auth owner holds exclusive profile access."
+                    "text": "Performs the selected explicit authentication procedure under exclusive profile access."
                   }
                 ],
                 "blockTags": [
@@ -85,7 +85,7 @@
                     "content": [
                       {
                         "kind": "text",
-                        "text": "Native CLI completion; the auth owner verifies status again before success."
+                        "text": "Procedure completion; the auth owner verifies status again before success."
                       }
                     ]
                   },
@@ -164,7 +164,7 @@
                 "summary": [
                   {
                     "kind": "text",
-                    "text": "Removes this isolated account's native credentials after its executions drain."
+                    "text": "Removes this isolated account's configured credentials after its executions drain."
                   }
                 ],
                 "blockTags": [
@@ -182,7 +182,7 @@
                     "content": [
                       {
                         "kind": "text",
-                        "text": "An AiError when the native logout fails."
+                        "text": "An AiError when logout fails."
                       }
                     ]
                   }
@@ -353,7 +353,7 @@
                 "summary": [
                   {
                     "kind": "text",
-                    "text": "Verifies native CLI account state without launching a login or hooks."
+                    "text": "Inspects account authentication through the driver's supported verification mechanism."
                   }
                 ],
                 "blockTags": [
@@ -362,7 +362,7 @@
                     "content": [
                       {
                         "kind": "text",
-                        "text": "Safe verified account metadata."
+                        "text": "Safe account metadata with the authentication result."
                       }
                     ]
                   },
@@ -371,7 +371,16 @@
                     "content": [
                       {
                         "kind": "text",
-                        "text": "An AiError when the host/CLI inspection fails."
+                        "text": "An AiError when the host or provider inspection fails."
+                      }
+                    ]
+                  },
+                  {
+                    "tag": "@remarks",
+                    "content": [
+                      {
+                        "kind": "text",
+                        "text": "Inspection does not initiate login or inference. Stored credentials alone do not establish remote validity; host-managed API keys require a host-owned verifier."
                       }
                     ]
                   }
@@ -2295,7 +2304,7 @@
         "summary": [
           {
             "kind": "text",
-            "text": "Explicit native login execution with host-owned interaction presentation."
+            "text": "Explicit authentication procedure with host-owned interaction presentation."
           }
         ]
       },
@@ -2335,7 +2344,7 @@
             "summary": [
               {
                 "kind": "text",
-                "text": "Present a native interaction; auth owner validates identity and expiry."
+                "text": "Present an authentication interaction; auth owner validates identity and expiry."
               }
             ]
           },
@@ -2365,7 +2374,7 @@
                         "summary": [
                           {
                             "kind": "text",
-                            "text": "Correlated native interaction to present."
+                            "text": "Correlated authentication interaction to present."
                           }
                         ]
                       },
@@ -2575,7 +2584,7 @@
         "summary": [
           {
             "kind": "text",
-            "text": "One declared input for a native credentials interaction."
+            "text": "One declared input for a credentials interaction."
           }
         ]
       },
@@ -2690,7 +2699,7 @@
         "summary": [
           {
             "kind": "text",
-            "text": "One correlated, expiring native authentication interaction."
+            "text": "One correlated, expiring authentication interaction."
           }
         ]
       },
@@ -2846,7 +2855,7 @@
             "summary": [
               {
                 "kind": "text",
-                "text": "Native login URL for an explicit user interaction."
+                "text": "Authentication URL for an explicit user interaction."
               }
             ]
           },
@@ -2921,7 +2930,7 @@
             "summary": [
               {
                 "kind": "text",
-                "text": "Required native interaction family."
+                "text": "Required authentication interaction family."
               }
             ]
           },
@@ -3134,7 +3143,7 @@
         "summary": [
           {
             "kind": "text",
-            "text": "Verified native CLI account state without reusable credential values."
+            "text": "Driver-reported account authentication state without reusable credential values."
           }
         ]
       },
@@ -3173,7 +3182,7 @@
             "summary": [
               {
                 "kind": "text",
-                "text": "Whether the CLI verified an authenticated account."
+                "text": "Whether the driver's verification mechanism accepted the account's authentication.\nHost-managed API keys require a host-owned verifier; stored key presence alone is insufficient."
               }
             ]
           },
@@ -3217,7 +3226,7 @@
             "summary": [
               {
                 "kind": "text",
-                "text": "Safe bounded status explanation; never raw CLI output."
+                "text": "Safe bounded status explanation; never raw provider output or credential values."
               }
             ]
           },
@@ -3239,7 +3248,7 @@
             "summary": [
               {
                 "kind": "text",
-                "text": "Verified native authentication family, e.g. chatgpt, subscription or api-key; absent when unknown."
+                "text": "Authentication family established by the driver, e.g. chatgpt, subscription or api-key; absent when unknown."
               }
             ]
           },
