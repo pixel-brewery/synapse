@@ -3,6 +3,7 @@ on:
     push:
         branches-ignore: [main]
     pull_request:
+    merge_group:
     workflow_dispatch:
     workflow_call:
 permissions:
@@ -27,3 +28,20 @@ jobs:
             - run: yarn install --immutable
             - run: yarn verify
             - run: yarn packaging:verify
+    quality-gate:
+        name: Quality Gate
+        needs: verify
+        if: ${{ always() }}
+        runs-on: ubuntu-latest
+        timeout-minutes: 5
+        permissions: {}
+        steps:
+            - name: Require successful verification on every supported platform
+              shell: bash
+              env:
+                  VERIFY_RESULT: ${{ needs.verify.result }}
+              run: |
+                  if [ "$VERIFY_RESULT" != success ]; then
+                      echo 'All platform verification jobs must succeed.' >&2
+                      exit 1
+                  fi

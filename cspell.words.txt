@@ -6,7 +6,6 @@ cooldowns
 CTYPE
 EPERM
 fileset
-flamox
 Imagegen
 LOCALAPPDATA
 mcpc
@@ -26,6 +25,7 @@ opencode
 PATHEXT
 pipefail
 pivanov
+resonanz
 ruederennes
 secd
 SECURESTORAGE

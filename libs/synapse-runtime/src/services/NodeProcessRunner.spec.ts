@@ -9,6 +9,7 @@ import type * as ChildProcessModule from 'node:child_process';
 import { PassThrough } from 'node:stream';
 import { afterEach, describe, expect, it, vi } from 'vitest';
 import { NodeProcessRunner } from './NodeProcessRunner.js';
+import type { INodeProcessRunnerOptions } from '../interfaces/INodeProcessRunnerOptions.js';
 
 // #endregion
 
@@ -29,8 +30,10 @@ const environment = (): Record<string, string> =>
             (entry): entry is [string, string] => entry[1] !== undefined,
         ),
     );
-const runner = (): NodeProcessRunner => {
-    const value = new NodeProcessRunner({ terminationGraceMs: 50 });
+const runner = (
+    options: INodeProcessRunnerOptions = { terminationGraceMs: 50 },
+): NodeProcessRunner => {
+    const value = new NodeProcessRunner(options);
 
     owned.push(value);
 
@@ -782,7 +785,8 @@ describe('NodeProcessRunner', () => {
 
     it('ends owned descendants that ignore graceful cancellation', async () => {
         // Arrange
-        const execution = runner();
+        // Exercise the real native tree with the runner's production termination budget.
+        const execution = runner({});
         const controller = new AbortController();
         let descendant = 0;
         let ready!: () => void;

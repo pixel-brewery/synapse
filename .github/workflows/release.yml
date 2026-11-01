@@ -15,6 +15,11 @@ on:
                     - patch
                     - minor
                     - major
+            source_sha:
+                description: Exact merge source required by the automatic dependency release request
+                required: false
+                default: ''
+                type: string
 
 permissions:
     contents: read
@@ -72,8 +77,14 @@ jobs:
               run: yarn install --immutable
 
             - name: Require the current main revision
+              env:
+                  EXPECTED_SOURCE_SHA: ${{ inputs.source_sha }}
               run: |
                   set -euo pipefail
+                  if [ -n "$EXPECTED_SOURCE_SHA" ] && [ "$EXPECTED_SOURCE_SHA" != "$GITHUB_SHA" ]; then
+                      echo 'The requested merge source no longer matches this workflow revision.' >&2
+                      exit 1
+                  fi
                   git fetch origin main --tags
                   if [ "$(git rev-parse origin/main)" != "$GITHUB_SHA" ]; then
                       echo "main moved beyond ${GITHUB_SHA}; the newer workflow run owns the next release." >&2
