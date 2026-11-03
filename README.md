@@ -4,7 +4,7 @@
 
 # Synapse
 
-**Bring AI to local applications through the CLIs already on the machine.**
+**One foundation for AI assistant authentication and communication across your applications.**
 
 Native sign-in. Independent application and account profiles. Resumable runs. Policy-controlled routing. Small TypeScript packages you compose yourself.
 
@@ -19,9 +19,11 @@ Native sign-in. Independent application and account profiles. Resumable runs. Po
 
 ## Why Synapse exists
 
-A local application can call an AI CLI in a few lines. The difficult part arrives when it needs a second account, a login screen, a resumed session, a cancelled child process or a fallback that must not repeat a write.
+Several desktop applications need to work with the same AI assistants. Rebuilding sign-in, account selection and agent communication inside each one creates different login flows and repeats the same integration problems.
 
-Synapse puts those concerns behind one application-facing runtime. It grew out of Symphony's desktop orchestration: the same integration should also work in a small Node tool, a background utility or an application processing meeting transcripts.
+Synapse grew out of that shared need. It gives applications such as Symphony, Wortlaut and Resonanz one foundation for assistant authentication and communication: native sign-in, isolated application and account profiles, streaming execution and resumable runs. Improvements to that foundation can serve every application while each keeps its own purpose and interface.
+
+The same foundation also works in a small Node tool, a backend authentication adapter or a background utility. A second account, a resumed session, cancellation and safe retry remain part of one lifecycle instead of separate fixes in every product.
 
 Your application supplies the prompt and decides what may happen. Synapse coordinates the selected CLI, its profile, its execution and its lifecycle. Business workflows, approval decisions, databases and result presentation stay with your application.
 
@@ -36,7 +38,7 @@ flowchart LR
 
 Supported native subscription sign-in avoids a mandatory API key. Inference follows the selected CLI and account: a local process can still call a remote model service.
 
-Authentication can also be used independently in a Node.js backend. `synapse-auth` provides an API-key authentication adapter with injected secret storage and provider verification; it requires no installed CLI or Synapse execution driver. The optional `synapse-auth-providers` package checks keys for OpenAI, Anthropic, Gemini, Mistral and OpenRouter using metadata endpoints. Resonanz supplies those same stored keys to Vercel AI SDK, which owns model calls, streaming and tools. See [cloud authentication](.docs/guides/cloud-authentication.md), including the SDK integration and separate prerequisites for future hosted ChatGPT subscription sign-in.
+Authentication can also be used independently in a Node.js backend. `synapse-auth` provides an API-key authentication adapter with injected secret storage and provider verification; it requires no installed CLI or Synapse execution driver. The optional `synapse-auth-providers` package checks keys for OpenAI, Anthropic, Gemini, Mistral and OpenRouter using metadata endpoints. A host backend can supply those stored keys to Vercel AI SDK, which owns model calls, streaming and tools; this is the planned boundary for Resonanz Cloud. See [cloud authentication](.docs/guides/cloud-authentication.md), including the SDK integration and separate prerequisites for future hosted ChatGPT subscription sign-in.
 
 Read the [project story](.docs/guides/why-synapse.md) for the motivation, design choices and examples beyond desktop orchestration.
 
