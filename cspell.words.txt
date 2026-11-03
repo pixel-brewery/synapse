@@ -46,3 +46,4 @@ wordmark
 worktrees
 wrkspc
 xhigh
+webp

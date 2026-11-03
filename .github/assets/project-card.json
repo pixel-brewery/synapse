@@ -1,24 +1,19 @@
 {
     "schemaVersion": 1,
+    "language": "en",
     "project": {
         "name": "Synapse",
         "slug": "synapse",
         "website": "https://github.com/pixel-brewery/synapse",
         "repository": "https://github.com/pixel-brewery/synapse"
     },
-    "description": {
-        "en": "Synapse helps developers connect local applications to AI assistants already installed on the machine, including Codex, Claude Code and OpenCode. It manages separate application and account profiles, native sign-in and resumable runs while the application controls its prompts and workflows.",
-        "de": "Synapse verbindet lokale Anwendungen mit bereits installierten KI-Assistenten wie Codex, Claude Code und OpenCode. Es verwaltet getrennte Anwendungs- und Kontoprofile, native Anmeldung und fortsetzbare Ausführungen, während die Anwendung ihre Prompts und Abläufe selbst bestimmt."
-    },
+    "description": "Synapse helps developers connect local applications to AI assistants already installed on the machine, including Codex, Claude Code and OpenCode. It manages separate application and account profiles, native sign-in and resumable runs while the application controls its prompts and workflows.",
     "image": {
         "file": "project-card.webp",
         "format": "webp",
         "width": 960,
         "height": 540,
-        "alt": {
-            "en": "Synapse's cobalt-blue connection mark beside converging ivory and glass paths.",
-            "de": "Synapses kobaltblaues Verbindungszeichen neben zusammenlaufenden Pfaden aus Keramik und Glas."
-        }
+        "alt": "Synapse's cobalt-blue connection mark beside converging ivory and glass paths."
     },
     "artwork": {
         "kind": "illustration",
