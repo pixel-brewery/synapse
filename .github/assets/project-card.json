@@ -1,25 +1,25 @@
 {
-  "schemaVersion": 1,
-  "language": "en",
-  "project": {
-    "name": "Synapse",
-    "slug": "synapse",
-    "website": "https://github.com/pixel-brewery/synapse",
-    "repository": "https://github.com/pixel-brewery/synapse"
-  },
-  "description": "Synapse gives desktop applications one shared foundation for AI-assistant login, accounts and communication. Symphony, Wortlaut and Resonanz use it for independent application contexts and resumable runs while owning their prompts and workflows.",
-  "image": {
-    "file": "project-card.webp",
-    "format": "webp",
-    "width": 960,
-    "height": 540,
-    "alt": "Synapse's cobalt-blue connection mark beside converging ivory and glass paths."
-  },
-  "artwork": {
-    "kind": "illustration",
-    "generator": "Built-in Imagegen",
-    "generatedOn": "2026-11-03",
-    "prompt": "Use case: ads-marketing\nAsset: Synapse project card, NEW VISUAL IDENTITY. The prior machine / metal junction / terminal-box concept has been rejected entirely. Do NOT use the old Synapse artwork.\nReference image: the supplied Mosaik card establishes only the shared series composition, 16:9 framing, white seamless studio background, soft tactile ceramic/glass materials, calm lighting, black wordmark typography and left-brand/right-motif hierarchy. Match the family, not the mosaic subject.\nPrimary request: Create an elegant, memorable new visual identity for Synapse, the library that connects an application with multiple installed AI assistants and their sessions. Target 1280x720.\nLEFT THIRD: large exact black word \"Synapse\". Above it, a distinctive minimalist COBALT-BLUE connection mark: three soft, rounded paths converge into one continuous clean junction, like a carefully drawn abstract branching path. Flat, confident, geometrically simple. It must NOT resemble a brain, sound waves, infinity loop, padlock, letter from another existing brand, arrows or a mechanical component.\nRIGHT TWO THIRDS: an airy sculptural composition of three broad, smooth flowing ivory ceramic ribbons, with one restrained cobalt-blue ribbon/edge joining them into a precise shared meeting point. A few slim clear glass layers give a sense of independent application/session contexts, connected without becoming one indistinguishable mass. Graceful negative space, refined curves, gentle grounded shadows and natural studio depth. The sculpture should visually echo the new abstract mark and express connection and continuity.\nPalette: white, warm ivory, charcoal wordmark, one confident cobalt-blue accent. No orange/mint legacy palette, neon, black metal or dark background.\nOnly text: \"Synapse\". No tagline or other prose. No devices, terminals, tiny command glyphs, pipes, wires, glowing chamber, cylinders, gears, technical machinery, robot, brain, cartoon, UI screenshot or dashboard. This is original brand artwork. Make it exceptionally art-directed and readable at small blog-card size."
-  },
-  "blogDescription": "Several desktop applications needed one consistent login flow and a common way to communicate with AI assistants. Synapse became that shared foundation for Symphony, Wortlaut and Resonanz, bringing native assistant accounts and request lifecycles together while leaving each application in control of its prompts and workflows.\n\n- **Native accounts:** sign-in and profiles for installed assistant CLIs.\n- **Application separation:** independent contexts for different applications and accounts.\n- **Continuity:** resumable runs through one integration layer."
+    "schemaVersion": 1,
+    "language": "en",
+    "project": {
+        "name": "Synapse",
+        "slug": "synapse",
+        "website": "https://github.com/pixel-brewery/synapse",
+        "repository": "https://github.com/pixel-brewery/synapse"
+    },
+    "description": "Synapse gives desktop applications one shared foundation for AI-assistant login, accounts and communication. Symphony, Wortlaut and Resonanz use it for independent application contexts and resumable runs while owning their prompts and workflows.",
+    "image": {
+        "file": "project-card.webp",
+        "format": "webp",
+        "width": 960,
+        "height": 540,
+        "alt": "Synapse's cobalt-blue connection mark beside converging ivory and glass paths."
+    },
+    "artwork": {
+        "kind": "illustration",
+        "generator": "Built-in Imagegen",
+        "generatedOn": "2026-11-03",
+        "prompt": "Use case: ads-marketing\nAsset: Synapse project card, NEW VISUAL IDENTITY. The prior machine / metal junction / terminal-box concept has been rejected entirely. Do NOT use the old Synapse artwork.\nReference image: the supplied Mosaik card establishes only the shared series composition, 16:9 framing, white seamless studio background, soft tactile ceramic/glass materials, calm lighting, black wordmark typography and left-brand/right-motif hierarchy. Match the family, not the mosaic subject.\nPrimary request: Create an elegant, memorable new visual identity for Synapse, the library that connects an application with multiple installed AI assistants and their sessions. Target 1280x720.\nLEFT THIRD: large exact black word \"Synapse\". Above it, a distinctive minimalist COBALT-BLUE connection mark: three soft, rounded paths converge into one continuous clean junction, like a carefully drawn abstract branching path. Flat, confident, geometrically simple. It must NOT resemble a brain, sound waves, infinity loop, padlock, letter from another existing brand, arrows or a mechanical component.\nRIGHT TWO THIRDS: an airy sculptural composition of three broad, smooth flowing ivory ceramic ribbons, with one restrained cobalt-blue ribbon/edge joining them into a precise shared meeting point. A few slim clear glass layers give a sense of independent application/session contexts, connected without becoming one indistinguishable mass. Graceful negative space, refined curves, gentle grounded shadows and natural studio depth. The sculpture should visually echo the new abstract mark and express connection and continuity.\nPalette: white, warm ivory, charcoal wordmark, one confident cobalt-blue accent. No orange/mint legacy palette, neon, black metal or dark background.\nOnly text: \"Synapse\". No tagline or other prose. No devices, terminals, tiny command glyphs, pipes, wires, glowing chamber, cylinders, gears, technical machinery, robot, brain, cartoon, UI screenshot or dashboard. This is original brand artwork. Make it exceptionally art-directed and readable at small blog-card size."
+    },
+    "blogDescription": "Several desktop applications needed one consistent login flow and a common way to communicate with AI assistants. Synapse became that shared foundation for Symphony, Wortlaut and Resonanz, bringing native assistant accounts and request lifecycles together while leaving each application in control of its prompts and workflows.\n\n- **Native accounts:** sign-in and profiles for installed assistant CLIs.\n- **Application separation:** independent contexts for different applications and accounts.\n- **Continuity:** resumable runs through one integration layer."
 }
