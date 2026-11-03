@@ -1,5 +1,5 @@
 <p align="center">
-  <img src=".github/assets/synapse-hero.png" alt="Synapse — a precision junction connecting modular terminals with luminous signal paths" width="1200" />
+  <img src=".github/assets/synapse-hero-v2.png" alt="Synapse — a cobalt-blue connection mark beside converging ivory and glass paths" width="1200" />
 </p>
 
 # Synapse
