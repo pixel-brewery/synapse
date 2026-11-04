@@ -48,3 +48,4 @@ wrkspc
 xhigh
 webp
 Wortlaut
+Wehlert
