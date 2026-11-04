@@ -7,5 +7,16 @@ Synapse is a framework-neutral TypeScript monorepo for local CLI AI integration.
 - The lead architect owns decomposition, disjoint subagent ownership and integration. Concurrent source work is allowed; coordinate one heavy verification task at a time.
 - Maintain the native skill under `.agents/skills/`. Keep `CODEX.md`, `CLAUDE.md`, Copilot instructions and OpenCode configuration thin. Edit `.vscode/mcp.json` for shared MCP configuration. No credentials, absolute developer paths or automatic provider installation/login in repository configuration.
 - Run `yarn agents:sync` after changing the skill or AI source configuration, then `yarn agents:check`. Generated client projections must never be edited directly or symlinked to the source.
-- Before a pull request, run the available local Ship-it review and resolve blocking findings. Do not create a PR, commit, push, merge or publish unless the user has authorized that action.
-- Initial unpublished package versioning is part of scaffolding. Published versions, release tags and publication remain owner actions.
+- Before a pull request, run the available local Ship-it review and resolve blocking findings. The standing owner instruction authorizes that review.
+- Initial unpublished package versioning is part of scaffolding. Manual releases, release tags and publication require the owner's specific instruction.
+
+## Git delivery and completion
+
+- Work in the designated primary checkout. Do not create an additional worktree unless the owner specifically requests one.
+- Assign one Git owner per repository for index, branch, commit, push and merge operations. Parallel source edits must have disjoint ownership and preserve concurrent work.
+- An implementation or fix request includes task-scoped commits, pushing the designated development branch and completing the required pull-request integration, unless the owner requests analysis, a draft or local-only work. Follow the repository's normal protected-branch workflow.
+- Preserve unrelated changes and identify their owner and scope before integrating them. Never silently include, overwrite or discard another task's edits.
+- Remain responsible for a requested pull request until GitHub reports `MERGED`. Do not report delivery complete while requested integration is open, task changes have not been committed and pushed, or the designated checkout differs from its own upstream.
+- At completion, verify a clean working tree and zero commits ahead of or behind that upstream. If unrelated work prevents this, report the exact outstanding files and ownership instead of claiming a clean handoff.
+- Remove obsolete branches or worktrees only after proving their work is integrated and preserving any remaining unique commits or files.
+- Manual releases, package publication, deployments, history rewrites and repository visibility changes require the owner's specific instruction. Regular workflows triggered by an authorized merge remain part of that merge.

@@ -1,6 +1,6 @@
 # Why Synapse exists
 
-Local applications should be able to work with the AI tools their users already run. A desktop application, a background utility and a small command-line tool can all need the same integration: ask a selected CLI to do a job, observe progress and recover the result.
+Several desktop applications need to work with the AI tools their users already run. Each needs a reliable way to sign in, select an account, start work and recover the result. Rebuilding those flows independently makes the same assistants behave differently from one product to the next.
 
 The prompt is usually the easy part. The reusable work is everything around it.
 
@@ -10,7 +10,7 @@ The first integration starts an executable and reads its output. Then the applic
 
 Those events are part of a normal application lifecycle. If each tool implements them independently, the same edge cases spread across several codebases.
 
-Synapse grew out of extracting this boundary from Symphony, a local desktop orchestration platform. The goal is to reuse that work in independent applications while preserving their own product decisions.
+Synapse grew out of extracting this boundary from Symphony, a local desktop orchestration platform, so applications such as Wortlaut and Resonanz could share the same authentication and communication foundation. A fix to account isolation or session handling belongs in that common foundation; the applications keep their own prompts, workflows and interfaces.
 
 ## The boundary we chose
 
@@ -28,7 +28,7 @@ The host composes only the packages and drivers it needs. Core contracts are fre
 
 In Symphony, domain services still create analysis, implementation and issue prompts, preserve workspace rules and own SQLite persistence. Synapse supplies the native AI execution underneath that facade.
 
-In the [standalone meeting-text example](../../apps/meeting-notes/README.md), a small Node application supplies a synthetic transcript and a schema for a summary, decisions and tasks. The same packages run without Symphony, Electron or a Git repository. A future meeting application would still own audio capture, transcription choices, retention and its user interface.
+In the [standalone meeting-text example](../../apps/meeting-notes/README.md), a small Node application supplies a synthetic transcript and a schema for a summary, decisions and tasks. The same packages run without Symphony, Electron or a Git repository. Resonanz owns its audio capture, transcription choices, retention and interface, while reusing Synapse for assistant authentication and execution.
 
 Other local tools can define entirely different prompts and workflows. They reuse the CLI lifecycle without acquiring a desktop application's architecture.
 
