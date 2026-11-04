@@ -1,3 +1,19 @@
+## 0.0.6 (2026-11-04)
+
+### 🚀 Features
+
+- **auth:** add API key connections and provider verification ([a14b163](https://github.com/pixel-brewery/synapse/commit/a14b163))
+- **auth:** add API key connections and provider verification [skip ci] ([#5](https://github.com/pixel-brewery/synapse/pull/5))
+
+### 🩹 Fixes
+
+- accept the release author in generated changelogs ([907422e](https://github.com/pixel-brewery/synapse/commit/907422e))
+
+### ❤️ Thank You
+
+- André Wehlert @RueDeRennes
+- RueDeRennes @RueDeRennes
+
 ## 0.0.5 (2026-11-01)
 
 This was a version bump only, there were no code changes.
