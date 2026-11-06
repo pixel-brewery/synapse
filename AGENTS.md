@@ -20,3 +20,9 @@ Synapse is a framework-neutral TypeScript monorepo for local CLI AI integration.
 - At completion, verify a clean working tree and zero commits ahead of or behind that upstream. If unrelated work prevents this, report the exact outstanding files and ownership instead of claiming a clean handoff.
 - Remove obsolete branches or worktrees only after proving their work is integrated and preserving any remaining unique commits or files.
 - Manual releases, package publication, deployments, history rewrites and repository visibility changes require the owner's specific instruction. Regular workflows triggered by an authorized merge remain part of that merge.
+
+## Issue tracking
+
+- Use `pixel-brewery/synapse` issues for authorized follow-up work. Add each issue explicitly to the shared board and track its status on GitHub. [Synapse project board](https://github.com/orgs/pixel-brewery/projects/1)
+- Search the board and the repository's open and closed issues before creating a ticket. Update the existing issue when it covers the same underlying problem.
+- Read the board's current `Status` options through GitHub Projects or `gh project` before setting status. Verify that each issue appears once on the board with the intended status.

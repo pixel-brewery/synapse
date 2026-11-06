@@ -78,6 +78,21 @@
         "vitest": "5.0.5"
     },
     "description": "Modular TypeScript runtime for installed AI CLIs: native auth, isolated profiles, sessions and policy-controlled routing.",
+    "keywords": [
+        "typescript",
+        "nodejs",
+        "ai-cli",
+        "coding-agents",
+        "codex",
+        "claude-code",
+        "opencode",
+        "agent-client-protocol",
+        "authentication",
+        "account-profiles",
+        "session-management",
+        "streaming",
+        "provider-routing"
+    ],
     "repository": {
         "type": "git",
         "url": "git+https://github.com/pixel-brewery/synapse.git"
