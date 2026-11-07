@@ -36,7 +36,7 @@ Use the TypeDoc-based pipeline identified in [documentation](documentation.md). 
 
 ## AI provider setup
 
-`.agents/skills/synapse-architect/` is the canonical project specialization; `.agents/skills/architecture/` is its installed, versioned base. `AGENTS.md` mandates it for every task. `CODEX.md`, `CLAUDE.md`, `.github/copilot-instructions.md`, OpenCode instructions and generated skill mirrors only route to that owner.
+`.agents/skills/synapse-architect/` is the canonical project specialization; `.agents/skills/architect/` is its installed, versioned base. `AGENTS.md` mandates it for every task. `CODEX.md`, `CLAUDE.md`, `.github/copilot-instructions.md`, OpenCode instructions and generated skill mirrors only route to that owner.
 
 `.vscode/mcp.json` owns shared MCP servers. `yarn agents:sync` generates Codex, Claude and OpenCode projections without invoking a provider, logging in, installing global tools or changing personal credentials/settings. `yarn agents:check` verifies mirror equality, references, adapters and configuration drift. Never edit generated projections or symlink a mirror to its canonical source.
 
@@ -46,4 +46,4 @@ Keep the installed Architecture base intact. The standard `skills-lock.json` rec
 
 ## Shared foundation maintenance
 
-`yarn agents:upstream` validates the installed base against `skills-lock.json` and verifies Synapse's explicit inheritance through the base's `scripts/check_inheritance.py`. It does not fetch a floating branch, change the lock or require a peer checkout. Update with the Skills CLI using an explicitly reviewed full commit in the GitHub tree URL and the `architecture` skill; run `yarn agents:sync` and `yarn agents:check` afterward. Never edit imported base files or restore a separately maintained local `references/common/` copy. `.agents/architect-origin.json` remains historical evidence for the original Archipel extraction, not the current dependency lock.
+`yarn agents:upstream` validates the installed base against `skills-lock.json` and verifies Synapse's explicit inheritance through the base's `scripts/check_inheritance.py`. It does not fetch a floating branch, change the lock or require a peer checkout. Update with the Skills CLI using an explicitly reviewed full commit in the GitHub tree URL and the `architect` skill; run `yarn agents:sync` and `yarn agents:check` afterward. Never edit imported base files or restore a separately maintained local `references/common/` copy. `.agents/architect-origin.json` remains historical evidence for the original Archipel extraction, not the current dependency lock.

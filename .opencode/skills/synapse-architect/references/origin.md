@@ -1,6 +1,6 @@
 # Architect origin and project translations
 
-The shared foundations now come from the [Architecture base](../../architecture/SKILL.md) in [Pixel Brewery Skills](https://github.com/pixel-brewery/skills). The standard root `skills-lock.json` pins its exact commit, path and content hash. `yarn agents:upstream` validates that installed dependency and this skill's explicit derivation; it does not authorize changing the dependency or fetching a floating branch.
+The shared foundations now come from the [Architecture base](../../architect/SKILL.md) in [Pixel Brewery Skills](https://github.com/pixel-brewery/skills). The standard root `skills-lock.json` pins its exact commit, path and content hash. `yarn agents:upstream` validates that installed dependency and this skill's explicit derivation; it does not authorize changing the dependency or fetching a floating branch.
 
 The original extraction came from `archipel-architect` in [Pixel Brewery Archipel](https://github.com/RueDeRennes/archipel), inspected on 2026-10-29 at commit `de447fe50270be028da87eb774dd94448820c786`. `.agents/architect-origin.json` preserves that historical extraction record. Its former hashes do not describe the current versioned dependency and are no longer the active integrity check.
 

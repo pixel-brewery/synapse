@@ -1,6 +1,6 @@
 # Synapse project contract
 
-Read for every task with root `AGENTS.md` and [shared workflow](../../architecture/references/common/workflow.md). This contract applies Archipel's full general foundations to Synapse. It takes precedence over NestJS, application database, frontend and transport examples in shared modules.
+Read for every task with root `AGENTS.md` and [shared workflow](../../architect/references/common/workflow.md). This contract applies Archipel's full general foundations to Synapse. It takes precedence over NestJS, application database, frontend and transport examples in shared modules.
 
 ## Scope and layout
 

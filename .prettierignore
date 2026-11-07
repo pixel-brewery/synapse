@@ -6,7 +6,8 @@ artifacts/
 yarn.lock
 # Imported foundations and generated client projections.
 .agents/skills/synapse-architect/SKILL.md
-.agents/skills/architecture/
+.agents/skills/architect/
+/skills-lock.json
 .claude/skills/
 .opencode/skills/
 CODEX.md
