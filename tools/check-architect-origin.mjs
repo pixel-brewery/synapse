@@ -10,7 +10,7 @@ const root = resolve(dirname(fileURLToPath(import.meta.url)), '..');
 const result = spawnSync(
     'python3',
     [
-        join(root, '.agents/skills/architecture/scripts/check_inheritance.py'),
+        join(root, '.agents/skills/architect/scripts/check_inheritance.py'),
         '--root',
         root,
         '--derived',
