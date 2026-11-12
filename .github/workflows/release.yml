@@ -46,7 +46,6 @@ jobs:
         environment: release-main
         permissions:
             contents: write
-            actions: write
             packages: write
         runs-on: ubuntu-latest
         timeout-minutes: 60
@@ -278,8 +277,3 @@ jobs:
                       --verify-tag \
                       --title "Synapse ${RELEASE_VERSION}" \
                       --generate-notes
-
-            - name: Refresh remaining Dependabot branches
-              env:
-                  GH_TOKEN: ${{ github.token }}
-              run: gh workflow run rebase-dependabot.yml --ref main --repo "$GITHUB_REPOSITORY"
