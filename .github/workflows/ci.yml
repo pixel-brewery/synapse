@@ -1,8 +1,5 @@
 name: Verify
 on:
-    push:
-        # Dependabot branches get their required checks from pull_request.
-        branches-ignore: [main, 'dependabot/**']
     pull_request:
     merge_group:
     workflow_dispatch:
