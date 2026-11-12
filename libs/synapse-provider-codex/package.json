@@ -1,6 +1,6 @@
 {
     "name": "@pixel-brewery/synapse-provider-codex",
-    "version": "0.0.12",
+    "version": "0.0.13",
     "type": "module",
     "main": "./dist/index.js",
     "module": "./dist/index.js",
@@ -22,8 +22,8 @@
         "name": "synapse-provider-codex"
     },
     "dependencies": {
-        "@pixel-brewery/synapse-core": "^0.0.12",
-        "@pixel-brewery/synapse-runtime": "^0.0.12",
+        "@pixel-brewery/synapse-core": "^0.0.13",
+        "@pixel-brewery/synapse-runtime": "^0.0.13",
         "smol-toml": "1.9.1"
     },
     "license": "MIT",
