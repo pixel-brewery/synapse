@@ -59,7 +59,7 @@
         "@rollup/plugin-commonjs": "29.0.3",
         "@rollup/plugin-json": "6.1.0",
         "@rollup/plugin-node-resolve": "16.0.3",
-        "@swc/helpers": "~0.5.23",
+        "@swc/helpers": "~0.5.24",
         "@types/node": "26.6.6",
         "@yarnpkg/cli-dist": "4.18.1",
         "cspell": "10.4.1",
