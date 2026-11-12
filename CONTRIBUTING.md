@@ -78,7 +78,7 @@ yarn packaging:verify
 
 `yarn verify` checks agent/source conventions, formatting, lint, types, tests, builds and generated API drift. Artifact verification builds and installs real package archives in a separate consumer, checks declarations and inert imports, and exercises esbuild/Rollup provider exclusion and the simulated meeting example. It may fetch ordinary package dependencies; it does not log in to an AI account or run live inference.
 
-The [CI workflow](.github/workflows/ci.yml) configures Node.js 24 on Linux, macOS and native Windows. Its stable `Quality Gate` check runs after the complete matrix and fails when any platform fails, is cancelled or is skipped. Ordinary PRs, merge queues and non-main pushes run this workflow directly; main pushes reuse it through the package-release workflow. Report which platforms actually ran and which checks were skipped. A local pass on one operating system does not establish the others. The [release guide](.docs/guides/releases.md) distinguishes candidate evidence from publication readiness.
+The [CI workflow](.github/workflows/ci.yml) configures Node.js 24 on Linux, macOS and native Windows. Its stable `Quality Gate` check runs after the complete matrix and fails when any platform fails, is cancelled or is skipped. Pull requests and merge queues run this workflow directly. Use a manual run to verify a branch before opening a pull request. Pushes to `main` run the matrix through the package-release workflow. Report which platforms actually ran and which checks were skipped. A local pass on one operating system does not establish the others. The [release guide](.docs/guides/releases.md) distinguishes candidate evidence from publication readiness.
 
 ## Submit a focused pull request
 
