@@ -1,3 +1,14 @@
+## 0.0.12 (2026-11-12)
+
+### 🩹 Fixes
+
+- **ci:** avoid duplicate Dependabot checks ([8a7f1dd](https://github.com/pixel-brewery/synapse/commit/8a7f1dd))
+- **ci:** run verification once per pull request ([ee24037](https://github.com/pixel-brewery/synapse/commit/ee24037))
+
+### ❤️ Thank You
+
+- RueDeRennes @RueDeRennes
+
 ## 0.0.11 (2026-11-12)
 
 This was a version bump only, there were no code changes.
