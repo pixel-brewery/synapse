@@ -1,3 +1,13 @@
+## 0.0.10 (2026-11-12)
+
+### 🩹 Fixes
+
+- **ci:** rely on Dependabot to refresh dependency branches ([9500d7a](https://github.com/pixel-brewery/synapse/commit/9500d7a))
+
+### ❤️ Thank You
+
+- RueDeRennes @RueDeRennes
+
 ## 0.0.9 (2026-11-07)
 
 This was a version bump only, there were no code changes.

@@ -1,6 +1,6 @@
 {
     "name": "@pixel-brewery/synapse-auth",
-    "version": "0.0.9",
+    "version": "0.0.10",
     "type": "module",
     "main": "./dist/index.js",
     "module": "./dist/index.js",
@@ -22,8 +22,8 @@
         "name": "synapse-auth"
     },
     "dependencies": {
-        "@pixel-brewery/synapse-core": "^0.0.9",
-        "@pixel-brewery/synapse-runtime": "^0.0.9"
+        "@pixel-brewery/synapse-core": "^0.0.10",
+        "@pixel-brewery/synapse-runtime": "^0.0.10"
     },
     "license": "MIT",
     "engines": {

@@ -2729,21 +2729,21 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@pixel-brewery/synapse-auth-providers@workspace:libs/synapse-auth-providers"
   dependencies:
-    "@pixel-brewery/synapse-auth": "npm:^0.0.9"
-    "@pixel-brewery/synapse-core": "npm:^0.0.9"
+    "@pixel-brewery/synapse-auth": "npm:^0.0.10"
+    "@pixel-brewery/synapse-core": "npm:^0.0.10"
   languageName: unknown
   linkType: soft
 
-"@pixel-brewery/synapse-auth@npm:^0.0.9, @pixel-brewery/synapse-auth@workspace:^, @pixel-brewery/synapse-auth@workspace:libs/synapse-auth":
+"@pixel-brewery/synapse-auth@npm:^0.0.10, @pixel-brewery/synapse-auth@workspace:^, @pixel-brewery/synapse-auth@workspace:libs/synapse-auth":
   version: 0.0.0-use.local
   resolution: "@pixel-brewery/synapse-auth@workspace:libs/synapse-auth"
   dependencies:
-    "@pixel-brewery/synapse-core": "npm:^0.0.9"
-    "@pixel-brewery/synapse-runtime": "npm:^0.0.9"
+    "@pixel-brewery/synapse-core": "npm:^0.0.10"
+    "@pixel-brewery/synapse-runtime": "npm:^0.0.10"
   languageName: unknown
   linkType: soft
 
-"@pixel-brewery/synapse-core@npm:^0.0.9, @pixel-brewery/synapse-core@workspace:^, @pixel-brewery/synapse-core@workspace:libs/synapse-core":
+"@pixel-brewery/synapse-core@npm:^0.0.10, @pixel-brewery/synapse-core@workspace:^, @pixel-brewery/synapse-core@workspace:libs/synapse-core":
   version: 0.0.0-use.local
   resolution: "@pixel-brewery/synapse-core@workspace:libs/synapse-core"
   languageName: unknown
@@ -2779,8 +2779,8 @@ __metadata:
   resolution: "@pixel-brewery/synapse-provider-acp@workspace:libs/synapse-provider-acp"
   dependencies:
     "@agentclientprotocol/sdk": "npm:2.4.0"
-    "@pixel-brewery/synapse-core": "npm:^0.0.9"
-    "@pixel-brewery/synapse-runtime": "npm:^0.0.9"
+    "@pixel-brewery/synapse-core": "npm:^0.0.10"
+    "@pixel-brewery/synapse-runtime": "npm:^0.0.10"
     zod: "npm:4.6.7"
   languageName: unknown
   linkType: soft
@@ -2789,8 +2789,8 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@pixel-brewery/synapse-provider-claude@workspace:libs/synapse-provider-claude"
   dependencies:
-    "@pixel-brewery/synapse-core": "npm:^0.0.9"
-    "@pixel-brewery/synapse-runtime": "npm:^0.0.9"
+    "@pixel-brewery/synapse-core": "npm:^0.0.10"
+    "@pixel-brewery/synapse-runtime": "npm:^0.0.10"
   languageName: unknown
   linkType: soft
 
@@ -2798,8 +2798,8 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@pixel-brewery/synapse-provider-codex@workspace:libs/synapse-provider-codex"
   dependencies:
-    "@pixel-brewery/synapse-core": "npm:^0.0.9"
-    "@pixel-brewery/synapse-runtime": "npm:^0.0.9"
+    "@pixel-brewery/synapse-core": "npm:^0.0.10"
+    "@pixel-brewery/synapse-runtime": "npm:^0.0.10"
     smol-toml: "npm:1.9.1"
   languageName: unknown
   linkType: soft
@@ -2808,8 +2808,8 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@pixel-brewery/synapse-provider-opencode@workspace:libs/synapse-provider-opencode"
   dependencies:
-    "@pixel-brewery/synapse-core": "npm:^0.0.9"
-    "@pixel-brewery/synapse-runtime": "npm:^0.0.9"
+    "@pixel-brewery/synapse-core": "npm:^0.0.10"
+    "@pixel-brewery/synapse-runtime": "npm:^0.0.10"
   languageName: unknown
   linkType: soft
 
@@ -2817,15 +2817,15 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@pixel-brewery/synapse-routing@workspace:libs/synapse-routing"
   dependencies:
-    "@pixel-brewery/synapse-core": "npm:^0.0.9"
+    "@pixel-brewery/synapse-core": "npm:^0.0.10"
   languageName: unknown
   linkType: soft
 
-"@pixel-brewery/synapse-runtime@npm:^0.0.9, @pixel-brewery/synapse-runtime@workspace:^, @pixel-brewery/synapse-runtime@workspace:libs/synapse-runtime":
+"@pixel-brewery/synapse-runtime@npm:^0.0.10, @pixel-brewery/synapse-runtime@workspace:^, @pixel-brewery/synapse-runtime@workspace:libs/synapse-runtime":
   version: 0.0.0-use.local
   resolution: "@pixel-brewery/synapse-runtime@workspace:libs/synapse-runtime"
   dependencies:
-    "@pixel-brewery/synapse-core": "npm:^0.0.9"
+    "@pixel-brewery/synapse-core": "npm:^0.0.10"
     "@types/cross-spawn": "npm:6.0.6"
     ajv: "npm:8.20.0"
     cross-spawn: "npm:7.0.6"
@@ -2836,8 +2836,8 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@pixel-brewery/synapse-testing@workspace:libs/synapse-testing"
   dependencies:
-    "@pixel-brewery/synapse-core": "npm:^0.0.9"
-    "@pixel-brewery/synapse-runtime": "npm:^0.0.9"
+    "@pixel-brewery/synapse-core": "npm:^0.0.10"
+    "@pixel-brewery/synapse-runtime": "npm:^0.0.10"
   languageName: unknown
   linkType: soft
 
