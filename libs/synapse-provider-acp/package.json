@@ -22,7 +22,7 @@
         "name": "synapse-provider-acp"
     },
     "dependencies": {
-        "@agentclientprotocol/sdk": "2.4.0",
+        "@agentclientprotocol/sdk": "2.5.0",
         "@pixel-brewery/synapse-core": "^0.0.14",
         "@pixel-brewery/synapse-runtime": "^0.0.14",
         "zod": "4.6.7"
