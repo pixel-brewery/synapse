@@ -1,6 +1,6 @@
 {
     "name": "@pixel-brewery/synapse-testing",
-    "version": "0.0.13",
+    "version": "0.0.14",
     "type": "module",
     "main": "./dist/index.js",
     "module": "./dist/index.js",
@@ -22,8 +22,8 @@
         "name": "synapse-testing"
     },
     "dependencies": {
-        "@pixel-brewery/synapse-core": "^0.0.13",
-        "@pixel-brewery/synapse-runtime": "^0.0.13"
+        "@pixel-brewery/synapse-core": "^0.0.14",
+        "@pixel-brewery/synapse-runtime": "^0.0.14"
     },
     "license": "MIT",
     "engines": {
