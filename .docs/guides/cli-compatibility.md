@@ -54,7 +54,7 @@ Subscription access depends on the installed CLI and the account's supported aut
 
 1. Check the actual executable version and native help for execution, login, resume, schema and permission arguments.
 2. Add or adjust sanitized transport fixtures in the owning provider package; preserve tests for fragmentation, native errors, cancellation and cleanup.
-3. Run the provider's focused Nx targets, then `yarn verify` and `yarn packaging:verify`.
+3. Run the provider's focused Nx targets, then `yarn verify`.
 4. Run explicit native sign-in, short execution, resume and cancellation checks with a dedicated application/account profile on the intended operating systems.
 5. Record the versions, platform and outcome here and in the owning package README. Preserve failures and untested combinations as such.
 

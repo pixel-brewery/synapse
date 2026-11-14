@@ -82,7 +82,7 @@ export async function releaseLocal(arguments_, dependencies = {}) {
         const write = dependencies.write ?? ((text) => process.stdout.write(text));
 
         write(
-            `Dry run only. After preparing ${version}, a real local release would generate API documentation, format CHANGELOG.md, run verify and packaging:verify, create one release commit and tag, push main and the tag atomically, then run release:publish and release:verify. None of those steps ran.\n`,
+            `Dry run only. After preparing ${version}, a real local release would format CHANGELOG.md, run verify to regenerate documentation and verify packages, create one release commit and tag, push main and the tag atomically, then run release:publish and release:verify. None of those steps ran.\n`,
         );
 
         return { version, dryRun: true };
@@ -93,10 +93,8 @@ export async function releaseLocal(arguments_, dependencies = {}) {
     if (git(['tag', '--list', tag]))
         throw new Error('The prepared release tag already exists; inspect it before retrying.');
 
-    yarn(['docs']);
     yarn(['prettier', '--write', 'CHANGELOG.md']);
     yarn(['verify']);
-    yarn(['packaging:verify']);
 
     if (git(['branch', '--show-current']) !== 'main' || git(['rev-parse', 'HEAD']) !== base)
         throw new Error(

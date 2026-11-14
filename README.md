@@ -192,10 +192,9 @@ Start at the [documentation hub](.docs/README.md). Integration guidance, all pub
 
 ```sh
 yarn verify
-yarn packaging:verify
 ```
 
-Artifact verification installs real package archives in a separate consumer, validates declarations and inert imports, checks provider exclusion in esbuild/Rollup bundles and runs the independent simulated example. Ordinary tests require no personal AI accounts.
+Verification regenerates the API reference and agent configuration, runs repository checks and builds, and tests the resulting package archives in a separate consumer. The archive checks validate declarations and inert imports, check provider exclusion in esbuild/Rollup bundles and run the independent simulated example. Ordinary tests require no personal AI accounts.
 
 Local verification has run on macOS with Node.js 24. The configured CI matrix targets macOS, Linux and native Windows; remote matrix runs and live account/CLI checks remain separate evidence. See the [compatibility guide](.docs/guides/cli-compatibility.md).
 

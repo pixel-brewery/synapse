@@ -18,7 +18,7 @@ The fixed `synapse` release group contains the public runtime libraries in `libs
 
 The MCP CLI starts `dist/main.js` through its `synapse-mcp` bin and exports only `./package.json`. Its bundled `dist/data/corpus.json` contains the public libraries' recursive API references, guides and patterns. It adds no public TypeScript library entrypoint or dependency to the runtime libraries.
 
-The TypeDoc API surface covers the public libraries and their explicit package subpaths. Regenerate it explicitly with `yarn docs` after changing source documentation or package versions; the MCP build checks drift before building its corpus. Do not hand-edit generated API or corpus files.
+The TypeDoc API surface covers the public libraries and their explicit package subpaths. `yarn verify` regenerates it from the current source and package versions. Use `yarn docs` to regenerate it independently. The MCP build checks drift before building its corpus. Do not hand-edit generated API or corpus files.
 
 ## First publication and verification
 
@@ -95,12 +95,10 @@ The [completed Synapse release run](https://github.com/pixel-brewery/synapse/act
 Before publishing a candidate, run the configured gates against its actual sources and metadata:
 
 ```sh
-yarn docs
 yarn verify
-yarn packaging:verify
 ```
 
-`yarn verify` covers source conventions, agent configuration, formatting, lint, strict types, tests, builds and documentation drift. `yarn packaging:verify` installs real archives into an independent consumer: it checks library exports/declarations and inert imports, Codex-only esbuild/Rollup bundles, the simulated meeting-text example and the installed MCP CLI/corpus/stdio protocol. These are local candidate checks, not proof of registry publication.
+`yarn verify` regenerates API documentation and agent configuration and checks source conventions, formatting, lint, spelling, strict types, tests and builds. It installs real archives into an independent consumer to check library exports, declarations, inert imports, Codex-only esbuild/Rollup bundles, the simulated meeting-text example and the installed MCP CLI, corpus and stdio protocol.
 
 The same verification includes `yarn public:check`, which rejects excluded private project references in tracked and new non-ignored paths, symlink targets, UTF-8 and UTF-16 content, and decoded gzip archives. It streams file and archive content without an expanded-size limit and fails if a compressed file cannot be decoded. Diagnostics redact the excluded identifier from paths. Ignored local data is outside this source check unless force-tracked; Git history and remote issues or projects require a separate audit.
 

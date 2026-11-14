@@ -131,17 +131,11 @@ jobs:
                       exit 1
                   fi
 
-            - name: Generate the versioned API documentation
-              run: yarn docs
-
             - name: Format the generated changelog
               run: yarn prettier --write CHANGELOG.md
 
-            - name: Verify the versioned release source
+            - name: Verify the versioned release source and packed packages
               run: yarn verify
-
-            - name: Verify the complete packed package family
-              run: yarn packaging:verify
 
             - name: Include the verified documentation in the release commit
               run: |
