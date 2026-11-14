@@ -22,7 +22,7 @@ The shared developer commands follow Archipel's repository workflow:
 | `yarn run update` | Choose dependency updates through Yarn's interactive upgrade screen.                |
 | `yarn prepare`    | Format the checkout, then run lint and tests.                                       |
 | `yarn spell`      | Check authored source, documentation and configuration with the project dictionary. |
-| `yarn verify`     | Run all repository quality gates, including spelling.                               |
+| `yarn verify`     | Regenerate API and agent files and run all candidate checks.                        |
 
 Dependency updates are selected explicitly; adding the command does not upgrade existing dependencies. Generated documentation, byte-preserved upstream architecture foundations and generated agent mirrors are excluded from spelling checks. Maintain Synapse terminology in `cspell.words.txt` and keep synthetic fixture exceptions scoped in `cspell.config.mjs`.
 
@@ -30,7 +30,7 @@ To activate the tracked commit checks in your checkout, run `yarn exec husky` on
 
 ## Automated dependency updates
 
-Dependabot checks npm dependencies and GitHub Actions weekly. TypeScript is excluded and stays a deliberate maintainer update. Other major, minor and patch updates can be merged automatically after the complete `Verify` matrix succeeds on Linux, macOS and Windows, including `yarn verify`, `yarn packaging:verify` and the aggregate `Quality Gate`.
+Dependabot checks npm dependencies and GitHub Actions weekly. TypeScript is excluded and stays a deliberate maintainer update. Other major, minor and patch updates can be merged automatically after `yarn verify` and the generated-file check succeed on Linux, macOS and Windows and the aggregate `Quality Gate` passes.
 
 The merge workflow accepts only current same-repository Dependabot PRs targeting `main`. It checks the canonical CI workflow, its latest attempt, every matrix result, the `Quality Gate` result and the unchanged PR revision before requesting a squash merge. Failed, skipped or missing jobs leave the PR open. Existing branch rules still apply. The privileged workflow executes only the default-branch helper; it does not execute PR code, install dependencies or consume PR artifacts.
 
@@ -73,10 +73,9 @@ Before handing over a candidate, run the repository checks:
 
 ```sh
 yarn verify
-yarn packaging:verify
 ```
 
-`yarn verify` checks agent/source conventions, formatting, lint, types, tests, builds and generated API drift. Artifact verification builds and installs real package archives in a separate consumer, checks declarations and inert imports, and exercises esbuild/Rollup provider exclusion and the simulated meeting example. It may fetch ordinary package dependencies; it does not log in to an AI account or run live inference.
+`yarn verify` regenerates the API reference and agent configuration, then runs source and formatting checks, lint, spelling, type checks, tests, builds and package verification. It installs real package archives in a separate consumer, checks declarations and inert imports, and exercises esbuild/Rollup provider exclusion and the simulated meeting example. Review and commit the generated changes. CI runs the same command and requires regeneration to leave the checkout clean.
 
 The [CI workflow](.github/workflows/ci.yml) configures Node.js 24 on Linux, macOS and native Windows. Its stable `Quality Gate` check runs after the complete matrix and fails when any platform fails, is cancelled or is skipped. Pull requests and merge queues run this workflow directly. Use a manual run to verify a branch before opening a pull request. Pushes to `main` run the matrix through the package-release workflow. Report which platforms actually ran and which checks were skipped. A local pass on one operating system does not establish the others. The [release guide](.docs/guides/releases.md) distinguishes candidate evidence from publication readiness.
 

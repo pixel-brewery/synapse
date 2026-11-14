@@ -18,7 +18,7 @@
         "generate": {
             "executor": "nx:run-commands",
             "dependsOn": ["^build"],
-            "cache": true,
+            "cache": false,
             "inputs": [
                 "{projectRoot}/**/*",
                 "{workspaceRoot}/libs/**/*",

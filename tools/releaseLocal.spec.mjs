@@ -229,7 +229,6 @@ describe('local release', () => {
             expect.objectContaining({ firstRelease: true, specifier: 'patch', dryRun: false }),
         );
         expect(dependencies.calls).toContain('yarn verify');
-        expect(dependencies.calls).toContain('yarn packaging:verify');
     });
 
     it.each([
@@ -271,10 +270,8 @@ describe('local release', () => {
             ),
         ).toEqual([
             'nx release',
-            'yarn docs',
             'yarn prettier --write CHANGELOG.md',
             'yarn verify',
-            'yarn packaging:verify',
             'git add -- libs/synapse-core/package.json yarn.lock CHANGELOG.md .docs/api/index.json .docs/packages/synapse-core/api/new-reference.md',
             'git commit -m chore(release): publish 0.1.1 [skip ci]',
             'git tag --annotate v0.1.1 --message v0.1.1',
@@ -326,10 +323,8 @@ describe('local release', () => {
                 ),
             ).toEqual([
                 'nx release',
-                'yarn docs',
                 'yarn prettier --write CHANGELOG.md',
                 'yarn verify',
-                'yarn packaging:verify',
                 'git commit --allow-empty -m chore(release): publish 0.1.1 [skip ci]',
                 'git tag --annotate v0.1.1 --message v0.1.1',
                 'git push --atomic origin HEAD:refs/heads/main refs/tags/v0.1.1',
@@ -355,7 +350,6 @@ describe('local release', () => {
         // Assert
         await expect(result).rejects.toThrow('[skip ci]');
         expect(dependencies.calls).toContain('yarn verify');
-        expect(dependencies.calls).toContain('yarn packaging:verify');
         expect(
             dependencies.calls.some((step) =>
                 /^git (?:add|commit|tag --annotate|push)/u.test(step),
@@ -364,31 +358,11 @@ describe('local release', () => {
         expect(dependencies.calls).not.toContain('yarn release:publish');
     });
 
-    it.each(['yarn verify', 'yarn packaging:verify'])(
-        'does not commit, tag, push or publish after a failed candidate check: %s',
-        async (fail) => {
+    it.each([{}, { changed: '' }])(
+        'does not commit, tag, push or publish after verification fails: %j',
+        async (options) => {
             // Arrange
-            const dependencies = controlled({ fail });
-
-            // Act
-            const result = releaseLocal(['patch'], dependencies);
-
-            // Assert
-            await expect(result).rejects.toThrow('Controlled command failure.');
-            expect(
-                dependencies.calls.some((step) =>
-                    /^git (?:add|commit|tag --annotate|push)/u.test(step),
-                ),
-            ).toBe(false);
-            expect(dependencies.calls).not.toContain('yarn release:publish');
-        },
-    );
-
-    it.each(['yarn verify', 'yarn packaging:verify'])(
-        'does not tag or publish an unchanged release after a failed candidate check: %s',
-        async (fail) => {
-            // Arrange
-            const dependencies = controlled({ changed: '', fail });
+            const dependencies = controlled({ ...options, fail: 'yarn verify' });
 
             // Act
             const result = releaseLocal(['patch'], dependencies);

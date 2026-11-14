@@ -20,7 +20,7 @@ Generated artifacts:
 
 The artifacts contain no generation timestamp, machine path or Git revision. They can be embedded in a documentation site, search index or documentation service without requiring VitePress, Electron or a particular frontend framework. Index links are relative to `.docs/`; reflection paths are relative to that same root.
 
-`yarn docs:check` generates into a temporary owned directory and compares bytes against the checked-in generated artifacts. It does not rewrite documentation. `yarn docs` replaces only generated `api/` directories and `.docs/api/`; authored guides and package overview pages are preserved. Do not edit generated files manually.
+`yarn docs:check` generates into a temporary owned directory and compares bytes against the checked-in generated artifacts. `yarn docs` replaces only the generated `api/` directories and `.docs/api/`. `yarn verify` runs that regeneration before the repository checks. Edit the exported declarations and TSDoc to update generated files.
 
 Public symbols require TSDoc on their declarations and public/protected members. Explain intent, required and optional inputs, defaults, returned values, meaningful errors, ownership, cancellation and disposal. Use `@example` when integration is not obvious, and keep `@internal` implementation details out of public exports. The reference follows implemented exports; a package's presence alone does not establish a capability.
 
