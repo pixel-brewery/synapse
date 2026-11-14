@@ -1,3 +1,13 @@
+## 0.0.16 (2026-11-14)
+
+### 🩹 Fixes
+
+- **ci:** make verify regenerate and validate release artifacts ([#28](https://github.com/pixel-brewery/synapse/pull/28))
+
+### ❤️ Thank You
+
+- André Wehlert @RueDeRennes
+
 ## 0.0.15 (2026-11-13)
 
 This was a version bump only, there were no code changes.
