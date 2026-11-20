@@ -1,6 +1,6 @@
 {
     "name": "@pixel-brewery/synapse-auth-providers",
-    "version": "0.0.18",
+    "version": "0.0.19",
     "type": "module",
     "main": "./dist/index.js",
     "module": "./dist/index.js",
@@ -74,7 +74,7 @@
         "url": "https://github.com/pixel-brewery/synapse/issues"
     },
     "dependencies": {
-        "@pixel-brewery/synapse-auth": "^0.0.18",
-        "@pixel-brewery/synapse-core": "^0.0.18"
+        "@pixel-brewery/synapse-auth": "^0.0.19",
+        "@pixel-brewery/synapse-core": "^0.0.19"
     }
 }
