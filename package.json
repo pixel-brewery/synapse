@@ -11,7 +11,8 @@
     "workspaces": [
         "libs/*",
         "apps/*",
-        "tools/mcp"
+        "tools/mcp",
+        "tools/nx-plugins/*"
     ],
     "scripts": {
         "nx": "nx",
@@ -60,6 +61,7 @@
         "@rollup/plugin-json": "6.1.0",
         "@rollup/plugin-node-resolve": "16.0.3",
         "@swc/helpers": "~0.5.24",
+        "@synapse/repository-tasks": "workspace:*",
         "@types/node": "26.6.6",
         "@yarnpkg/cli-dist": "4.18.1",
         "cspell": "10.5.1",
