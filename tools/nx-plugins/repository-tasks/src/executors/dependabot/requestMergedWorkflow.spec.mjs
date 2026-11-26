@@ -1,7 +1,7 @@
 // #region Imports
 
 import { describe, expect, it, vi } from 'vitest';
-import { requestMergedVerification } from './requestMergedVerification.mjs';
+import { requestMergedWorkflow } from './requestMergedWorkflow.mjs';
 
 // #endregion
 
@@ -26,9 +26,11 @@ function controlled() {
             name: 'Verify',
             state: 'active',
         },
+        files: [{ filename: 'site/index.html', status: 'modified' }],
         runs: { total_count: 0, workflow_runs: [] },
         run: {
             id: 404,
+            run_attempt: 1,
             workflow_id: workflowId,
             path: '.github/workflows/ci.yml',
             head_sha: sourceSha,
@@ -48,6 +50,12 @@ function controlled() {
         if (method === 'GET' && endpoint === `repositories/${repositoryId}`)
             return structuredClone(records.repository);
 
+        if (
+            method === 'GET' &&
+            endpoint === `${repositoryPath}/commits/${sourceSha}?per_page=100&page=1`
+        )
+            return { sha: sourceSha, files: records.files };
+
         if (method === 'GET' && endpoint === mainPath) {
             mainReads++;
 
@@ -56,7 +64,11 @@ function controlled() {
             );
         }
 
-        if (method === 'GET' && endpoint === `${repositoryPath}/actions/workflows/ci.yml`)
+        if (
+            method === 'GET' &&
+            endpoint ===
+                `${repositoryPath}/actions/workflows/${records.workflow.path.split('/').at(-1)}`
+        )
             return structuredClone(records.workflow);
 
         if (
@@ -91,7 +103,7 @@ describe('Merged source verification request', () => {
         const dependencies = controlled();
 
         // act
-        const result = await requestMergedVerification(
+        const result = await requestMergedWorkflow(
             { ...context, repositoryId: String(repositoryId) },
             dependencies,
         );
@@ -119,7 +131,7 @@ describe('Merged source verification request', () => {
         const dependencies = controlled();
 
         // act
-        const result = requestMergedVerification({ ...context, ...override }, dependencies);
+        const result = requestMergedWorkflow({ ...context, ...override }, dependencies);
 
         // assert
         await expect(result).rejects.toThrow('Verification request failed');
@@ -139,7 +151,7 @@ describe('Merged source verification request', () => {
         Object.assign(dependencies.records.repository, override);
 
         // act
-        const result = requestMergedVerification(context, dependencies);
+        const result = requestMergedWorkflow(context, dependencies);
 
         // assert
         await expect(result).rejects.toThrow('Verification request failed');
@@ -158,7 +170,7 @@ describe('Merged source verification request', () => {
         Object.assign(dependencies.records.workflow, override);
 
         // act
-        const result = requestMergedVerification(context, dependencies);
+        const result = requestMergedWorkflow(context, dependencies);
 
         // assert
         await expect(result).rejects.toThrow('Verification request failed');
@@ -176,7 +188,7 @@ describe('Merged source verification request', () => {
             else dependencies.records.nextMain = moved;
 
             // act
-            const result = await requestMergedVerification(context, dependencies);
+            const result = await requestMergedWorkflow(context, dependencies);
 
             // assert
             expect(result).toEqual({ status: 'superseded', sourceSha });
@@ -198,7 +210,7 @@ describe('Merged source verification request', () => {
             };
 
             // act
-            const result = await requestMergedVerification(context, dependencies);
+            const result = await requestMergedWorkflow(context, dependencies);
 
             // assert
             expect(result).toEqual({ status: 'already-requested', sourceSha, runId: 404 });
@@ -217,7 +229,7 @@ describe('Merged source verification request', () => {
         dependencies.records.runs = runs;
 
         // act
-        const result = requestMergedVerification(context, dependencies);
+        const result = requestMergedWorkflow(context, dependencies);
 
         // assert
         await expect(result).rejects.toThrow('Verification request failed');
@@ -240,7 +252,7 @@ describe('Merged source verification request', () => {
         dependencies.records.runs = { total_count: 1, workflow_runs: [dependencies.records.run] };
 
         // act
-        const result = requestMergedVerification(context, dependencies);
+        const result = requestMergedWorkflow(context, dependencies);
 
         // assert
         await expect(result).rejects.toThrow('Verification request failed');
@@ -252,15 +264,101 @@ describe('Merged source verification request', () => {
         const dependencies = controlled();
 
         dependencies.records.acceptThenFail = true;
-        await expect(requestMergedVerification(context, dependencies)).rejects.toThrow(
+        await expect(requestMergedWorkflow(context, dependencies)).rejects.toThrow(
             'Verification request failed',
         );
 
         // act
-        const result = await requestMergedVerification(context, dependencies);
+        const result = await requestMergedWorkflow(context, dependencies);
 
         // assert
         expect(result).toEqual({ status: 'already-requested', sourceSha, runId: 404 });
         expect(writes(dependencies.request)).toHaveLength(1);
     });
+});
+
+for (const filename of ['site/index.html', '.github/workflows/publish-pages.yml']) {
+    it(`continues the existing Pages push path ${filename}`, async () => {
+        // Arrange
+        const f = controlled();
+
+        f.records.workflow.path = '.github/workflows/publish-pages.yml';
+        f.records.workflow.name = 'Publish GitHub Pages';
+        f.records.run.path = f.records.workflow.path;
+        f.records.files = [{ filename, status: 'modified' }];
+
+        // Act
+        const result = await requestMergedWorkflow({ ...context, workflow: 'documentation' }, f);
+
+        // Assert
+        expect(result.status).toBe('requested');
+        expect(writes(f.request)).toEqual([
+            [
+                'POST',
+                `${workflowEndpoint}/dispatches`,
+                { ref: 'main', inputs: { expected_head_sha: sourceSha } },
+            ],
+        ]);
+    });
+}
+
+it('preserves the existing Pages path filter for unrelated dependency changes', async () => {
+    // Arrange
+    const f = controlled();
+
+    f.records.files = [{ filename: 'package.json', status: 'modified' }];
+
+    // Act
+    const result = await requestMergedWorkflow({ ...context, workflow: 'documentation' }, f);
+
+    // Assert
+    expect(result).toEqual({ status: 'not-applicable', sourceSha });
+    expect(writes(f.request)).toEqual([]);
+});
+
+it('includes a removed previous Pages path when a file is renamed', async () => {
+    // Arrange
+    const f = controlled();
+
+    f.records.workflow.path = '.github/workflows/publish-pages.yml';
+    f.records.workflow.name = 'Publish GitHub Pages';
+    f.records.run.path = f.records.workflow.path;
+    f.records.files = [
+        { filename: 'docs/old-site.html', previous_filename: 'site/index.html', status: 'renamed' },
+    ];
+
+    // Act
+    const result = await requestMergedWorkflow({ ...context, workflow: 'documentation' }, f);
+
+    // Assert
+    expect(result.status).toBe('requested');
+});
+
+it('retains an existing failed source-bound Pages attempt', async () => {
+    // Arrange
+    const f = controlled();
+
+    f.records.workflow.path = '.github/workflows/publish-pages.yml';
+    f.records.workflow.name = 'Publish GitHub Pages';
+    f.records.run.path = f.records.workflow.path;
+    f.records.runs = {
+        total_count: 1,
+        workflow_runs: [{ ...f.records.run, status: 'completed', conclusion: 'failure' }],
+    };
+
+    // Act
+    const result = await requestMergedWorkflow({ ...context, workflow: 'documentation' }, f);
+
+    // Assert
+    expect(result.status).toBe('already-requested');
+    expect(writes(f.request)).toEqual([]);
+});
+
+it('rejects an arbitrary continuation workflow before contacting GitHub', async () => {
+    // Arrange
+    const f = controlled();
+
+    // Act and Assert
+    await expect(requestMergedWorkflow({ ...context, workflow: 'release' }, f)).rejects.toThrow();
+    expect(f.request).not.toHaveBeenCalled();
 });
