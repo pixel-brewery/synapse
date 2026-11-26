@@ -121,3 +121,18 @@ An authorized exact-tag registry recovery uses the existing package-owner creden
 Registry credentials allow package installation/publication. Native Codex, Claude Code or OpenCode login is a separate runtime concern; installing Synapse does not sign in to an AI provider, and an AI subscription login does not authenticate the package registry.
 
 The public source launch makes repository URLs, issues and repository-hosted guides accessible under `pixel-brewery/synapse`. Reading public source requires no package-registry credential; installing public GitHub npm packages still requires registry authentication. The optional MCP archive carries its documentation corpus independently and needs no checkout or documentation website after installation. See [consumer installation](consumers.md#install-from-github-packages) and the [MCP guide](mcp.md).
+
+## Documentation after a native-token dependency merge
+
+The same private Nx owner continues the existing documentation workflow with
+`expected_head_sha`, independently of main CI and the source-bound release. It
+checks immutable repository/workflow identity, the exact current main source and
+positive run IDs/attempts before treating a request as existing. Successful,
+failed and cancelled attempts are retained; a superseding main revision prevents
+a new dispatch. The documentation job checks its selected source and current main
+immediately before deployment. No package or deployment is manually dispatched by
+this delivery change.
+
+Pages retains its existing push paths: its workflow, `site/` and the project
+artwork. Complete bounded commit-file inspection includes renamed previous paths;
+unrelated dependency changes do not deploy Pages.
