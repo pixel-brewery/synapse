@@ -71,6 +71,12 @@ function controlled() {
         pull,
         run,
         workflow: { id: 10, name: 'Verify', path: '.github/workflows/ci.yml', state: 'active' },
+        releaseWorkflow: {
+            id: 11,
+            name: verificationPolicy.releaseWorkflowName,
+            path: '.github/workflows/release.yml',
+            state: 'active',
+        },
         main: { name: 'main', commit: { sha: M } },
         branch: { object: { type: 'commit', sha: B } },
         mergeRef: { object: { type: 'commit', sha: C } },
@@ -111,8 +117,20 @@ function controlled() {
 
         if (endpoint === 'repositories/1439526639') return structuredClone(state.repo);
 
-        if (endpoint === `${prefix}/pulls?state=open&base=main&per_page=100&page=1`)
-            return [state.pull, { number: 8, user: { id: 1, login: 'maintainer', type: 'User' } }];
+        if (endpoint.startsWith(`${prefix}/pulls?state=open&base=main&per_page=100&page=`)) {
+            const page = Number(endpoint.split('page=').at(-1));
+
+            return state.openPages
+                ? state.openPages[page - 1]
+                : page === 1
+                  ? [state.pull, { number: 8, user: { id: 1, login: 'maintainer', type: 'User' } }]
+                  : [];
+        }
+
+        if (endpoint === `${prefix}/actions/workflows/release.yml`)
+            return structuredClone(state.releaseWorkflow);
+
+        if (endpoint === `${prefix}/actions/runs/30`) return structuredClone(state.triggeredRun);
 
         if (endpoint === `${prefix}/actions/workflows/ci.yml`)
             return structuredClone(
@@ -179,56 +197,185 @@ function controlled() {
 
 const writes = (request) => request.mock.calls.filter(([method]) => method !== 'GET');
 
-describe('Isolated native CI authorization inventory', () => {
-    it('authorizes scheduled own bot candidates through the actual full source proof', async () => {
+function completedTrigger(state, release = false, conclusion = 'success') {
+    return {
+        ...structuredClone(state.run),
+        id: 30,
+        run_attempt: 1,
+        conclusion,
+        head_sha: M,
+        head_branch: release ? 'main' : 'dependabot/npm_and_yarn/previous-head',
+        pull_requests: [],
+        event: release ? 'push' : 'pull_request',
+        workflow_id: release ? state.releaseWorkflow.id : state.workflow.id,
+        name: release ? state.releaseWorkflow.name : state.workflow.name,
+        path: release ? state.releaseWorkflow.path : state.workflow.path,
+    };
+}
+
+const notified = { ...context, eventName: 'workflow_run', runId: 30, runAttempt: 1 };
+
+describe('Post-reconciliation current native authorization', () => {
+    it.each(['schedule', 'workflow_dispatch'])(
+        'reads the current complete bot inventory after %s',
+        async (eventName) => {
+            // Arrange
+            const fixture = controlled();
+
+            // Act
+            const result = await authorizePullRequestWorkflows({ ...context, eventName }, fixture);
+
+            // Assert
+            expect(result).toEqual([
+                { number: 7, status: 'verification-approved', head: B, runId: 20, runAttempt: 1 },
+            ]);
+            expect(writes(fixture.request)).toEqual([
+                ['POST', `${prefix}/actions/runs/20/approve`],
+            ]);
+        },
+    );
+
+    it.each([
+        [false, 'success'],
+        [false, 'failure'],
+        [true, 'success'],
+        [true, 'failure'],
+    ])(
+        'authorizes the current proved native run after completed release=%s / %s, independently of the old trigger head',
+        async (release, conclusion) => {
+            // Arrange
+            const fixture = controlled();
+
+            fixture.state.triggeredRun = completedTrigger(fixture.state, release, conclusion);
+
+            // Act
+            const result = await authorizePullRequestWorkflows(notified, fixture);
+
+            // Assert
+            expect(result[0]).toEqual({
+                number: 7,
+                status: 'verification-approved',
+                head: B,
+                runId: 20,
+                runAttempt: 1,
+            });
+            expect(writes(fixture.request)).toEqual([
+                ['POST', `${prefix}/actions/runs/20/approve`],
+            ]);
+        },
+    );
+
+    it('does not mistake the old notification attempt for the current candidate authorization attempt', async () => {
         // Arrange
         const fixture = controlled();
+
+        fixture.state.triggeredRun = { ...completedTrigger(fixture.state), run_attempt: 2 };
+        fixture.state.run.run_attempt = 3;
+
+        // Act
+        const result = await authorizePullRequestWorkflows(notified, fixture);
+
+        // Assert
+        expect(result[0].runAttempt).toBe(3);
+        expect(writes(fixture.request)).toEqual([['POST', `${prefix}/actions/runs/20/approve`]]);
+    });
+
+    it.each([
+        { id: 31 },
+        { run_attempt: 0 },
+        { status: 'queued' },
+        { name: 'Unrelated workflow' },
+        { workflow_id: 99 },
+        { path: '.github/workflows/foreign.yml' },
+        { head_repository: { id: 1 } },
+        { repository: { id: 1439526639, full_name: 'foreign/project' } },
+    ])(
+        'rejects an unrelated or malformed workflow reason before the current inventory: %j',
+        async (change) => {
+            // Arrange
+            const fixture = controlled();
+
+            fixture.state.triggeredRun = { ...completedTrigger(fixture.state), ...change };
+
+            // Act
+            const result = await authorizePullRequestWorkflows(notified, fixture);
+
+            // Assert
+            expect(result).toEqual([]);
+            expect(writes(fixture.request)).toEqual([]);
+            expect(
+                fixture.request.mock.calls.some(([, endpoint]) =>
+                    endpoint.includes('/pulls?state=open'),
+                ),
+            ).toBe(false);
+        },
+    );
+
+    it('loads every inventory page before the first approval', async () => {
+        // Arrange
+        const fixture = controlled();
+        const humans = Array.from({ length: 99 }, (_, index) => ({
+            number: index + 100,
+            user: { id: 1, login: 'maintainer', type: 'User' },
+        }));
+
+        fixture.state.openPages = [[fixture.state.pull, ...humans], []];
 
         // Act
         const result = await authorizePullRequestWorkflows(context, fixture);
 
         // Assert
-        expect(result).toEqual([
-            { number: 7, status: 'verification-approved', head: B, runId: 20, runAttempt: 1 },
-        ]);
-        expect(writes(fixture.request)).toEqual([['POST', `${prefix}/actions/runs/20/approve`]]);
-    });
-    it('routes only the exact approval-required event and current attempt', async () => {
-        // Arrange
-        const fixture = controlled();
-
-        // Act
-        const result = await authorizePullRequestWorkflows(
-            { ...context, eventName: 'workflow_run', runId: 20, runAttempt: 1 },
-            fixture,
-        );
-
-        // Assert
         expect(result[0].status).toBe('verification-approved');
-        expect(writes(fixture.request)).toHaveLength(1);
+
+        const calls = fixture.request.mock.calls;
+
+        expect(
+            calls.findIndex(([, path]) => path.endsWith('page=2')) <
+                calls.findIndex(([method]) => method === 'POST'),
+        ).toBe(true);
     });
-    it.each([
-        { run_attempt: 2 },
-        { conclusion: 'success' },
-        { event: 'workflow_dispatch' },
-        { head_repository: { id: 1 } },
-    ])('rejects a changed or unrelated event without any write: %j', async (change) => {
+
+    it.each(['malformed-first', 'overlong-first', 'malformed-second', 'bounded-overflow'])(
+        'retains a malformed or incomplete current inventory before any approval: %s',
+        async (problem) => {
+            // Arrange
+            const fixture = controlled();
+            const full = Array.from({ length: 100 }, () => fixture.state.pull);
+
+            fixture.state.openPages =
+                problem === 'malformed-first'
+                    ? [null]
+                    : problem === 'overlong-first'
+                      ? [[...full, fixture.state.pull]]
+                      : problem === 'malformed-second'
+                        ? [full, null]
+                        : [full, full, full, full, full];
+
+            // Act
+            const result = authorizePullRequestWorkflows(context, fixture);
+
+            // Assert
+            await expect(result).rejects.toThrow('inventory');
+            expect(writes(fixture.request)).toEqual([]);
+        },
+    );
+
+    it('keeps all current single-run source guards when a valid release triggers inspection', async () => {
         // Arrange
         const fixture = controlled();
 
-        Object.assign(fixture.state.run, change);
+        fixture.state.triggeredRun = completedTrigger(fixture.state, true);
+        fixture.state.branch.object.sha = M;
 
         // Act
-        const result = await authorizePullRequestWorkflows(
-            { ...context, eventName: 'workflow_run', runId: 20, runAttempt: 1 },
-            fixture,
-        );
+        const result = await authorizePullRequestWorkflows(notified, fixture);
 
         // Assert
-        expect(result).toEqual([]);
+        expect(result[0].status).not.toBe('verification-approved');
         expect(writes(fixture.request)).toEqual([]);
     });
-    it('sanitizes one failed approval without retrying its native attempt', async () => {
+
+    it('sanitizes a failed approval without retrying the current native run', async () => {
         // Arrange
         const fixture = controlled();
 

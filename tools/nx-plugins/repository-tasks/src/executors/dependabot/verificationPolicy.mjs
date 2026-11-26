@@ -7,6 +7,7 @@ export const verificationPolicy = Object.freeze({
     workflowFile: 'ci.yml',
     workflowPath: '.github/workflows/ci.yml',
     workflowName: 'Verify',
+    releaseWorkflowName: 'Continuous Package Release',
     requiredJobs: [
         'verify (ubuntu-latest)',
         'verify (macos-latest)',
