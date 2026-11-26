@@ -5,7 +5,7 @@ import { resolve } from 'node:path';
 import { pathToFileURL } from 'node:url';
 import { mergeDependabotPullRequest } from './mergeDependabotPullRequest.mjs';
 import { reconcileDependabotBranches } from './reconcileDependabotBranches.mjs';
-import { requestMergedVerification } from './requestMergedVerification.mjs';
+import { requestMergedWorkflow } from './requestMergedWorkflow.mjs';
 import { requestMergedRelease } from './requestMergedRelease.mjs';
 
 // #endregion
@@ -50,8 +50,12 @@ export async function runDependabotAutomation(mode) {
             break;
         case 'continue':
             result = {
-                verification: await requestMergedVerification(context),
+                verification: await requestMergedWorkflow(context),
                 release: await requestMergedRelease(context),
+                documentation: await requestMergedWorkflow({
+                    ...context,
+                    workflow: 'documentation',
+                }),
             };
 
             break;
