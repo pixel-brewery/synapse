@@ -3,7 +3,7 @@ const repositoryPattern = /^[A-Za-z0-9-]+\/synapse$/u;
 const branchPattern = /^[A-Za-z0-9][A-Za-z0-9_./-]{0,199}$/u;
 
 /**
- * Resolves Symphony's transferred repository through its immutable GitHub identity.
+ * Resolves Synapse's public transferred repository through its immutable GitHub identity.
  *
  * @param context - Trusted workflow repository ID, full name and default branch.
  * @param request - The parsed-JSON GitHub REST request boundary.
@@ -30,6 +30,8 @@ export async function resolveDependabotRepository(context, request) {
         repository?.id !== repositoryId ||
         repository?.name !== 'synapse' ||
         repository?.fork !== false ||
+        repository?.private !== false ||
+        repository?.visibility !== 'public' ||
         repository?.full_name !== context.repository ||
         repository?.default_branch !== context.defaultBranch
     )
