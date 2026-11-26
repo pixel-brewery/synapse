@@ -9,6 +9,7 @@ const { executeGitHub } = vi.hoisted(() => ({ executeGitHub: vi.fn() }));
 
 vi.mock('node:child_process', () => ({ execFileSync: executeGitHub }));
 
+const repositoryId = 1439526639;
 const repositoryPath = 'repos/pixel-brewery/synapse';
 const mainSha = 'a'.repeat(40);
 const headSha = 'b'.repeat(40);
@@ -17,6 +18,8 @@ const changedSha = 'd'.repeat(40);
 const context = {
     eventName: 'workflow_run',
     repository: 'pixel-brewery/synapse',
+    repositoryId,
+    defaultBranch: 'main',
     runId: 202,
     runAttempt: 2,
 };
@@ -26,7 +29,7 @@ const runPath = `${repositoryPath}/actions/runs/202`;
 const mainPath = `${repositoryPath}/branches/main`;
 
 function controlled() {
-    const repository = { id: 17, full_name: 'pixel-brewery/synapse' };
+    const repository = { id: repositoryId, full_name: 'pixel-brewery/synapse' };
     const jobs = [
         'verify (ubuntu-latest)',
         'verify (macos-latest)',
@@ -84,6 +87,9 @@ function controlled() {
 
         reads.set(endpoint, count);
 
+        if (endpoint === `repositories/${repositoryId}`)
+            return { ...repository, name: 'synapse', default_branch: 'main', fork: false };
+
         if (endpoint === `${repositoryPath}/actions/workflows/ci.yml`)
             return structuredClone(records.workflow);
 
@@ -135,7 +141,12 @@ describe('Dependabot pull request merge', () => {
         const result = await mergeDependabotPullRequest(context, dependencies);
 
         // Assert
-        expect(result).toEqual({ status: 'merged', pullRequestNumber: 7, sha: mergeSha });
+        expect(result).toEqual({
+            status: 'merged',
+            pullRequestNumber: 7,
+            sha: mergeSha,
+            defaultBranch: 'main',
+        });
         expect(writes(dependencies.request)).toEqual([
             ['PUT', `${pullRequestPath}/merge`, { sha: headSha, merge_method: 'squash' }],
         ]);
@@ -547,7 +558,9 @@ describe('Dependabot GitHub CLI boundary', () => {
         vi.stubEnv('GH_TOKEN', 'test-workflow-job-token');
         executeGitHub.mockImplementation((_command, arguments_, options) => {
             const method = arguments_[arguments_.indexOf('--method') + 1];
-            const endpoint = arguments_.find((argument) => argument.startsWith('repos/'));
+            const endpoint = arguments_.find(
+                (argument) => argument.startsWith('repos/') || argument.startsWith('repositories/'),
+            );
             const body = options.input === undefined ? undefined : JSON.parse(options.input);
 
             return JSON.stringify(dependencies.request(method, endpoint, body));
@@ -616,4 +629,86 @@ describe('Dependabot GitHub CLI boundary', () => {
             expect(executeGitHub).toHaveBeenCalledTimes(1);
         },
     );
+});
+
+describe('Dependabot refreshed-head verification', () => {
+    it('accepts explicit CI only for the uniquely associated current Dependabot head', async () => {
+        // arrange
+        const { records, request } = controlled();
+
+        records.run.event = 'workflow_dispatch';
+        records.run.pull_requests = [];
+        Object.assign(records.run, { head_branch: 'dependabot/npm_and_yarn/frameworks' });
+        Object.assign(records.pullRequest.head, { ref: 'dependabot/npm_and_yarn/frameworks' });
+
+        const original = request.getMockImplementation();
+
+        request.mockImplementation((method, endpoint) =>
+            endpoint === `${repositoryPath}/commits/${headSha}/pulls?per_page=100`
+                ? [{ ...structuredClone(records.pullRequest), merged: undefined, merged_at: null }]
+                : original(method, endpoint),
+        );
+
+        // act
+        const result = await mergeDependabotPullRequest(context, { request });
+
+        // assert
+        expect(result.status).toBe('merged');
+        expect(writes(request)).toEqual([
+            ['PUT', `${pullRequestPath}/merge`, { sha: headSha, merge_method: 'squash' }],
+        ]);
+    });
+
+    it('rejects ambiguous dispatched-head associations without a merge', async () => {
+        // arrange
+        const { records, request } = controlled();
+
+        records.run.event = 'workflow_dispatch';
+        records.run.pull_requests = [];
+        Object.assign(records.run, { head_branch: 'dependabot/npm_and_yarn/frameworks' });
+        Object.assign(records.pullRequest.head, { ref: 'dependabot/npm_and_yarn/frameworks' });
+
+        const original = request.getMockImplementation();
+
+        request.mockImplementation((method, endpoint) =>
+            endpoint === `${repositoryPath}/commits/${headSha}/pulls?per_page=100`
+                ? [
+                      {
+                          ...structuredClone(records.pullRequest),
+                          merged: undefined,
+                          merged_at: null,
+                      },
+                      {
+                          ...structuredClone(records.pullRequest),
+                          number: 8,
+                          merged: undefined,
+                          merged_at: null,
+                      },
+                  ]
+                : original(method, endpoint),
+        );
+
+        // act
+        const result = await mergeDependabotPullRequest(context, { request });
+
+        // assert
+        expect(result).toEqual({ status: 'skipped', reason: 'ambiguous-pull-request' });
+        expect(writes(request)).toEqual([]);
+    });
+
+    it('rejects a manually verified non-Dependabot branch without a merge', async () => {
+        // arrange
+        const { records, request } = controlled();
+
+        records.run.event = 'workflow_dispatch';
+        records.run.pull_requests = [];
+        Object.assign(records.run, { head_branch: 'feature/manual' });
+
+        // act
+        const result = await mergeDependabotPullRequest(context, { request });
+
+        // assert
+        expect(result).toEqual({ status: 'skipped', reason: 'ambiguous-pull-request' });
+        expect(writes(request)).toEqual([]);
+    });
 });

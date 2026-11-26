@@ -1,0 +1,33 @@
+{
+    "name": "repository-tasks",
+    "sourceRoot": "tools/nx-plugins/repository-tasks/src",
+    "projectType": "library",
+    "tags": ["type:tooling"],
+    "targets": {
+        "dependabot": {
+            "executor": "@synapse/repository-tasks:dependabot",
+            "cache": false,
+            "options": {
+                "mode": "merge"
+            }
+        },
+        "test": {
+            "executor": "nx:run-commands",
+            "options": {
+                "command": "vitest run --config tools/nx-plugins/repository-tasks/vitest.config.ts"
+            }
+        },
+        "lint": {
+            "executor": "nx:run-commands",
+            "options": {
+                "command": "eslint tools/nx-plugins/repository-tasks"
+            }
+        },
+        "typecheck": {
+            "executor": "nx:run-commands",
+            "options": {
+                "command": "tsc -p tools/nx-plugins/repository-tasks/tsconfig.json --noEmit"
+            }
+        }
+    }
+}

@@ -3,6 +3,12 @@ on:
     pull_request:
     merge_group:
     workflow_dispatch:
+        inputs:
+            expected_head_sha:
+                description: Exact dependency source requested by the trusted controller
+                required: false
+                default: ''
+                type: string
     workflow_call:
 permissions:
     contents: read
@@ -15,6 +21,11 @@ jobs:
         runs-on: ${{ matrix.os }}
         timeout-minutes: 30
         steps:
+            - name: Require the requested dependency revision
+              if: github.event_name == 'workflow_dispatch' && inputs.expected_head_sha != ''
+              env:
+                  EXPECTED_HEAD_SHA: ${{ inputs.expected_head_sha }}
+              run: test "$GITHUB_SHA" = "$EXPECTED_HEAD_SHA"
             - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
               with:
                   persist-credentials: false

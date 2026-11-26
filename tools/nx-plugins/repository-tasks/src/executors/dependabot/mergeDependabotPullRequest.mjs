@@ -1,14 +1,11 @@
 // #region Imports
 
-import { execFileSync } from 'node:child_process';
-import { appendFileSync } from 'node:fs';
-import { resolve } from 'node:path';
-import { pathToFileURL } from 'node:url';
+import { requestDependabotGitHub } from './requestDependabotGitHub.mjs';
+import { resolveDependabotRepository } from './resolveDependabotRepository.mjs';
 
 // #endregion
 
-const repository = 'pixel-brewery/synapse';
-const repositoryPath = `repos/${repository}`;
+const repositoryName = 'pixel-brewery/synapse';
 const workflowPath = '.github/workflows/ci.yml';
 const workflowName = 'Verify';
 const requiredJobs = [
@@ -24,7 +21,7 @@ const requestFailure =
 /**
  * Squash-merges one same-repository Dependabot pull request after its current Verify attempt succeeds.
  *
- * @param context - The workflow_run event name, canonical repository, triggering run ID and attempt.
+ * @param context - The workflow_run event name, immutable repository identity, default branch, triggering run ID and attempt.
  * @param dependencies - An optional request(method, endpoint, body) GitHub REST boundary for offline tests.
  * @returns A merged result or a skipped result with a fixed, non-sensitive reason.
  * @throws An Error with a controlled diagnostic when an API request fails or a merge is not confirmed.
@@ -38,13 +35,13 @@ export async function mergeDependabotPullRequest(context, dependencies = {}) {
 
     if (
         context?.eventName !== 'workflow_run' ||
-        context?.repository !== repository ||
+        context?.repository !== repositoryName ||
         runId === undefined ||
         runAttempt === undefined
     )
         return skipped('unsupported-context');
 
-    const boundary = dependencies.request ?? requestGitHub;
+    const boundary = dependencies.request ?? requestDependabotGitHub;
     const request = async (method, endpoint, body) => {
         try {
             return await boundary(method, endpoint, body);
@@ -52,6 +49,11 @@ export async function mergeDependabotPullRequest(context, dependencies = {}) {
             throw new Error(requestFailure);
         }
     };
+    const identity = await resolveDependabotRepository(context, request);
+
+    if (!identity) return skipped('unsupported-repository');
+
+    const repositoryPath = identity.path;
     const workflow = await request('GET', `${repositoryPath}/actions/workflows/ci.yml`);
 
     if (
@@ -64,26 +66,33 @@ export async function mergeDependabotPullRequest(context, dependencies = {}) {
     const runPath = `${repositoryPath}/actions/runs/${runId}`;
     const run = await request('GET', runPath);
 
-    if (!eligibleRun(run, workflow, runId, runAttempt)) return skipped('ineligible-workflow-run');
+    if (!eligibleRun(run, workflow, runId, runAttempt, identity))
+        return skipped('ineligible-workflow-run');
 
-    const pullRequestNumber = associatedPullRequest(run);
+    const pullRequestNumber = await verifiedAssociatedPullRequest(
+        run,
+        request,
+        repositoryPath,
+        identity,
+    );
 
     if (pullRequestNumber === undefined) return skipped('ambiguous-pull-request');
 
     const pullRequestPath = `${repositoryPath}/pulls/${pullRequestNumber}`;
     const pullRequest = await request('GET', pullRequestPath);
 
-    if (!eligiblePullRequest(pullRequest, pullRequestNumber, run))
+    if (!eligiblePullRequest(pullRequest, pullRequestNumber, run, identity))
         return skipped('ineligible-pull-request');
 
-    if (!(await successfulJobs(request, runId, runAttempt)))
+    if (!(await successfulJobs(request, runId, runAttempt, repositoryPath)))
         return skipped('incomplete-verification');
 
-    const mainPath = `${repositoryPath}/branches/main`;
+    const mainPath = `${repositoryPath}/branches/${encodeURIComponent(identity.defaultBranch)}`;
     const main = await request('GET', mainPath);
     const mainSha = main?.commit?.sha;
 
-    if (!shaPattern.test(mainSha ?? '')) return skipped('invalid-main');
+    if (main?.name !== identity.defaultBranch || !shaPattern.test(mainSha ?? ''))
+        return skipped('invalid-main');
 
     const comparison = await request(
         'GET',
@@ -98,19 +107,21 @@ export async function mergeDependabotPullRequest(context, dependencies = {}) {
     const currentMain = await request('GET', mainPath);
 
     if (
-        !eligiblePullRequest(currentPullRequest, pullRequestNumber, run) ||
+        !eligiblePullRequest(currentPullRequest, pullRequestNumber, run, identity) ||
         currentPullRequest?.base?.sha !== pullRequest.base.sha
     )
         return skipped('pull-request-changed');
 
     if (
-        !eligibleRun(currentRun, workflow, runId, runAttempt) ||
+        !eligibleRun(currentRun, workflow, runId, runAttempt, identity) ||
         currentRun.head_sha !== run.head_sha ||
-        associatedPullRequest(currentRun) !== pullRequestNumber
+        (await verifiedAssociatedPullRequest(currentRun, request, repositoryPath, identity)) !==
+            pullRequestNumber
     )
         return skipped('workflow-run-changed');
 
-    if (currentMain?.commit?.sha !== mainSha) return skipped('main-changed');
+    if (currentMain?.name !== identity.defaultBranch || currentMain?.commit?.sha !== mainSha)
+        return skipped('main-changed');
 
     const result = await request('PUT', `${pullRequestPath}/merge`, {
         sha: run.head_sha,
@@ -122,7 +133,12 @@ export async function mergeDependabotPullRequest(context, dependencies = {}) {
             'GitHub did not confirm the Dependabot pull request merge; inspect it before retrying.',
         );
 
-    return { status: 'merged', pullRequestNumber, sha: result.sha };
+    return {
+        status: 'merged',
+        pullRequestNumber,
+        sha: result.sha,
+        defaultBranch: identity.defaultBranch,
+    };
 }
 
 function skipped(reason) {
@@ -135,15 +151,15 @@ function positiveInteger(value) {
     return Number.isSafeInteger(integer) && integer > 0 ? integer : undefined;
 }
 
-function canonicalRepository(value) {
-    return value?.full_name === repository;
+function canonicalRepository(value, identity) {
+    return value?.id === identity.id && value?.full_name === identity.fullName;
 }
 
-function eligibleRun(run, workflow, runId, runAttempt) {
+function eligibleRun(run, workflow, runId, runAttempt, identity) {
     return (
         run?.id === runId &&
         run?.run_attempt === runAttempt &&
-        run?.event === 'pull_request' &&
+        ['pull_request', 'workflow_dispatch'].includes(run?.event) &&
         run?.status === 'completed' &&
         run?.conclusion === 'success' &&
         run?.workflow_id === workflow.id &&
@@ -152,8 +168,8 @@ function eligibleRun(run, workflow, runId, runAttempt) {
         (run.path === workflowPath ||
             (run.path.startsWith(`${workflowPath}@`) &&
                 run.path.length > workflowPath.length + 1)) &&
-        canonicalRepository(run?.repository) &&
-        canonicalRepository(run?.head_repository) &&
+        canonicalRepository(run?.repository, identity) &&
+        canonicalRepository(run?.head_repository, identity) &&
         shaPattern.test(run?.head_sha ?? '')
     );
 }
@@ -164,7 +180,46 @@ function associatedPullRequest(run) {
     return positiveInteger(run.pull_requests[0]?.number);
 }
 
-function eligiblePullRequest(pullRequest, number, run) {
+async function verifiedAssociatedPullRequest(run, request, repositoryPath, identity) {
+    const associated = associatedPullRequest(run);
+
+    if (associated !== undefined) return associated;
+
+    if (
+        run?.event !== 'workflow_dispatch' ||
+        !Array.isArray(run?.pull_requests) ||
+        run.pull_requests.length !== 0 ||
+        typeof run?.head_branch !== 'string' ||
+        !run.head_branch.startsWith('dependabot/')
+    )
+        return undefined;
+
+    const candidates = await request(
+        'GET',
+        `${repositoryPath}/commits/${run.head_sha}/pulls?per_page=100`,
+    );
+
+    if (!Array.isArray(candidates) || candidates.length >= 100) return undefined;
+
+    const matching = candidates.filter(
+        (pullRequest) =>
+            positiveInteger(pullRequest?.number) !== undefined &&
+            pullRequest?.state === 'open' &&
+            pullRequest?.draft === false &&
+            pullRequest?.merged_at === null &&
+            pullRequest?.user?.login === 'dependabot[bot]' &&
+            pullRequest?.user?.type === 'Bot' &&
+            canonicalRepository(pullRequest?.head?.repo, identity) &&
+            canonicalRepository(pullRequest?.base?.repo, identity) &&
+            pullRequest?.base?.ref === identity.defaultBranch &&
+            pullRequest?.head?.sha === run.head_sha &&
+            pullRequest?.head?.ref === run.head_branch,
+    );
+
+    return matching.length === 1 ? positiveInteger(matching[0].number) : undefined;
+}
+
+function eligiblePullRequest(pullRequest, number, run, identity) {
     return (
         pullRequest?.number === number &&
         pullRequest?.state === 'open' &&
@@ -172,15 +227,15 @@ function eligiblePullRequest(pullRequest, number, run) {
         pullRequest?.merged === false &&
         pullRequest?.user?.login === 'dependabot[bot]' &&
         pullRequest?.user?.type === 'Bot' &&
-        canonicalRepository(pullRequest?.head?.repo) &&
-        canonicalRepository(pullRequest?.base?.repo) &&
-        pullRequest?.base?.ref === 'main' &&
+        canonicalRepository(pullRequest?.head?.repo, identity) &&
+        canonicalRepository(pullRequest?.base?.repo, identity) &&
+        pullRequest?.base?.ref === identity.defaultBranch &&
         shaPattern.test(pullRequest?.base?.sha ?? '') &&
         pullRequest?.head?.sha === run.head_sha
     );
 }
 
-async function successfulJobs(request, runId, runAttempt) {
+async function successfulJobs(request, runId, runAttempt, repositoryPath) {
     const jobs = [];
     let total;
 
@@ -231,61 +286,4 @@ async function successfulJobs(request, runId, runAttempt) {
     }
 
     return remaining.size === 0;
-}
-
-function requestGitHub(method, endpoint, body) {
-    if (!process.env.GH_TOKEN) throw new Error(requestFailure);
-
-    const output = execFileSync(
-        'gh',
-        [
-            'api',
-            '--hostname',
-            'github.com',
-            '--method',
-            method,
-            '--header',
-            'Accept: application/vnd.github+json',
-            '--header',
-            'X-GitHub-Api-Version: 2022-11-28',
-            endpoint,
-            ...(body === undefined ? [] : ['--input', '-']),
-        ],
-        {
-            encoding: 'utf8',
-            env: { ...process.env, GH_PROMPT_DISABLED: '1' },
-            input: body === undefined ? undefined : JSON.stringify(body),
-            maxBuffer: 4 * 1024 * 1024,
-            timeout: 15_000,
-            stdio: ['pipe', 'pipe', 'pipe'],
-        },
-    );
-
-    return JSON.parse(output);
-}
-
-if (process.argv[1] && import.meta.url === pathToFileURL(resolve(process.argv[1])).href) {
-    try {
-        if (process.argv.length !== 2)
-            throw new Error('Dependabot merge accepts only its workflow_run environment.');
-
-        const result = await mergeDependabotPullRequest({
-            eventName: process.env.GITHUB_EVENT_NAME,
-            repository: process.env.GITHUB_REPOSITORY,
-            runId: process.env.WORKFLOW_RUN_ID,
-            runAttempt: process.env.WORKFLOW_RUN_ATTEMPT,
-        });
-
-        if (process.env.GITHUB_OUTPUT)
-            appendFileSync(
-                process.env.GITHUB_OUTPUT,
-                `merged=${result.status === 'merged'}\n${result.status === 'merged' ? `merge_sha=${result.sha}\n` : ''}`,
-                'utf8',
-            );
-
-        process.stdout.write(`${JSON.stringify(result)}\n`);
-    } catch {
-        process.stderr.write('Dependabot merge failed; inspect the workflow and pull request.\n');
-        process.exitCode = 1;
-    }
 }
