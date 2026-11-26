@@ -70,11 +70,62 @@ Future releases follow Symphony's release shape:
 
 The main-branch workflow is the real release entry point under the active PR policy. A direct registry command or an independent version edit does not replace its preparation and verification. The existing `release`, `release:patch`, `release:minor` and `release:major` commands dispatch that asynchronous workflow; local dry runs remain available without publication authority.
 
-Dependabot PRs use the [dependency automation](../../CONTRIBUTING.md#automated-dependency-updates): the current canonical `Verify` PR run must finish all three platform jobs and the aggregate `Quality Gate` successfully before the unchanged PR can be merged. The merge workflow explicitly dispatches full main CI and the existing patch release because a merge made with `GITHUB_TOKEN` does not trigger the usual main push workflow. Both continuations verify the exact merge source and retain an existing attempt rather than dispatching it again. Human merges start the release through their normal push event. The trusted Nx-owned controller reconciles outdated bot branches after verification or release completion and hourly, updates only an unchanged expected head and explicitly requests full CI for its replacement. Current manually dispatched CI must map uniquely to the same bot PR and pass all four jobs. Updated bot revisions must pass CI again before merging.
+Dependabot applies the same three-platform verification and `Quality Gate` to
+all update types, including majors and published internal packages. The private
+`repository-tasks:dependabot` Nx executor owns automation and the native Node
+bootstrap; it is separate from published packages.
 
-The successful merge job retains `merged` and `merge_sha` outputs for a separate release-request job. If the request fails, retry that failed job while preserving the completed merge. The requester verifies the immutable public repository, its `main` branch and the active release workflow. It dispatches `specifier: patch` and `source_sha` equal to the exact merge commit only while main still points there. A newer main revision supersedes the request. An existing release attempt for that workflow/source is retained even when failed or cancelled; recover it in its original run instead of creating another candidate. The release workflow rejects a nonempty `source_sha` that differs from its actual revision, so a main movement between the final request check and dispatch cannot release an unrelated source. Ordinary push and manual release behavior remains unchanged when the optional input is blank. The follow-up refreshes remaining bot PRs even if its release request fails.
+The privileged controller executes only the trusted default-branch Nx owner,
+without installing workspace dependencies or executing PR code or PR artifacts.
+Its `merge`, `reconcile`, `authorize` and `continue` operations are non-cacheable.
+Branch refresh and merge have Contents/PR write with Actions read. A separate
+`authorize` job has only Contents read, PR read and Actions write. It approves
+workflow execution through GitHub's native run-approval endpoint; it creates no
+PR review, status, check or branch-rule exemption.
 
-Synapse publishes library archives and a GitHub Release for each completed family version. A consuming desktop application owns its own version, Squirrel update assets and GitHub release feed. A Synapse package update becomes available to that application through its dependency update and application release pipeline; this library does not produce desktop installers or Squirrel assets.
+Reconciliation after verification/release completion and hourly checks bounded
+same-repository bot inventories. A stale branch uses `expected_head_sha` and waits
+for the replacement. Only real `pull_request` CI is merge proof. If it is waiting
+for execution approval, the isolated authorizer verifies the exact Dependabot or
+GitHub Actions service identity of both run actors before one approval request.
+A missing native run remains pending. Manual diagnostic `workflow_dispatch` runs
+remain available but cannot satisfy protected PR checks or shadow a native run.
+Conflicts, real failures and rejected approvals retain the affected PR and attempt.
+
+For every approval and merge, M is current protected main, B the unchanged bot
+head, and C GitHub's actual `refs/pull/<number>/merge` commit. The owner checks
+unique own-repository PR association, M as ancestor of B, C's ordered parents
+[M, B] and C's tree equal to B. Source blobs are verified by Git object digest.
+Only the fixed reviewed read-only CI baseline in trusted-main
+`verificationPolicy.reviewedCiSha256` authorizes execution: its normalized main
+SHA-256 must match that constant, and normalized PR CI must equal normalized main.
+Normalization changes only full 40-character action pins with the same action
+owner/path and optional SemVer comments. CI logic, scopes, secrets or syntax edits
+require a conscious read-only review and explicit policy-digest update; no runtime
+or PR input learns a new baseline. This positive review proof does not rely on a
+partial YAML parser.
+
+The latest eligible native run is selected independently of diagnostics and its
+actual current `run_attempt` is reloaded. All actual jobs must succeed. Ordinary
+maintainer-triggered native CI on the bot PR is valid after the same complete
+source proof. A later reconciliation re-enters the full merger after a transient
+skip, never a reduced path. Workflow/run/PR/M/B/C/protection are re-read immediately
+before the ordinary SHA-guarded squash request. GitHub's strict required checks
+remain the final merge authority; the actual closed, merged PR is then confirmed.
+
+Confirmed merge outputs from either reconciliation or the CI event reach a
+separate continuation job. Recovery resolves the current main commit association
+and reads the full PR with `merged: true`; missing confirmation starts nothing.
+Main verification receives `expected_head_sha`, and the existing patch release
+retains `source_sha`. Existing exact-source main `push` or `workflow_dispatch` runs
+are retained in every state, including queued, failed and cancelled. Diagnostic
+branch runs do not suppress them. Every new request rechecks current main; a
+superseding revision stops it. Interrupted requests can therefore be retried
+without merging twice or preparing a duplicate release. Failed releases retain
+their original source and artifact instead of receiving a blind new dispatch.
+
+Documentation continuation retains Pages' existing path filter, independently of
+main CI and source-bound release. Unrelated dependency files do not deploy Pages.
 
 ## Main protection and release App prerequisites
 

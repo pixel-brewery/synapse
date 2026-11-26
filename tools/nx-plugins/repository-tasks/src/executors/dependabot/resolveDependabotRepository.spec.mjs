@@ -16,6 +16,8 @@ const metadata = {
     full_name: context.repository,
     default_branch: context.defaultBranch,
     fork: false,
+    private: false,
+    visibility: 'public',
 };
 
 describe('Dependabot repository identity', () => {
