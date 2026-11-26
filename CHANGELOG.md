@@ -1,3 +1,13 @@
+## 0.0.21 (2026-11-26)
+
+### 🩹 Fixes
+
+- **ci:** complete verified dependency update automation ([#40](https://github.com/pixel-brewery/synapse/pull/40))
+
+### ❤️ Thank You
+
+- André Wehlert @RueDeRennes
+
 ## 0.0.20 (2026-11-20)
 
 This was a version bump only, there were no code changes.
