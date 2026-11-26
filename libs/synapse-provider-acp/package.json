@@ -1,6 +1,6 @@
 {
     "name": "@pixel-brewery/synapse-provider-acp",
-    "version": "0.0.21",
+    "version": "0.0.22",
     "type": "module",
     "main": "./dist/index.js",
     "module": "./dist/index.js",
@@ -23,8 +23,8 @@
     },
     "dependencies": {
         "@agentclientprotocol/sdk": "2.7.0",
-        "@pixel-brewery/synapse-core": "^0.0.21",
-        "@pixel-brewery/synapse-runtime": "^0.0.21",
+        "@pixel-brewery/synapse-core": "^0.0.22",
+        "@pixel-brewery/synapse-runtime": "^0.0.22",
         "zod": "4.6.7"
     },
     "license": "MIT",
