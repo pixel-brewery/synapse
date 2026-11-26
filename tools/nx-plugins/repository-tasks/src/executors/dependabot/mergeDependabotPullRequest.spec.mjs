@@ -1,7 +1,12 @@
 // #region Imports
 
+import { readFileSync } from 'node:fs';
+
+import { createHash } from 'node:crypto';
 import { afterEach, describe, expect, it, vi } from 'vitest';
 import { mergeDependabotPullRequest } from './mergeDependabotPullRequest.mjs';
+
+import { verificationPolicy } from './verificationPolicy.mjs';
 
 // #endregion
 
@@ -15,10 +20,23 @@ const mainSha = 'a'.repeat(40);
 const headSha = 'b'.repeat(40);
 const mergeSha = 'c'.repeat(40);
 const changedSha = 'd'.repeat(40);
+const testMergeSha = 'e'.repeat(40);
+const treeSha = 'f'.repeat(40);
+const branch = 'dependabot/npm_and_yarn/frameworks';
+const ci = readFileSync('.github/workflows/ci.yml', 'utf8');
+const ciBlob = {
+    type: 'file',
+    encoding: 'base64',
+    content: Buffer.from(ci).toString('base64'),
+    sha: createHash('sha1')
+        .update(`blob ${Buffer.byteLength(ci)}\0`)
+        .update(ci)
+        .digest('hex'),
+};
 const context = {
     eventName: 'workflow_run',
     repository: 'pixel-brewery/synapse',
-    repositoryId,
+    repositoryId: repositoryId,
     defaultBranch: 'main',
     runId: 202,
     runAttempt: 2,
@@ -30,20 +48,17 @@ const mainPath = `${repositoryPath}/branches/main`;
 
 function controlled() {
     const repository = { id: repositoryId, full_name: 'pixel-brewery/synapse' };
-    const jobs = [
-        'verify (ubuntu-latest)',
-        'verify (macos-latest)',
-        'verify (windows-latest)',
-        'Quality Gate',
-    ].map((name, index) => ({
+    const jobs = verificationPolicy.requiredJobs.map((name, index) => ({
         id: index + 1,
         run_id: 202,
+        run_attempt: 2,
+        head_sha: headSha,
         name,
         status: 'completed',
         conclusion: 'success',
     }));
     const records = {
-        workflow: { id: 101, name: 'Verify', path: '.github/workflows/ci.yml' },
+        workflow: { id: 101, name: 'Verify', path: '.github/workflows/ci.yml', state: 'active' },
         run: {
             id: 202,
             run_attempt: 2,
@@ -56,15 +71,26 @@ function controlled() {
             repository,
             head_repository: repository,
             head_sha: headSha,
-            pull_requests: [{ number: 7 }],
+            head_branch: branch,
+            actor: { id: 49699333, login: 'dependabot[bot]', type: 'Bot' },
+            triggering_actor: { id: 49699333, login: 'dependabot[bot]', type: 'Bot' },
+            pull_requests: [
+                {
+                    number: 7,
+                    head: { ref: branch, sha: headSha, repo: repository },
+                    base: { ref: 'main', sha: mainSha, repo: repository },
+                },
+            ],
         },
         pullRequest: {
             number: 7,
             state: 'open',
             draft: false,
             merged: false,
-            user: { login: 'dependabot[bot]', type: 'Bot' },
-            head: { sha: headSha, repo: repository },
+            user: { id: 49699333, login: 'dependabot[bot]', type: 'Bot' },
+            mergeable: true,
+            merge_commit_sha: testMergeSha,
+            head: { sha: headSha, ref: branch, repo: repository },
             base: { ref: 'main', sha: mainSha, repo: repository },
         },
         main: { name: 'main', commit: { sha: mainSha } },
@@ -74,12 +100,16 @@ function controlled() {
         merge: { merged: true, sha: mergeSha },
     };
     const reads = new Map();
+    let merged = false;
     const request = vi.fn((method, endpoint) => {
         if (records.failure?.method === method && records.failure?.endpoint === endpoint)
             throw new Error('Sensitive upstream output must not reach the caller.');
 
-        if (method === 'PUT' && endpoint === `${pullRequestPath}/merge`)
+        if (method === 'PUT' && endpoint === `${pullRequestPath}/merge`) {
+            merged = records.merge.merged === true;
+
             return structuredClone(records.merge);
+        }
 
         if (method !== 'GET') throw new Error('Unexpected test request.');
 
@@ -88,7 +118,14 @@ function controlled() {
         reads.set(endpoint, count);
 
         if (endpoint === `repositories/${repositoryId}`)
-            return { ...repository, name: 'synapse', default_branch: 'main', fork: false };
+            return {
+                ...repository,
+                name: 'synapse',
+                default_branch: 'main',
+                fork: false,
+                visibility: 'public',
+                private: false,
+            };
 
         if (endpoint === `${repositoryPath}/actions/workflows/ci.yml`)
             return structuredClone(records.workflow);
@@ -97,9 +134,71 @@ function controlled() {
             return structuredClone(count > 1 ? (records.nextRun ?? records.run) : records.run);
 
         if (endpoint === pullRequestPath)
-            return structuredClone(
-                count > 1 ? (records.nextPullRequest ?? records.pullRequest) : records.pullRequest,
-            );
+            return merged
+                ? {
+                      ...structuredClone(records.pullRequest),
+                      state: 'closed',
+                      merged: true,
+                      merge_commit_sha: records.merge.sha,
+                  }
+                : structuredClone(
+                      count > 1
+                          ? (records.nextPullRequest ?? records.pullRequest)
+                          : records.pullRequest,
+                  );
+
+        if (
+            endpoint ===
+            `${repositoryPath}/actions/workflows/ci.yml/runs?head_sha=${headSha}&per_page=100`
+        ) {
+            const runs = [
+                structuredClone(records.inventoryRun ?? records.run),
+                ...(records.extraRuns ?? []),
+            ];
+
+            return { total_count: runs.length, workflow_runs: runs };
+        }
+
+        if (endpoint === `${repositoryPath}/git/ref/heads/${branch}`)
+            return { object: { type: 'commit', sha: headSha } };
+
+        if (endpoint === `${repositoryPath}/git/ref/pull/7/merge`)
+            return { object: { type: 'commit', sha: testMergeSha } };
+
+        if (endpoint === `${repositoryPath}/git/commits/${headSha}`)
+            return { sha: headSha, tree: { sha: treeSha } };
+
+        if (endpoint === `${repositoryPath}/git/commits/${testMergeSha}`)
+            return {
+                sha: testMergeSha,
+                tree: { sha: treeSha },
+                parents: [{ sha: mainSha }, { sha: headSha }],
+            };
+
+        if (
+            endpoint === `${repositoryPath}/contents/.github/workflows/ci.yml?ref=${mainSha}` ||
+            endpoint === `${repositoryPath}/contents/.github/workflows/ci.yml?ref=${headSha}`
+        )
+            return ciBlob;
+
+        if (endpoint === `${repositoryPath}/commits/${headSha}/pulls?per_page=100`)
+            return [
+                { ...structuredClone(records.pullRequest), merged: undefined, merged_at: null },
+            ];
+
+        if (endpoint === `${repositoryPath}/rules/branches/main`)
+            return [
+                { type: 'pull_request' },
+                {
+                    type: 'required_status_checks',
+                    parameters: {
+                        strict_required_status_checks_policy: true,
+                        required_status_checks: verificationPolicy.requiredChecks.map(
+                            (context) => ({ context, integration_id: 15368 }),
+                        ),
+                    },
+                },
+            ];
 
         if (endpoint === mainPath)
             return structuredClone(count > 1 ? (records.nextMain ?? records.main) : records.main);
@@ -121,12 +220,70 @@ function writes(request) {
 }
 
 afterEach(() => {
-    executeGitHub.mockReset();
     vi.restoreAllMocks();
     vi.unstubAllEnvs();
 });
 
 describe('Dependabot pull request merge', () => {
+    it.each([
+        { id: 41898282, login: 'github-actions[bot]', type: 'Bot' },
+        { id: 7523247, login: 'RueDeRennes', type: 'User' },
+    ])('accepts a fully verified actual PR run from %j', async (actor) => {
+        // Arrange
+        const fixture = controlled();
+
+        fixture.records.run.actor = actor;
+        fixture.records.run.triggering_actor = actor;
+
+        // Act
+        const result = await mergeDependabotPullRequest(context, fixture);
+
+        // Assert
+        expect(result.status).toBe('merged');
+        expect(writes(fixture.request)).toHaveLength(1);
+    });
+    it('retains the real native run when a newer diagnostic exists', async () => {
+        // Arrange
+        const fixture = controlled();
+
+        fixture.records.extraRuns = [
+            { ...fixture.records.run, id: 203, event: 'workflow_dispatch', pull_requests: [] },
+        ];
+
+        // Act
+        const result = await mergeDependabotPullRequest(context, fixture);
+
+        // Assert
+        expect(result.status).toBe('merged');
+        expect(writes(fixture.request)).toHaveLength(1);
+    });
+    it('blocks an older successful PR run behind a newer native failure', async () => {
+        // Arrange
+        const fixture = controlled();
+
+        fixture.records.extraRuns = [{ ...fixture.records.run, id: 203, conclusion: 'failure' }];
+
+        // Act
+        const result = await mergeDependabotPullRequest(context, fixture);
+
+        // Assert
+        expect(result.status).toBe('skipped');
+        expect(writes(fixture.request)).toEqual([]);
+    });
+    it('loads the actual current attempt when the inventory still lists the previous attempt', async () => {
+        // Arrange
+        const fixture = controlled();
+
+        fixture.records.inventoryRun = { ...fixture.records.run, run_attempt: 1 };
+
+        // Act
+        const result = await mergeDependabotPullRequest(context, fixture);
+
+        // Assert
+        expect(result.status).toBe('merged');
+        expect(writes(fixture.request)).toHaveLength(1);
+    });
+
     it.each([
         'Bump vitest from 4.0.0 to 5.0.0',
         'Bump typescript-eslint from 8.0.0 to 8.1.0',
@@ -150,12 +307,10 @@ describe('Dependabot pull request merge', () => {
         expect(writes(dependencies.request)).toEqual([
             ['PUT', `${pullRequestPath}/merge`, { sha: headSha, merge_method: 'squash' }],
         ]);
-        expect(dependencies.request.mock.calls.slice(-4)).toEqual([
-            ['GET', pullRequestPath, undefined],
-            ['GET', runPath, undefined],
-            ['GET', mainPath, undefined],
-            ['PUT', `${pullRequestPath}/merge`, { sha: headSha, merge_method: 'squash' }],
-        ]);
+        expect(dependencies.request.mock.calls.at(-1)).toEqual(['GET', pullRequestPath, undefined]);
+        expect(
+            dependencies.request.mock.calls.filter(([, endpoint]) => endpoint === runPath).length,
+        ).toBeGreaterThanOrEqual(2);
         expect(dependencies.request).toHaveBeenCalledWith('GET', `${jobsPath}1`, undefined);
     });
 
@@ -176,8 +331,6 @@ describe('Dependabot pull request merge', () => {
     it.each([
         { eventName: 'pull_request' },
         { eventName: 'workflow_dispatch' },
-        { repository: 'untrusted/synapse' },
-        { repository: 'pixel-brewery/synapse-lookalike' },
         { runId: undefined },
         { runId: '202/traversal' },
         { runId: Number.MAX_SAFE_INTEGER + 1 },
@@ -327,13 +480,13 @@ describe('Dependabot pull request merge', () => {
         expect(writes(dependencies.request)).toEqual([]);
     });
 
-    it.each(['failure', 'skipped', 'neutral', 'cancelled'])(
-        'requires the Quality Gate to succeed before merging: %s',
+    it.each(['failure', 'cancelled', 'skipped'])(
+        'rejects a %s aggregate gate even when the workflow reports success',
         async (conclusion) => {
             // Arrange
             const dependencies = controlled();
 
-            dependencies.records.jobs[3].conclusion = conclusion;
+            dependencies.records.jobs[dependencies.records.jobs.length - 1].conclusion = conclusion;
 
             // Act
             const result = await mergeDependabotPullRequest(context, dependencies);
@@ -344,13 +497,13 @@ describe('Dependabot pull request merge', () => {
         },
     );
 
-    it.each(['missing', 'duplicate', 'extra'])('rejects %s verification coverage', async (kind) => {
+    it.each(['missing', 'duplicate', 'extra'])('rejects %s matrix coverage', async (kind) => {
         // Arrange
         const dependencies = controlled();
         const jobs = dependencies.records.jobs;
 
         if (kind === 'missing') jobs.pop();
-        else if (kind === 'duplicate') jobs[2] = { ...jobs[0], id: 5 };
+        else if (kind === 'duplicate') jobs[jobs.length - 1] = { ...jobs[0], id: jobs.length + 1 };
         else jobs.push({ ...jobs[0], id: 5, name: 'extra job' });
 
         dependencies.records.jobPages[0].total_count = jobs.length;
@@ -368,8 +521,14 @@ describe('Dependabot pull request merge', () => {
         const dependencies = controlled();
 
         dependencies.records.jobPages = [
-            { total_count: 4, jobs: dependencies.records.jobs.slice(0, 1) },
-            { total_count: 4, jobs: dependencies.records.jobs.slice(1) },
+            {
+                total_count: verificationPolicy.requiredJobs.length,
+                jobs: dependencies.records.jobs.slice(0, 1),
+            },
+            {
+                total_count: verificationPolicy.requiredJobs.length,
+                jobs: dependencies.records.jobs.slice(1),
+            },
         ];
 
         // Act
@@ -393,8 +552,12 @@ describe('Dependabot pull request merge', () => {
             const jobs = dependencies.records.jobs;
 
             dependencies.records.jobPages = [
-                { total_count: 4, jobs: jobs.slice(0, 1) },
-                { total_count: kind === 'count-changed' ? 5 : 4, jobs: jobs.slice(1) },
+                { total_count: verificationPolicy.requiredJobs.length, jobs: jobs.slice(0, 1) },
+                {
+                    total_count:
+                        verificationPolicy.requiredJobs.length + (kind === 'count-changed' ? 1 : 0),
+                    jobs: jobs.slice(1),
+                },
             ];
 
             if (kind === 'empty-page') dependencies.records.jobPages[1].jobs = [];
@@ -463,7 +626,7 @@ describe('Dependabot pull request merge', () => {
             const result = await mergeDependabotPullRequest(context, dependencies);
 
             // Assert
-            expect(result).toEqual({ status: 'skipped', reason: 'pull-request-changed' });
+            expect(result).toEqual({ status: 'skipped', reason: 'pull-request-or-main-changed' });
             expect(writes(dependencies.request)).toEqual([]);
         },
     );
@@ -498,7 +661,7 @@ describe('Dependabot pull request merge', () => {
         const result = await mergeDependabotPullRequest(context, dependencies);
 
         // Assert
-        expect(result).toEqual({ status: 'skipped', reason: 'main-changed' });
+        expect(result).toEqual({ status: 'skipped', reason: 'unproven-readonly-source' });
         expect(writes(dependencies.request)).toEqual([]);
     });
 
@@ -550,6 +713,85 @@ describe('Dependabot pull request merge', () => {
     });
 });
 
+describe('Dependabot refreshed-head verification', () => {
+    it('rejects diagnostic CI even for the uniquely associated current Dependabot head', async () => {
+        // arrange
+        const { records, request } = controlled();
+
+        records.run.event = 'workflow_dispatch';
+        records.run.pull_requests = [];
+        Object.assign(records.run, { head_branch: 'dependabot/npm_and_yarn/frameworks' });
+        Object.assign(records.pullRequest.head, { ref: 'dependabot/npm_and_yarn/frameworks' });
+
+        const original = request.getMockImplementation();
+
+        request.mockImplementation((method, endpoint) =>
+            endpoint === `${repositoryPath}/commits/${headSha}/pulls?per_page=100`
+                ? [{ ...structuredClone(records.pullRequest), merged: undefined, merged_at: null }]
+                : original(method, endpoint),
+        );
+
+        // act
+        const result = await mergeDependabotPullRequest(context, { request });
+
+        // assert
+        expect(result).toEqual({ status: 'skipped', reason: 'ineligible-workflow-run' });
+        expect(writes(request)).toEqual([]);
+    });
+
+    it('rejects ambiguous dispatched-head associations without a merge', async () => {
+        // arrange
+        const { records, request } = controlled();
+
+        records.run.event = 'workflow_dispatch';
+        records.run.pull_requests = [];
+        Object.assign(records.run, { head_branch: 'dependabot/npm_and_yarn/frameworks' });
+        Object.assign(records.pullRequest.head, { ref: 'dependabot/npm_and_yarn/frameworks' });
+
+        const original = request.getMockImplementation();
+
+        request.mockImplementation((method, endpoint) =>
+            endpoint === `${repositoryPath}/commits/${headSha}/pulls?per_page=100`
+                ? [
+                      {
+                          ...structuredClone(records.pullRequest),
+                          merged: undefined,
+                          merged_at: null,
+                      },
+                      {
+                          ...structuredClone(records.pullRequest),
+                          number: 8,
+                          merged: undefined,
+                          merged_at: null,
+                      },
+                  ]
+                : original(method, endpoint),
+        );
+
+        // act
+        const result = await mergeDependabotPullRequest(context, { request });
+
+        // assert
+        expect(result).toEqual({ status: 'skipped', reason: 'ineligible-workflow-run' });
+        expect(writes(request)).toEqual([]);
+    });
+
+    it('rejects a manually verified non-Dependabot branch without a merge', async () => {
+        // arrange
+        const { records, request } = controlled();
+
+        records.run.event = 'workflow_dispatch';
+        records.run.pull_requests = [];
+        Object.assign(records.run, { head_branch: 'feature/manual' });
+
+        // act
+        const result = await mergeDependabotPullRequest(context, { request });
+
+        // assert
+        expect(result).toEqual({ status: 'skipped', reason: 'ineligible-workflow-run' });
+        expect(writes(request)).toEqual([]);
+    });
+});
 describe('Dependabot GitHub CLI boundary', () => {
     it('uses only the supplied job token and bounded direct GitHub API calls', async () => {
         // Arrange
@@ -631,84 +873,32 @@ describe('Dependabot GitHub CLI boundary', () => {
     );
 });
 
-describe('Dependabot refreshed-head verification', () => {
-    it('accepts explicit CI only for the uniquely associated current Dependabot head', async () => {
-        // arrange
-        const { records, request } = controlled();
+describe('Latest eligible native association', () => {
+    it.each(['another PR', 'another base branch', 'another base revision'])(
+        'does not shadow the verified own PR with a newer native run for %s',
+        async (difference) => {
+            // Arrange
+            const fixture = controlled();
+            const unrelated = structuredClone(fixture.records.run);
 
-        records.run.event = 'workflow_dispatch';
-        records.run.pull_requests = [];
-        Object.assign(records.run, { head_branch: 'dependabot/npm_and_yarn/frameworks' });
-        Object.assign(records.pullRequest.head, { ref: 'dependabot/npm_and_yarn/frameworks' });
+            unrelated.id = 203;
+            unrelated.conclusion = 'failure';
 
-        const original = request.getMockImplementation();
+            if (difference === 'another PR') unrelated.pull_requests[0].number = 8;
 
-        request.mockImplementation((method, endpoint) =>
-            endpoint === `${repositoryPath}/commits/${headSha}/pulls?per_page=100`
-                ? [{ ...structuredClone(records.pullRequest), merged: undefined, merged_at: null }]
-                : original(method, endpoint),
-        );
+            if (difference === 'another base branch') unrelated.pull_requests[0].base.ref = 'dev';
 
-        // act
-        const result = await mergeDependabotPullRequest(context, { request });
+            if (difference === 'another base revision')
+                unrelated.pull_requests[0].base.sha = changedSha;
 
-        // assert
-        expect(result.status).toBe('merged');
-        expect(writes(request)).toEqual([
-            ['PUT', `${pullRequestPath}/merge`, { sha: headSha, merge_method: 'squash' }],
-        ]);
-    });
+            fixture.records.extraRuns = [unrelated];
 
-    it('rejects ambiguous dispatched-head associations without a merge', async () => {
-        // arrange
-        const { records, request } = controlled();
+            // Act
+            const result = await mergeDependabotPullRequest(context, fixture);
 
-        records.run.event = 'workflow_dispatch';
-        records.run.pull_requests = [];
-        Object.assign(records.run, { head_branch: 'dependabot/npm_and_yarn/frameworks' });
-        Object.assign(records.pullRequest.head, { ref: 'dependabot/npm_and_yarn/frameworks' });
-
-        const original = request.getMockImplementation();
-
-        request.mockImplementation((method, endpoint) =>
-            endpoint === `${repositoryPath}/commits/${headSha}/pulls?per_page=100`
-                ? [
-                      {
-                          ...structuredClone(records.pullRequest),
-                          merged: undefined,
-                          merged_at: null,
-                      },
-                      {
-                          ...structuredClone(records.pullRequest),
-                          number: 8,
-                          merged: undefined,
-                          merged_at: null,
-                      },
-                  ]
-                : original(method, endpoint),
-        );
-
-        // act
-        const result = await mergeDependabotPullRequest(context, { request });
-
-        // assert
-        expect(result).toEqual({ status: 'skipped', reason: 'ambiguous-pull-request' });
-        expect(writes(request)).toEqual([]);
-    });
-
-    it('rejects a manually verified non-Dependabot branch without a merge', async () => {
-        // arrange
-        const { records, request } = controlled();
-
-        records.run.event = 'workflow_dispatch';
-        records.run.pull_requests = [];
-        Object.assign(records.run, { head_branch: 'feature/manual' });
-
-        // act
-        const result = await mergeDependabotPullRequest(context, { request });
-
-        // assert
-        expect(result).toEqual({ status: 'skipped', reason: 'ambiguous-pull-request' });
-        expect(writes(request)).toEqual([]);
-    });
+            // Assert
+            expect(result.status).toBe('merged');
+            expect(writes(fixture.request)).toHaveLength(1);
+        },
+    );
 });

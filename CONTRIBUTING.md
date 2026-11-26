@@ -34,7 +34,13 @@ Dependabot checks npm dependencies and GitHub Actions weekly. Major, minor and p
 
 The merge workflow accepts only current same-repository Dependabot PRs targeting `main`. It checks the canonical CI workflow, its latest attempt, every matrix result, the `Quality Gate` result and the unchanged PR revision before requesting a squash merge. Failed, skipped or missing jobs leave the PR open. Existing branch rules still apply. The canonical owner is the local Nx `repository-tasks:dependabot` executor, with a native Node bootstrap of the same implementation for isolated privileged execution. The privileged workflow executes only the default-branch implementation; it does not execute PR code, install dependencies or consume PR artifacts.
 
-After verification or release completion, and hourly as recovery, the trusted controller checks open bot PRs. It refreshes stale branches with an expected-head guard, waits for the replacement revision and explicitly requests full CI for that exact head. A `workflow_dispatch` verification must uniquely map to the same-repository current Dependabot PR. Conflicts block that PR only; existing failed verification is retained instead of retried blindly. No dependency installation or PR code runs with the controller's write token.
+After verification or release completion, and hourly as recovery, the trusted
+controller refreshes stale bot branches with an expected-head guard. Only the
+latest real native PR CI attempt can permit a merge. A separate read-only-source
+job authorizes approval-pending service CI after its reviewed workflow/source
+proof; diagnostic dispatch never replaces a PR check. A later reconciliation
+re-enters the same full merger after a transient skip. See the
+[complete authority and continuation contract](.docs/guides/releases.md#subsequent-releases-through-main).
 
 A successful bot merge explicitly dispatches full main CI and the normal package release because pushes made with `GITHUB_TOKEN` do not start ordinary push workflows. Both continuations retain the confirmed source SHA, avoid duplicate runs and stop for a superseded source. Release completion reconciles remaining Dependabot PRs against the generated version commit. Human PR merges start the release through the ordinary main push event. Package operations use the short-lived `GITHUB_TOKEN`; an existing `PACKAGES_TOKEN` secret is an optional override. Only the final atomic release commit/tag push uses installed release App `5547670`. Its main-rule exception, main-only credential environment and package publication have been exercised by a successful Synapse release. Each candidate still needs its own complete checks and registry verification. See the [release guide](.docs/guides/releases.md#main-protection-and-release-app-prerequisites).
 

@@ -46,7 +46,13 @@ export function requestDependabotGitHub(method, endpoint, body) {
         },
     );
 
-    if (method === 'POST' && endpoint.endsWith('/dispatches') && output.trim() === '')
+    if (
+        method === 'POST' &&
+        (endpoint.endsWith('/dispatches') ||
+            endpoint.endsWith('/approve') ||
+            endpoint.endsWith('/rerun-failed-jobs')) &&
+        output.trim() === ''
+    )
         return undefined;
 
     return JSON.parse(output);
