@@ -1,3 +1,13 @@
+## 0.0.23 (2026-11-26)
+
+### 🩹 Fixes
+
+- **ci:** authorize current native dependency checks ([#50](https://github.com/pixel-brewery/synapse/pull/50))
+
+### ❤️ Thank You
+
+- André Wehlert @RueDeRennes
+
 ## 0.0.22 (2026-11-26)
 
 This was a version bump only, there were no code changes.
