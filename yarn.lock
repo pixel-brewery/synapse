@@ -5,16 +5,16 @@ __metadata:
   version: 10
   cacheKey: 10c0
 
-"@agentclientprotocol/sdk@npm:2.7.0":
-  version: 2.7.0
-  resolution: "@agentclientprotocol/sdk@npm:2.7.0"
+"@agentclientprotocol/sdk@npm:2.9.1":
+  version: 2.9.1
+  resolution: "@agentclientprotocol/sdk@npm:2.9.1"
   peerDependencies:
     "@modelcontextprotocol/server": ^2.4.0
     zod: ^3.25.76 || ^4.0.0
   peerDependenciesMeta:
     "@modelcontextprotocol/server":
       optional: true
-  checksum: 10c0/e431d07b866f7285f8549f3f1fa04a351f5d8dceea5986817898cf2595494ced2890439db48206656cec8156d9fdf2181f345f102984f2d06164810ead40c7cd
+  checksum: 10c0/1d9d894831e8d99c17dc503b1169e077096f6ce00c040098bd674befe36b8e0eceb2f5b488577db28ebc0ef9addfd00b799743d04ce814e32519e8d951bdaca4
   languageName: node
   linkType: hard
 
@@ -2818,7 +2818,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@pixel-brewery/synapse-provider-acp@workspace:libs/synapse-provider-acp"
   dependencies:
-    "@agentclientprotocol/sdk": "npm:2.7.0"
+    "@agentclientprotocol/sdk": "npm:2.9.1"
     "@pixel-brewery/synapse-core": "npm:^0.0.24"
     "@pixel-brewery/synapse-runtime": "npm:^0.0.24"
     zod: "npm:4.6.7"
