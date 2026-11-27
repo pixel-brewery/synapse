@@ -64,7 +64,7 @@
         "@synapse/repository-tasks": "workspace:*",
         "@types/node": "26.6.6",
         "@yarnpkg/cli-dist": "4.19.0",
-        "cspell": "10.5.1",
+        "cspell": "10.5.2",
         "esbuild": "0.28.2",
         "eslint": "10.15.0",
         "husky": "9.1.7",
