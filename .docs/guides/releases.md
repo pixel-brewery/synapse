@@ -70,70 +70,7 @@ Future releases follow Symphony's release shape:
 
 The main-branch workflow is the real release entry point under the active PR policy. A direct registry command or an independent version edit does not replace its preparation and verification. The existing `release`, `release:patch`, `release:minor` and `release:major` commands dispatch that asynchronous workflow; local dry runs remain available without publication authority.
 
-Dependabot applies the same three-platform verification and `Quality Gate` to
-all update types, including majors and published internal packages. The private
-`repository-tasks:dependabot` Nx executor owns automation and the native Node
-bootstrap; it is separate from published packages.
-
-The privileged controller executes only the trusted default-branch Nx owner,
-without installing workspace dependencies or executing PR code or PR artifacts.
-Its `merge`, `reconcile`, `authorize` and `continue` operations are non-cacheable.
-Branch refresh and merge have Contents/PR write with Actions read. A separate
-`authorize` job has only Contents read, PR read and Actions write. It approves
-workflow execution through GitHub's native run-approval endpoint; it creates no
-PR review, status, check or branch-rule exemption.
-
-Reconciliation after verification/release completion and hourly checks bounded
-same-repository bot inventories. A stale branch uses `expected_head_sha` and waits
-for the replacement. Only real `pull_request` CI is merge proof. If it is waiting
-for execution approval, the isolated authorizer verifies the exact Dependabot or
-GitHub Actions service identity of both run actors before one approval request.
-A missing native run remains pending. Manual diagnostic `workflow_dispatch` runs
-remain available but cannot satisfy protected PR checks or shadow a native run.
-Conflicts, real failures and rejected approvals retain the affected PR and attempt.
-
-The isolated authorization job waits for branch reconciliation before reading the
-complete bounded current open bot inventory. Every permitted maintenance trigger,
-including completed own CI and release runs, inspects those current candidates;
-the triggering run's old head, conclusion or attempt does not replace any
-candidate's source and native-attempt proof. Approval after a refresh therefore
-does not depend on another workflow notification. The hourly pass remains a
-fallback for an interrupted event or a not-yet-visible native run.
-
-For every approval and merge, M is current protected main, B the unchanged bot
-head, and C GitHub's actual `refs/pull/<number>/merge` commit. The owner checks
-unique own-repository PR association, M as ancestor of B, C's ordered parents
-[M, B] and C's tree equal to B. Source blobs are verified by Git object digest.
-Only the fixed reviewed read-only CI baseline in trusted-main
-`verificationPolicy.reviewedCiSha256` authorizes execution: its normalized main
-SHA-256 must match that constant, and normalized PR CI must equal normalized main.
-Normalization changes only full 40-character action pins with the same action
-owner/path and optional SemVer comments. CI logic, scopes, secrets or syntax edits
-require a conscious read-only review and explicit policy-digest update; no runtime
-or PR input learns a new baseline. This positive review proof does not rely on a
-partial YAML parser.
-
-The latest eligible native run is selected independently of diagnostics and its
-actual current `run_attempt` is reloaded. All actual jobs must succeed. Ordinary
-maintainer-triggered native CI on the bot PR is valid after the same complete
-source proof. A later reconciliation re-enters the full merger after a transient
-skip, never a reduced path. Workflow/run/PR/M/B/C/protection are re-read immediately
-before the ordinary SHA-guarded squash request. GitHub's strict required checks
-remain the final merge authority; the actual closed, merged PR is then confirmed.
-
-Confirmed merge outputs from either reconciliation or the CI event reach a
-separate continuation job. Recovery resolves the current main commit association
-and reads the full PR with `merged: true`; missing confirmation starts nothing.
-Main verification receives `expected_head_sha`, and the existing patch release
-retains `source_sha`. Existing exact-source main `push` or `workflow_dispatch` runs
-are retained in every state, including queued, failed and cancelled. Diagnostic
-branch runs do not suppress them. Every new request rechecks current main; a
-superseding revision stops it. Interrupted requests can therefore be retried
-without merging twice or preparing a duplicate release. Failed releases retain
-their original source and artifact instead of receiving a blind new dispatch.
-
-Documentation continuation retains Pages' existing path filter, independently of
-main CI and source-bound release. Unrelated dependency files do not deploy Pages.
+Dependabot pull requests receive the same three-platform verification and `Quality Gate` as every other pull request. Once those required checks are green, `.github/workflows/dependabot-merge.yml` squash-merges the pull request with the native `GITHUB_TOKEN`; the `main` branch rules remain the merge authority. Because that merge starts no `push` workflows, the workflow then dispatches the package-release workflow with the merge commit as `source_sha`, and Pages with `expected_head_sha` when the merged files match its push paths.
 
 ## Main protection and release App prerequisites
 
@@ -145,7 +82,7 @@ The native `GITHUB_TOKEN` is not the bypass identity. Private release App `55476
 
 The release job selects `environment: release-main`. Only that job checks the App key's presence; when the key is scoped as required, earlier jobs cannot read it. It creates a short-lived installation token only after all candidate checks and final prepared-commit checks pass. The token request selects the current owner and this repository alone, with only `contents: write`. Only the final atomic fast-forward `main` and version-tag push receives that token. Checkout credentials are not persisted, and PR code, dependency installation, package publication, GitHub Release APIs and workflow dispatch do not receive the App token. Its bypass permits the already verified metadata commit to advance `main`; it is not an exemption from the workflow's source, tag, version or concurrency checks. Missing resolved App settings or a failed token request stops publication. No human/native-token fallback is implemented, and a broader secret of the same name is forbidden by the operator contract rather than detected by YAML.
 
-Dependabot continues to merge only through its verified PR and the existing trusted helper; it does not use the release App. The generated release commit retains `[skip ci]`, and release completion causes the controller to reconcile remaining Dependabot branches. Dependency merges and publication remain unattended; the App configuration adds no per-release approval.
+Dependabot pull requests merge through `dependabot-merge.yml` with the native `GITHUB_TOKEN`; they do not use the release App. The generated release commit retains `[skip ci]`. Dependency merges and publication remain unattended; the App configuration adds no per-release approval.
 
 The [completed Synapse release run](https://github.com/pixel-brewery/synapse/actions/runs/41130701417) exercised the App-authorized main/tag push and completed publication, exact-version downloads and public-visibility verification for the ten-package family. This proves that release path for that candidate, not every later candidate or Symphony's desktop publication. Every release still requires its own successful workflow and registry verification.
 
@@ -169,11 +106,11 @@ Development verification has run on macOS with Node.js 24.21.0. Node.js 24.15+ i
 
 Public GitHub npm packages still require registry authentication. Consumers can use a personal access token (classic) with `read:packages`. The release job uses the short-lived `GITHUB_TOKEN` with `packages: write`. For each existing package, grant `pixel-brewery/synapse` the Write role under Package settings → Manage Actions access. This Actions grant is distinct from linking the package's source repository. An existing `PACKAGES_TOKEN` secret remains an optional override; no personal token is required for the normal workflow. See [GitHub's recommended workflow authentication](https://docs.github.com/en/packages/managing-github-packages-using-github-actions-workflows/publishing-and-installing-a-package-with-github-actions).
 
-`NODE_AUTH_TOKEN` is supplied only to publication, download and published-version verification steps. `GH_TOKEN` is scoped to the GitHub release query/create and Dependabot refresh dispatch steps; the release job's `actions: write` permission allows that final dispatch. Follow the [GitHub npm registry documentation](https://docs.github.com/en/packages/working-with-a-github-packages-registry/working-with-the-npm-registry). Keep token values in the environment or credential store, never in tracked configuration or release output.
+`NODE_AUTH_TOKEN` is supplied only to publication, download and published-version verification steps. `GH_TOKEN` is scoped to the GitHub release query/create steps. Follow the [GitHub npm registry documentation](https://docs.github.com/en/packages/working-with-a-github-packages-registry/working-with-the-npm-registry). Keep token values in the environment or credential store, never in tracked configuration or release output.
 
 The release job runs unattended after the complete verification matrix, requires `refs/heads/main`, and uses the configured main-only `release-main` environment without manual reviewers or a wait timer. The environment is a credential boundary rather than a per-release approval gate. Keep the App key scoped there; there is no permitted repository-secret fallback. Contribution verification declares read-only repository permissions, disables persisted checkout credentials and implicit package-manager caching, and uses commit-pinned official Actions.
 
-The short-lived release App credential is limited to the final atomic source/tag push described above. Package registry operations, GitHub Release APIs and Dependabot refresh dispatch continue to use their existing `GITHUB_TOKEN` or package-token boundary. During publication, `release:publish` and its build dependencies inherit the package credential. Maintainers must review dependency and workflow changes before merging them into the trusted main branch.
+The short-lived release App credential is limited to the final atomic source/tag push described above. Package registry operations and GitHub Release APIs continue to use their existing `GITHUB_TOKEN` or package-token boundary. During publication, `release:publish` and its build dependencies inherit the package credential. Maintainers must review dependency and workflow changes before merging them into the trusted main branch.
 
 An authorized exact-tag registry recovery uses the existing package-owner credentials consumed by `release:publish` and `release:verify`, such as `NODE_AUTH_TOKEN`, `GH_TOKEN` or `GITHUB_TOKEN`, or the already authenticated GitHub CLI account. It does not push a new main commit or obtain the release App token. The local runner does not initiate login or change credential configuration; that fact does not make its direct human main push compatible with PR protection.
 
@@ -183,15 +120,4 @@ The public source launch makes repository URLs, issues and repository-hosted gui
 
 ## Documentation after a native-token dependency merge
 
-The same private Nx owner continues the existing documentation workflow with
-`expected_head_sha`, independently of main CI and the source-bound release. It
-checks immutable repository/workflow identity, the exact current main source and
-positive run IDs/attempts before treating a request as existing. Successful,
-failed and cancelled attempts are retained; a superseding main revision prevents
-a new dispatch. The documentation job checks its selected source and current main
-immediately before deployment. No package or deployment is manually dispatched by
-this delivery change.
-
-Pages retains its existing push paths: its workflow, `site/` and the project
-artwork. Complete bounded commit-file inspection includes renamed previous paths;
-unrelated dependency changes do not deploy Pages.
+`dependabot-merge.yml` dispatches the Pages workflow with `expected_head_sha` only when the merged files match its existing push paths: its workflow, `site/` and the project artwork. The documentation job checks that this source is still the current `main` immediately before deployment, so unrelated dependency changes do not deploy Pages.

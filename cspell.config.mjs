@@ -46,5 +46,10 @@ export default {
             // GitHub token-prefix character class, retained literally in the credential matcher.
             words: ['pousr'],
         },
+        {
+            filename: '.github/workflows/dependabot-merge.yml',
+            // Shell and jq keywords in the shared pixel-brewery Dependabot merge workflow.
+            words: ['elif', 'gsub', 'mktemp', 'rawfile', 'startswith'],
+        },
     ],
 };
