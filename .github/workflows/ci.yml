@@ -5,7 +5,7 @@ on:
     workflow_dispatch:
         inputs:
             expected_head_sha:
-                description: Exact dependency source requested by the trusted controller
+                description: Exact source revision this run must verify
                 required: false
                 default: ''
                 type: string
